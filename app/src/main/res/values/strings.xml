@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">FoodVault</string>
+    <string name="add_product_manually">Add Product Manually</string>
+    <string name="product_name">Product Name</string>
 </resources>
