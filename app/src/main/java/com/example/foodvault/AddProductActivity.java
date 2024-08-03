@@ -19,7 +19,6 @@ import android.widget.Toast;
 import java.util.Calendar;
 
 public class AddProductActivity extends AppCompatActivity {
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

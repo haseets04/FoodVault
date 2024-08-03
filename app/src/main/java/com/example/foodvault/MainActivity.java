@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
     private Connection connection = null;
     private Statement stmt;*/
     private Button loginBtn;
+    private Button signUpButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,20 +32,23 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         loginBtn = findViewById(R.id.login_btn);
+        signUpButton = findViewById(R.id.sign_up);
 
-        loginBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String emailAddress = ((EditText) findViewById(R.id.email_address_input)).getText().toString();
-                String password = ((EditText) findViewById(R.id.password_input)).getText().toString();
+        loginBtn.setOnClickListener(v -> {
+            String emailAddress = ((EditText) findViewById(R.id.email_address_input)).getText().toString();
+            String password = ((EditText) findViewById(R.id.password_input)).getText().toString();
 
-                Log.i("Test Credentials", "Email Address: " + emailAddress + " and Password: " + password);
+            Log.i("Test Credentials", "Email Address: " + emailAddress + " and Password: " + password);
 
-                startActivity(new Intent(MainActivity.this, AddProductActivity.class));
+            startActivity(new Intent(MainActivity.this, AddProductActivity.class));
+        });
+
+        signUpButton.setOnClickListener(view -> startActivity(new Intent(MainActivity.this, RegisterProfileActivity.class)));
 
 
 
-                /*try {
+
+        /*try {
                     //Start the jtds SQL Server driver and obtain a connection to the database.
                     StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
                     StrictMode.setThreadPolicy(policy);
@@ -111,11 +115,5 @@ public class MainActivity extends AppCompatActivity {
                         throw new RuntimeException(e);
                     }
                 }*/
-
-
-            }
-        });
-
-
     }
 }

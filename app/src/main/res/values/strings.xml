@@ -14,6 +14,11 @@
     <string name="camera_icon">Camera icon</string>
     <string name="save_and_add_product_to_inventory">Save and Add Product to Inventory</string>
     <string name="cancel_product_entry">Cancel Product Entry</string>
+    <string name="welcome_to_foodvault">Welcome to FoodVault</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="register_profile">Register Profile</string>
     <string-array name="categories">
         <item>Category 1</item>
         <item>Category 2</item>

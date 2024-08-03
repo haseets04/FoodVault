@@ -21,7 +21,6 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
             android:text="@string/add_product_manually"
             android:textAllCaps="true"
             android:textColor="#050C57"
@@ -50,8 +49,7 @@
             android:gravity="center_horizontal"
             android:text="@string/quantity"
             android:textColor="#3949AB"
-            android:textSize="15sp"
-            android:id="@+id/quantity" />
+            android:textSize="15sp" />
 
         <NumberPicker
             android:id="@+id/number_picker_quantity"
@@ -101,7 +99,6 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
             android:layout_marginTop="15dp"
             android:text="@string/scan_product_to_add"
             android:textAllCaps="true"
