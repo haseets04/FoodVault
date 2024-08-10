@@ -19,6 +19,10 @@
     <string name="last_name">Last Name</string>
     <string name="confirm_password">Confirm Password</string>
     <string name="register_profile">Register Profile</string>
+    <string name="foodvault">FoodVault</string>
+    <string name="view_inventory">View Inventory</string>
+    <string name="view_shopping_lists">View Shopping Lists</string>
+    <string name="view_groups">View Groups</string>
     <string-array name="categories">
         <item>Category 1</item>
         <item>Category 2</item>

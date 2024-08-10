@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
             Log.i("Test Credentials", "Email Address: " + emailAddress + " and Password: " + password);
 
-            startActivity(new Intent(MainActivity.this, AddProductActivity.class));
+            startActivity(new Intent(MainActivity.this, DashboardActivity.class));
         });
 
         signUpButton.setOnClickListener(view -> startActivity(new Intent(MainActivity.this, RegisterProfileActivity.class)));

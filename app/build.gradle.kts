@@ -38,6 +38,7 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
 
     implementation("mysql:mysql-connector-java:8.0.33")
+    implementation("androidx.cardview:cardview:1.0.0")
     //implementation files("libs\\mysql-connector-j-9.0.0.jar") //added
     //implementation("net.sourceforge.jtds:jtds:1.3.1")
 
