@@ -22,7 +22,7 @@ public class DashboardActivity extends AppCompatActivity {
 
         //viewInventoryBtn.setOnClickListener(view -> startActivity(new Intent(DashboardActivity.this, InventoryActivity.class)));
 
-        //viewShopListBtn.setOnClickListener(view -> startActivity(new Intent(DashboardActivity.this, ShoppingListActivity.class)));
+        viewShopListBtn.setOnClickListener(view -> startActivity(new Intent(DashboardActivity.this, ShoppingListActivity.class)));
 
         //viewGroupsBtn.setOnClickListener(view -> startActivity(new Intent(DashboardActivity.this, GroupsActivity.class)));
     }
