@@ -18,4 +18,48 @@
         android:layout_marginTop="16dp"
         android:src="@drawable/account_circle_icon" />
 
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/profile_icon"
+        android:layout_marginTop="30dp"
+        android:gravity="center"
+        android:text="New Shopping List"
+        android:textColor="#050C57"
+        android:textSize="40sp"
+        android:textStyle="bold"
+        android:textAllCaps="true"/>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="50dp"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/btn_save_shopping_list"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginEnd="8dp"
+            android:text="Save Shopping List"
+            android:textColor="#311B92"
+            android:backgroundTint="#70B1BA"/>
+
+        <Button
+            android:id="@+id/btn_cancel_entry"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="#70B1BA"
+            android:text="Cancel Entry"
+            android:textColor="#311B92" />
+
+    </LinearLayout>
+
 </RelativeLayout>
