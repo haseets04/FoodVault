@@ -26,4 +26,7 @@ public interface SupabaseAPI {
     @POST("/rest/v1/user")
     Call<Void> insertUser(@Body UserModel user); //insert new user record
 
+    @POST("/rest/v1/product")
+    Call<Void> insertProduct(@Body ProductModel product); //insert new product record
+
 }

@@ -36,7 +36,8 @@
             android:padding="18dp"
             android:text="@string/view_inventory"
             android:textColor="#311B92"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:onClick="onViewInventoryClicked" />
 
         <Button
             android:id="@+id/view_shoplist_btn"
@@ -47,7 +48,8 @@
             android:padding="18dp"
             android:text="@string/view_shopping_lists"
             android:textColor="#311B92"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:onClick="onViewShopListClicked" />
 
         <Button
             android:id="@+id/view_groups_btn"
@@ -58,7 +60,8 @@
             android:padding="18dp"
             android:text="@string/view_groups"
             android:textColor="#311B92"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:onClick="onViewGroupsClicked" />
 
     </LinearLayout>
 

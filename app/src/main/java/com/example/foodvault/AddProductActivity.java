@@ -50,37 +50,30 @@ public class AddProductActivity extends AppCompatActivity {
         category.setAdapter(adapter);
         //String stringCategory = category.toString();
 
-        ImageButton cameraButton = findViewById(R.id.camera_button);
-        cameraButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                try{
-                    Intent intentCameraApp = new Intent();
-                    intentCameraApp.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
-                    startActivity(intentCameraApp);
-                } catch (Exception e){
-                    e.printStackTrace();
-                }
-                //make it scan a barcode on camera app
-            }
-        });
-
-        Button addProduct = findViewById(R.id.btn_add_product);
-        addProduct.setOnClickListener(view -> {
-            //add to DB (product table)
-            /*Log.i("Test Credentials", "Product Name: " + productName + ", Quantity: " + stringQuantity +
-                    ", Expiration Date: " + stringExpireDate + ", Category: " + stringCategory);*/ //get info into their datatypes
-            Toast.makeText(AddProductActivity.this, "Product added to Inventory", Toast.LENGTH_SHORT).show();
-        });
-
-        Button cancelProduct = findViewById(R.id.btn_cancel_product);
-        cancelProduct.setOnClickListener(view -> {
-            //don't add to DB
-            Toast.makeText(AddProductActivity.this, "Product entry cancelled", Toast.LENGTH_SHORT).show();
-        });
-
-
 
     }
 
+    public void onAddProductClicked(View view) {
+        //add to DB (product table)
+            /*Log.i("Test Credentials", "Product Name: " + productName + ", Quantity: " + stringQuantity +
+                    ", Expiration Date: " + stringExpireDate + ", Category: " + stringCategory);*/ //get info into their datatypes
+        Toast.makeText(AddProductActivity.this, "Product added to Inventory", Toast.LENGTH_SHORT).show();
+    }
+
+    public void onCancelProductClicked(View view) {
+        //don't add to DB
+        Toast.makeText(AddProductActivity.this, "Product entry cancelled", Toast.LENGTH_SHORT).show();
+        finish();
+    }
+
+    public void onCameraClicked(View view) {
+        try{
+            Intent intentCameraApp = new Intent();
+            intentCameraApp.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivity(intentCameraApp);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        //make it scan a barcode on camera app
+    }
 }
