@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.sql.Connection;
@@ -17,8 +18,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+public class MainActivity extends AppCompatActivity { //Login page
+
     /*private static final String ConnectionString = "jdbc:mysql://localhost:3306/foodvault"; //check jdbc:mysql://localhost:3306/FoodVault //192.168.101.118
     private static final String DeviceDriver = "com.mysql.cj.jdbc.Driver"; //check
     private Connection connection = null;
@@ -31,89 +38,48 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        loginBtn = findViewById(R.id.login_btn);
-        signUpButton = findViewById(R.id.sign_up);
+        //get first user record
+        TextView textView = findViewById(R.id.text_view);
 
-        loginBtn.setOnClickListener(v -> {
-            String emailAddress = ((EditText) findViewById(R.id.email_address_input)).getText().toString();
-            String password = ((EditText) findViewById(R.id.password_input)).getText().toString();
-
-            Log.i("Test Credentials", "Email Address: " + emailAddress + " and Password: " + password);
-
-            startActivity(new Intent(MainActivity.this, DashboardActivity.class));
+        SupabaseAPI api = SupabaseClient.getClient().create(SupabaseAPI.class);
+        Call<List<UserModel>> call = api.getItems("*"); //second half of your sql statement
+        call.enqueue(new Callback<List<UserModel>>() {
+            @Override
+            public void onResponse(Call<List<UserModel>> call, Response<List<UserModel>> response) {
+                if (response.isSuccessful()) {
+                    List<UserModel> items = response.body();
+                    Log.d("Supabase Response", response.toString());
+                    if (items != null && !items.isEmpty()) {
+                        //textView.setText("Connected. Items: " + items.get(0).user_id);
+                        textView.setText("Successfully connected to the Supabase API. Items: \n" +
+                                + items.get(1).getUserId() + items.get(1).getUserFirstname() + items.get(1).getUserLastname() + items.get(1).getUserEmail() + items.get(1).getUserPassword());
+                    } else {
+                        textView.setText("No items found.");
+                    }
+                } else {
+                    textView.setText("Response unsuccessful: " + response.message());
+                }
+            }
+            @Override
+            public void onFailure(Call<List<UserModel>> call, Throwable t) {
+                Toast.makeText(MainActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                textView.setText("Error connecting to the Supabase API: " + t.getMessage());
+            }
         });
 
-        signUpButton.setOnClickListener(view -> startActivity(new Intent(MainActivity.this, RegisterProfileActivity.class)));
+    }
+
+    public void onLoginClicked(View view) {
+        String emailAddress = ((EditText) findViewById(R.id.email_address_input)).getText().toString();
+        String password = ((EditText) findViewById(R.id.password_input)).getText().toString();
+
+        Log.i("Test Credentials", "Email Address: " + emailAddress + " and Password: " + password);
+
+        startActivity(new Intent(MainActivity.this, DashboardActivity.class));
+    }
 
 
-
-
-        /*try {
-                    //Start the jtds SQL Server driver and obtain a connection to the database.
-                    StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-                    StrictMode.setThreadPolicy(policy);
-
-                    Class.forName(DeviceDriver);
-                    connection = DriverManager.getConnection(ConnectionString, "root", "mySQL@04");
-                    //connection = DriverManager.getConnection(ConnectionString, username, password);
-                    stmt = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-
-                    //Toast.makeText(MainActivity.this, "Connected...", Toast.LENGTH_LONG).show();
-                    Toast.makeText(MainActivity.this, "Connected...", Toast.LENGTH_SHORT).show();
-
-                    //region Toggle visibility of UI Views.
-                    //findViewById(R.id.vConnect).setVisibility(View.GONE);
-                    //findViewById(R.id.vConnected).setVisibility(View.VISIBLE);
-
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
-                    Toast.makeText(MainActivity.this, "Could not instantiate device driver...", Toast.LENGTH_SHORT).show();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                    Toast.makeText(MainActivity.this, "Could not connect...", Toast.LENGTH_SHORT).show();
-                }
-
-                //insert new user record (for registering)
-                //dummy variable
-                String name = "name";
-                String surname = "surname";
-                String email = "email@gmail.com";
-                String password1 = "password";
-                String sql = String.format("INSERT INTO foodvault VALUES ('%s', '%s', '%s', '%s')", name, surname, email, password1);
-                try {
-                    stmt.execute(sql);
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }*/
-
-
-                /*PreparedStatement statement = null;
-                try {
-                    statement = connection.prepareStatement("SELECT * FROM foodvault.users");
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
-                ResultSet resultSet = null try {
-                    resultSet = statement.executeQuery();
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }) {
-                while (true) {
-                    try {
-                        if (!resultSet.next()) break;
-                    } catch (SQLException e) {
-                        throw new RuntimeException(e);
-                    }
-                    try {
-                        int id = resultSet.getInt("id");
-                    } catch (SQLException e) {
-                        throw new RuntimeException(e);
-                    }
-                    try {
-                        String name = resultSet.getString("name");
-                    } catch (SQLException e) {
-                        throw new RuntimeException(e);
-                    }
-                }*/
+    public void onSignUpClicked(View view) {
+        startActivity(new Intent(MainActivity.this, RegisterProfileActivity.class));
     }
 }

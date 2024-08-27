@@ -61,7 +61,8 @@
             android:padding="18dp"
             android:text="@string/login"
             android:textColor="#311B92"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:onClick="onLoginClicked" />
 
         <Button
             android:id="@+id/sign_up"
@@ -72,7 +73,18 @@
             android:text="@string/don_t_have_an_account"
             android:textAllCaps="false"
             android:textColor="#3949AB"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:onClick="onSignUpClicked" />
+
+        <TextView
+            android:id="@+id/text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="TextView"
+            android:textAllCaps="true"
+            android:textColor="#050C57"
+            android:textStyle="bold" />
 
     </LinearLayout>
 

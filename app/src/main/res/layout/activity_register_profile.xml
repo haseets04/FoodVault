@@ -117,7 +117,8 @@
                 android:padding="18dp"
                 android:text="@string/register_profile"
                 android:textColor="#311B92"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:onClick="onRegisterClicked" />
         </LinearLayout>
 
     </ScrollView>
