@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity { //Login page
 
         Log.i("Test Credentials", "Email Address: " + emailAddress + " and Password: " + password);
 
-        startActivity(new Intent(MainActivity.this, DashboardActivity.class)); //Dashboard
+        startActivity(new Intent(MainActivity.this, ExpirationPeriodActivity.class)); //Dashboard
     }
 
 
