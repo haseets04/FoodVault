@@ -32,15 +32,15 @@
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
-            android:gravity="center_horizontal"
+            android:autofillHints=""
             android:background="@drawable/rounded_corner"
+            android:gravity="center_horizontal"
             android:hint="@string/product_name"
             android:inputType="text"
             android:padding="14dp"
             android:textColor="#3949AB"
             android:textColorHint="#3949AB"
-            android:textSize="15sp"
-            android:autofillHints="" />
+            android:textSize="15sp" />
 
         <TextView
             android:layout_width="wrap_content"

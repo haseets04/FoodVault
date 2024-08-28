@@ -23,10 +23,16 @@ public interface SupabaseAPI {
     @GET("/rest/v1/user") // Your table name is "Example"
     Call<List<UserModel>> getItems(@Query("select") String select); //first part of your query (select, update, insert, etc.)
 
+    @GET("/rest/v1/user")
+    Call<List<UserModel>> getUserByEmail(@Query("user_email") String email);
+
     @POST("/rest/v1/user")
     Call<Void> insertUser(@Body UserModel user); //insert new user record
 
     @POST("/rest/v1/product")
     Call<Void> insertProduct(@Body ProductModel product); //insert new product record
+
+    @POST("/rest/v1/inventory")
+    Call<InventoryModel> insertInventory(@Body InventoryModel inventory); //insert new product record
 
 }

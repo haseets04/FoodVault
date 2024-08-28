@@ -1,15 +1,16 @@
 package com.example.foodvault;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import okhttp3.ResponseBody;
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -43,49 +44,55 @@ public class RegisterProfileActivity extends AppCompatActivity {
             newUser.setUserPassword(password);
 
             SupabaseAPI api = SupabaseClient.getClient().create(SupabaseAPI.class);
-            Call<Void> call = api.insertUser(newUser);
-            call.enqueue(new Callback<Void>() {
+
+            //check if user already exists
+            Call<List<UserModel>> checkUserCall = api.getUserByEmail(emailAddress);
+            checkUserCall.enqueue(new Callback<List<UserModel>>() {
                 @Override
-                /*public void onResponse(Call<Void> call, Response<Void> response) {
-                    if (response.isSuccessful()) {
-                        Toast.makeText(RegisterProfileActivity.this, "Profile Registered", Toast.LENGTH_SHORT).show();
-                        // Redirect to another activity if needed
+                public void onResponse(@NonNull Call<List<UserModel>> call, @NonNull Response<List<UserModel>> response) {
+                    if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
+                        //user already exists
+                        Toast.makeText(RegisterProfileActivity.this, "Email already registered", Toast.LENGTH_SHORT).show();
                     } else {
-                        Toast.makeText(RegisterProfileActivity.this, "Registration Failed: " + response.message(), Toast.LENGTH_SHORT).show();
-                    }
-                }*/
-                public void onResponse(Call<Void> call, Response<Void> response) {
-                    if (response.isSuccessful()) {
-                        Toast.makeText(RegisterProfileActivity.this, "Profile Registered", Toast.LENGTH_SHORT).show();
-                        // Clear the input fields or redirect to another activity if needed
-                        firstNameInput.setText("");
-                        lastNameInput.setText("");
-                        emailInput.setText("");
-                        passwordInput.setText("");
-                        confirmPasswordInput.setText("");
-                    } else {
-                        try {
-                            String errorBody = response.errorBody() != null ? response.errorBody().string() : "No error body";
-                            Log.e("Supabase Error", "Registration Failed: " + response.message() + " - " + errorBody);
-                        } catch (Exception e) {
-                            Log.e("Supabase Error", "Error reading response body", e);
-                        }
-                        Toast.makeText(RegisterProfileActivity.this, "Registration Failed: " + response.message(), Toast.LENGTH_SHORT).show();
+                        //proceed with user registration
+                        Call<Void> insertCall = api.insertUser(newUser);
+                        insertCall.enqueue(new Callback<Void>() {
+                            @Override
+                            public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
+                                if (response.isSuccessful()) {
+                                    Toast.makeText(RegisterProfileActivity.this, "Profile Registered", Toast.LENGTH_SHORT).show();
+
+                                    // Clear the input fields
+                                    firstNameInput.setText("");
+                                    lastNameInput.setText("");
+                                    emailInput.setText("");
+                                    passwordInput.setText("");
+                                    confirmPasswordInput.setText("");
+
+                                } else {
+                                    try {
+                                        String errorBody = response.errorBody() != null ? response.errorBody().string() : "No error body";
+                                        Log.e("Supabase Error", "Registration Failed: " + response.message() + " - " + errorBody);
+                                    } catch (Exception e) {
+                                        Log.e("Supabase Error", "Error reading response body", e);
+                                    }
+                                    Toast.makeText(RegisterProfileActivity.this, "Registration Failed: " + response.message(), Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                            @Override
+                            public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
+                                Toast.makeText(RegisterProfileActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
                     }
                 }
-
                 @Override
-                public void onFailure(Call<Void> call, Throwable t) {
+                public void onFailure(@NonNull Call<List<UserModel>> call, @NonNull Throwable t) {
                     Toast.makeText(RegisterProfileActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
-
-            Log.i("Test Credentials", "First Name: " + firstName + ", Last Name: " + lastName +
-                    ", Email Address: " + emailAddress + ", Password: " + password); //get info into their data types
-            //Toast.makeText(RegisterProfileActivity.this, "Profile Registered", Toast.LENGTH_SHORT).show();
-            //startActivity(new Intent(RegisterProfileActivity.this, Activity.class)); //specify next activity
-        }
-        else {  //cannot register
+            Log.i("Test Credentials", "First Name: " + firstName + ", Last Name: " + lastName + ", Email Address: " + emailAddress + ", Password: " + password);
+        } else { // cannot register
             Toast.makeText(RegisterProfileActivity.this, "Passwords do not match", Toast.LENGTH_SHORT).show();
         }
 

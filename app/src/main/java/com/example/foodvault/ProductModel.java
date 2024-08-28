@@ -3,9 +3,9 @@ package com.example.foodvault;
 import java.util.Date;
 
 public class ProductModel {
-    private int product_id;
+    private Integer product_id;
     private String product_name;
-    private int product_barcode;
+    private int product_barcode; //add
     private Date product_expiration_date;
     private String product_category;
     private boolean product_expired;
@@ -13,43 +13,43 @@ public class ProductModel {
     public ProductModel() {
     }
 
-    public int getProduct_id() {
+    public Integer getProductId() {
         return product_id;
     }
 
-    public void setProduct_id(int product_id) {
+    public void setProductId(Integer product_id) {
         this.product_id = product_id;
     }
 
-    public String getProduct_name() {
+    public String getProductName() {
         return product_name;
     }
 
-    public void setProduct_name(String product_name) {
+    public void setProductName(String product_name) {
         this.product_name = product_name;
     }
 
-    public int getProduct_barcode() {
+    public int getProductBarcode() {
         return product_barcode;
     }
 
-    public void setProduct_barcode(int product_barcode) {
+    public void setProductBarcode(int product_barcode) {
         this.product_barcode = product_barcode;
     }
 
-    public Date getProduct_expiration_date() {
+    public Date getProductExpirationDate() {
         return product_expiration_date;
     }
 
-    public void setProduct_expiration_date(Date product_expiration_date) {
+    public void setProductExpirationDate(Date product_expiration_date) {
         this.product_expiration_date = product_expiration_date;
     }
 
-    public String getProduct_category() {
+    public String getProductCategory() {
         return product_category;
     }
 
-    public void setProduct_category(String product_category) {
+    public void setProductCategory(String product_category) {
         this.product_category = product_category;
     }
 

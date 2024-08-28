@@ -1,30 +1,17 @@
 package com.example.foodvault;
 
 public class UserModel {
-    public int user_id;
-    //public String body_type_my;
-    public String user_firstname;
-    public String user_lastname;
-    public String user_email;
-    public String user_password;
+    private Integer user_id;
+    private String user_firstname;
+    private String user_lastname;
+    private String user_email;
+    private String user_password;
 
-    public UserModel(String user_firstname, String user_lastname, String user_email, String user_password) {
-        //this.user_id = user_id;
-        this.user_firstname = user_firstname;
-        this.user_lastname = user_lastname;
-        this.user_email = user_email;
-        this.user_password = user_password;
-    }
-
-    public UserModel() {
-
-    }
-
-    public int getUserId() {
+    public Integer getUserId() {
         return user_id;
     }
 
-    public void setUserId(int user_id) {
+    public void setUserId(Integer user_id) {
         this.user_id = user_id;
     }
 
