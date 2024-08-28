@@ -53,11 +53,11 @@ public class ProductModel {
         this.product_category = product_category;
     }
 
-    public boolean isProduct_expired() {
+    public boolean isProductExpired() {
         return product_expired;
     }
 
-    public void setProduct_expired(boolean product_expired) {
+    public void setProductExpired(boolean product_expired) {
         this.product_expired = product_expired;
     }
 }

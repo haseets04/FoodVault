@@ -23,9 +23,16 @@
     <string name="view_inventory">View Inventory</string>
     <string name="view_shopping_lists">View Shopping Lists</string>
     <string name="view_groups">View Groups</string>
+    <string name="add_new_item">Add New Item</string>
     <string-array name="categories">
         <item>Category 1</item>
         <item>Category 2</item>
         <item>Category 3</item>
+    </string-array>
+    <string name="spinner_prompt">Group products in list by:</string>
+    <string-array name="spinner_options">
+        <item>Item Category</item>
+        <item>Grocery Store</item>
+        <item>Both</item>
     </string-array>
 </resources>

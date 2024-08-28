@@ -1,5 +1,6 @@
 package com.example.foodvault;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
@@ -28,28 +29,29 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class AddProductActivity extends AppCompatActivity {
-    String productName;
+    private String productName;
     //Barcode
-    int quantityValue;
-    Date expireDate;
-    String selectedCategory;
-    boolean isProductExpired = false;
+    private int quantityValue;
+    private Date expireDate;
+    private String selectedCategory;
+    private boolean isProductExpired = false;
+    EditText productNameInput, expirationDateInput;
+    NumberPicker quantityPicker;
+    Spinner category;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_product);
 
-        EditText productNameInput = findViewById(R.id.product_name_input);
-        productName = productNameInput.getText().toString();
+        productNameInput = findViewById(R.id.product_name_input);
 
         //goes in inventory table
-        NumberPicker quantity = findViewById(R.id.number_picker_quantity);
-        quantity.setMinValue(0);
-        quantity.setMaxValue(100);
-        quantityValue = quantity.getValue();
+        quantityPicker = findViewById(R.id.number_picker_quantity);
+        quantityPicker.setMinValue(0);
+        quantityPicker.setMaxValue(100);
 
-        EditText expirationDate = findViewById(R.id.expiration_date_input);
-        expirationDate.setOnClickListener(v -> {
+        expirationDateInput = findViewById(R.id.expiration_date_input);
+        expirationDateInput.setOnClickListener(v -> {
             Calendar calendar = Calendar.getInstance();
             int year = calendar.get(Calendar.YEAR);
             int month = calendar.get(Calendar.MONTH);
@@ -58,25 +60,13 @@ public class AddProductActivity extends AppCompatActivity {
             DatePickerDialog datePickerDialog = new DatePickerDialog(AddProductActivity.this,
                     (view, year1, month1, dayOfMonth) -> {
                         String dateString = year1 + "-" + (month1 + 1) + "-" + dayOfMonth;
-                        expirationDate.setText(dateString);
+                        expirationDateInput.setText(dateString);
                     }, year, month, day);
             datePickerDialog.show();
 
         });
-        String dateString = expirationDate.getText().toString();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-        try {
-            expireDate = sdf.parse(dateString);
-            // Use expireDate to insert into the database
-        } catch (ParseException e) {
-            e.printStackTrace();
-            // Handle the error
-        }
 
-        //expireDate = (Date) expirationDate.getText();
-        //String stringExpireDate = expirationDate.getText().toString();
-
-        Spinner category = findViewById(R.id.spinner_category);
+        category = findViewById(R.id.spinner_category);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.categories, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         category.setAdapter(adapter);
@@ -95,10 +85,37 @@ public class AddProductActivity extends AppCompatActivity {
 
     }
 
-    public void onAddProductClicked(View view) {
-        //insert new product record to DB (product and inventory table)
+    public void onAddProductClicked(View view) { //doesnt add to product table
+        // Retrieve values from UI
+        productName = productNameInput.getText().toString();
+        quantityValue = quantityPicker.getValue();
+
+        String dateString = expirationDateInput.getText().toString();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        try {
+            expireDate = sdf.parse(dateString); //use this to add to DB
+        } catch (ParseException e) {
+            e.printStackTrace();
+            Toast.makeText(AddProductActivity.this, "Invalid date format", Toast.LENGTH_SHORT).show();
+        }
+        category.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                selectedCategory = (String) parent.getItemAtPosition(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Handle the case when no item is selected (if necessary)
+            }
+        });
+
+        Log.i("Product Info", "Name: " + productName + ", Quantity: " + quantityValue +
+                ", Expiration Date: " + expireDate + ", Category: " + selectedCategory);
+
+        // Insert into Inventory table
         InventoryModel newInventory = new InventoryModel();
-        newInventory.setQty(quantityValue);
+        newInventory.setQuantity(quantityValue);
 
         SupabaseAPI api = SupabaseClient.getClient().create(SupabaseAPI.class);
         Call<InventoryModel> inventoryCall = api.insertInventory(newInventory);
@@ -106,32 +123,25 @@ public class AddProductActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<InventoryModel> call, Response<InventoryModel> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    // Get the generated product_id from the Inventory insertion
-                    int generatedProductId = response.body().getProductId();
+                    Integer generatedProductId = response.body().getProductId();
 
-                    // Now insert into Product table using the generated product_id
+                    // Insert into Product table
                     ProductModel newProduct = new ProductModel();
-                    newProduct.setProductId(generatedProductId); // Set the product_id from Inventory
+                    newProduct.setProductId(generatedProductId);
                     newProduct.setProductName(productName);
                     newProduct.setProductExpirationDate(expireDate);
                     newProduct.setProductCategory(selectedCategory);
-                    newProduct.setProduct_expired(isProductExpired);
+                    newProduct.setProductExpired(isProductExpired);
 
                     Call<Void> insertProductCall = api.insertProduct(newProduct);
                     insertProductCall.enqueue(new Callback<Void>() {
                         @Override
                         public void onResponse(Call<Void> call, Response<Void> response) {
                             if (response.isSuccessful()) {
-                                Toast.makeText(AddProductActivity.this, "Product added to Inventory", Toast.LENGTH_SHORT).show();
-                                // Clear the input fields or redirect to another activity if needed
+                                Toast.makeText(AddProductActivity.this, "Product added successfully", Toast.LENGTH_SHORT).show();
+                                // Clear input fields or redirect if needed
                             } else {
-                                try {
-                                    String errorBody = response.errorBody() != null ? response.errorBody().string() : "No error body";
-                                    Log.e("Supabase Error", "Product Insertion Failed: " + response.message() + " - " + errorBody);
-                                } catch (Exception e) {
-                                    Log.e("Supabase Error", "Error reading response body", e);
-                                }
-                                Toast.makeText(AddProductActivity.this, "Product Insertion Failed: " + response.message(), Toast.LENGTH_SHORT).show();
+                                handleApiError(response);
                             }
                         }
 
@@ -142,7 +152,7 @@ public class AddProductActivity extends AppCompatActivity {
                     });
 
                 } else {
-                    Toast.makeText(AddProductActivity.this, "Inventory Insertion Failed: " + response.message(), Toast.LENGTH_SHORT).show();
+                    handleApiError(response);
                 }
             }
 
@@ -151,12 +161,17 @@ public class AddProductActivity extends AppCompatActivity {
                 Toast.makeText(AddProductActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
-
-        /*Log.i("Test Credentials", "Product Name: " + productName + ", Quantity: " + stringQuantity +
-                    ", Expiration Date: " + stringExpireDate + ", Category: " + stringCategory);*/ //get info into their datatypes
     }
 
-
+    private void handleApiError(Response<?> response) {
+        try {
+            String errorBody = response.errorBody() != null ? response.errorBody().string() : "No error body";
+            Log.e("Supabase Error", "Failed: " + response.message() + " - " + errorBody);
+            Toast.makeText(AddProductActivity.this, "Failed: " + response.message(), Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            Log.e("Supabase Error", "Error reading response body", e);
+        }
+    }
 
     public void onCancelProductClicked(View view) {
         //don't add to DB
