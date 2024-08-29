@@ -9,7 +9,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_column="0"
-        android:background="@drawable/border"
+        android:background="@drawable/inventory_border"
         android:text="@string/empty_string" />
 
     <TextView
@@ -17,7 +17,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_column="1"
-        android:background="@drawable/border"
+        android:background="@drawable/inventory_border"
         android:text="@string/empty_string" />
 
     <TextView
@@ -25,7 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_column="2"
-        android:background="@drawable/border"
+        android:background="@drawable/inventory_border"
         android:text="@string/empty_string" />
 
     <TextView
@@ -33,7 +33,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_column="3"
-        android:background="@drawable/border"
+        android:background="@drawable/inventory_border"
         android:text="@string/empty_string" />
 
     <TextView
@@ -41,7 +41,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_column="4"
-        android:background="@drawable/border"
+        android:background="@drawable/inventory_border"
         android:text="@string/empty_string" />
 
     <CheckBox
@@ -49,7 +49,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_column="5"
-        android:background="@drawable/border"
+        android:background="@drawable/inventory_border"
         android:shadowColor="#4CAF50"
         android:text="@string/empty_string"
         android:textStyle="bold"

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/border"
+    android:background="@drawable/inventory_border"
     tools:context=".ViewInventory">
 
     <ImageButton
@@ -37,7 +37,7 @@
         android:id="@+id/scrollview"
         android:layout_width="377dp"
         android:layout_height="347dp"
-        android:background="@drawable/border"
+        android:background="@drawable/inventory_border"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.538"
@@ -63,7 +63,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_column="0"
-                        android:background="@drawable/border"
+                        android:background="@drawable/inventory_border"
                         android:text="@string/product_name"
                         android:textColor="#000000"
                         android:textStyle="normal" />
@@ -73,7 +73,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_column="1"
-                        android:background="@drawable/border"
+                        android:background="@drawable/inventory_border"
                         android:text="@string/quantity"
                         android:textColor="#000000"
                         android:textStyle="normal" />
@@ -83,7 +83,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_column="2"
-                        android:background="@drawable/border"
+                        android:background="@drawable/inventory_border"
                         android:text="@string/expiration_date"
                         android:textColor="#000000"
                         android:textStyle="normal" />
@@ -93,7 +93,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_column="3"
-                        android:background="@drawable/border"
+                        android:background="@drawable/inventory_border"
                         android:text="@string/category"
                         android:textColor="#000000" />
 
@@ -102,7 +102,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_column="4"
-                        android:background="@drawable/border"
+                        android:background="@drawable/inventory_border"
                         android:text="@string/product_location"
                         android:textColor="#000000"
                         android:textStyle="normal" />
@@ -112,7 +112,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_column="5"
-                        android:background="@drawable/border"
+                        android:background="@drawable/inventory_border"
                         android:text="@string/product_is_expired"
                         android:textColor="#000000"
                         android:textStyle="normal" />
@@ -161,7 +161,8 @@
         android:text="@string/filter_items"
         android:textSize="10sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/scrollview" />
+        app:layout_constraintTop_toBottomOf="@+id/scrollview"
+        tools:ignore="TouchTargetSizeCheck" />
 
     <ImageView
         android:id="@+id/imageView2"
