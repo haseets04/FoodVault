@@ -25,11 +25,6 @@
     <string name="view_inventory">View Inventory</string>
     <string name="view_shopping_lists">View Shopping Lists</string>
     <string name="view_groups">View Groups</string>
-    <string name="empty_string" ></string>
-    <string name="category" >Category</string>
-    <string name="inventory">Inventory</string>
-    <string name="add_new_location">Add New Location</string>
-    <string name="filter_items">Filter Items</string>
     <string-array name="categories">
         <item>Category 1</item>
         <item>Category 2</item>

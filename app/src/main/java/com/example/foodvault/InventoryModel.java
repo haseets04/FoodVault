@@ -1,18 +1,8 @@
 package com.example.foodvault;
 
-public class InventoryModel {
+public class InventoryModel { //NB write attributes as exactly seen in DB
     private Integer product_id;
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
     private int quantity;
-
 
     public InventoryModel() {
     }
@@ -25,5 +15,11 @@ public class InventoryModel {
         this.product_id = product_id;
     }
 
+    public int getQuantity() {
+        return quantity;
+    }
 
+    public void setQuantity(int qty) {
+        this.quantity = qty;
+    }
 }

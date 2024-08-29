@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/screen_background"
+    android:gravity="center"
+    tools:context=".ExpirationPeriodActivity">
+
+    <LinearLayout
+        android:id="@+id/linear_layout_1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="120dp"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxLines="2"
+            android:text="Settings"
+            android:textAllCaps="true"
+            android:textColor="#050C57"
+            android:textSize="40sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="400dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxLines="2"
+            android:text="Set Expiration Period for Reminder"
+            android:textAllCaps="true"
+            android:textColor="#050C57"
+            android:textSize="30sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="400dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:layout_marginTop="20dp"
+            android:text="Select how many days in advance you would like the app to remind you before a product reaches it's expiration date:"
+            android:textColor="#050C57"
+            android:textSize="25sp" />
+
+        <NumberPicker
+            android:id="@+id/number_picker_expiration_period"
+            android:layout_width="300dp"
+            android:layout_height="100dp"
+            android:layout_marginTop="10dp"
+            android:gravity="center_horizontal" />
+
+        <TextView
+            android:id="@+id/txt_set_expiration_period"
+            android:layout_width="400dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginTop="20dp"
+            android:text="Set to 30  days before"
+            android:textColor="#050C57"
+            android:textSize="25sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="50dp"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/btn_save_settings"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginEnd="8dp"
+            android:text="Save Settings"
+            android:textColor="#311B92"
+            android:backgroundTint="#70B1BA"
+            android:onClick="onSaveSettingsClicked" />
+
+        <Button
+            android:id="@+id/btn_cancel_settings"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="#70B1BA"
+            android:text="Cancel Edited Settings"
+            android:textColor="#311B92"
+            android:onClick="onCancelSettingsClicked" />
+
+    </LinearLayout>
+
+</RelativeLayout>

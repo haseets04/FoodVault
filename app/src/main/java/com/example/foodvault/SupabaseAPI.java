@@ -35,4 +35,8 @@ public interface SupabaseAPI {
     @POST("/rest/v1/inventory")
     Call<InventoryModel> insertInventory(@Body InventoryModel inventory); //insert new product record
 
+    @POST("/rest/v1/shoppinglist")
+    Call<Void> insertShoppingList(@Body ShopListModel shoppingList); //insert new shoppingList record
+
+
 }
