@@ -16,6 +16,7 @@ public class SupabaseClient {
     private static String apiKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ1Y2RuZXBlY25xbWZteXl5bWd0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjM0MDYwMzksImV4cCI6MjAzODk4MjAzOX0.Bau0CHxYNgngjKF6QBIhRPk805kEirJvrEM7lwjvK1U";
     public static Retrofit getClient() {
         if (retrofit == null) {
+
             OkHttpClient client = new OkHttpClient.Builder().addInterceptor(chain -> {
                 Request request = chain.request().newBuilder()
                         .addHeader("apikey", apiKey)

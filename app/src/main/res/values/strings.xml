@@ -9,6 +9,8 @@
     <string name="product_name">Product Name</string>
     <string name="quantity">Quantity</string>
     <string name="expiration_date">Expiration Date</string>
+    <string name="product_location">Location</string>
+    <string name="product_is_expired">Expired</string>
     <string name="or">OR...</string>
     <string name="scan_product_to_add">Scan Product To Add:</string>
     <string name="camera_icon">Camera icon</string>
@@ -23,6 +25,11 @@
     <string name="view_inventory">View Inventory</string>
     <string name="view_shopping_lists">View Shopping Lists</string>
     <string name="view_groups">View Groups</string>
+    <string name="empty_string" ></string>
+    <string name="category" >Category</string>
+    <string name="inventory">Inventory</string>
+    <string name="add_new_location">Add New Location</string>
+    <string name="filter_items">Filter Items</string>
     <string-array name="categories">
         <item>Category 1</item>
         <item>Category 2</item>

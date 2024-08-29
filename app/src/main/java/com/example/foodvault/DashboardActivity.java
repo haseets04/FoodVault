@@ -15,7 +15,7 @@ public class DashboardActivity extends AppCompatActivity {
     }
 
     public void onViewInventoryClicked(View view) {
-        //startActivity(new Intent(DashboardActivity.this, InventoryActivity.class);
+        startActivity(new Intent(DashboardActivity.this, ViewInventory.class));
     }
 
 

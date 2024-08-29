@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity { //Login page
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         //get first user record
         TextView textView = findViewById(R.id.text_view);
 

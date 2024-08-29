@@ -5,10 +5,20 @@ import java.util.Date;
 public class ProductModel {
     private Integer product_id;
     private String product_name;
-    private int product_barcode; //add
+    private Integer product_barcode; //add
     private Date product_expiration_date;
     private String product_category;
     private boolean product_expired;
+
+    public Integer getLocation_id() {
+        return location_id;
+    }
+
+    public void setLocation_id(Integer location_id) {
+        this.location_id = location_id;
+    }
+
+    private Integer location_id;
 
     public ProductModel() {
     }
@@ -29,11 +39,11 @@ public class ProductModel {
         this.product_name = product_name;
     }
 
-    public int getProductBarcode() {
+    public Integer getProductBarcode() {
         return product_barcode;
     }
 
-    public void setProductBarcode(int product_barcode) {
+    public void setProductBarcode(Integer product_barcode) {
         this.product_barcode = product_barcode;
     }
 

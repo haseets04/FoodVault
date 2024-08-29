@@ -1,7 +1,5 @@
 package com.example.foodvault;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,12 +8,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.NumberPicker;
 import android.widget.Spinner;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -98,7 +96,7 @@ public class AddProductActivity extends AppCompatActivity {
     public void onAddProductClicked(View view) {
         //insert new product record to DB (product and inventory table)
         InventoryModel newInventory = new InventoryModel();
-        newInventory.setQty(quantityValue);
+        newInventory.setQuantity(quantityValue);
 
         SupabaseAPI api = SupabaseClient.getClient().create(SupabaseAPI.class);
         Call<InventoryModel> inventoryCall = api.insertInventory(newInventory);
