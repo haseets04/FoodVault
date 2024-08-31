@@ -9,6 +9,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_column="0"
+        android:textColor="@color/black"
         android:background="@drawable/inventory_border"
         android:text="@string/empty_string" />
 
@@ -17,6 +18,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_column="1"
+        android:textColor="@color/black"
         android:background="@drawable/inventory_border"
         android:text="@string/empty_string" />
 
@@ -25,6 +27,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_column="2"
+        android:textColor="@color/black"
         android:background="@drawable/inventory_border"
         android:text="@string/empty_string" />
 
@@ -33,6 +36,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_column="3"
+        android:textColor="@color/black"
         android:background="@drawable/inventory_border"
         android:text="@string/empty_string" />
 
@@ -41,6 +45,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_column="4"
+        android:textColor="@color/black"
         android:background="@drawable/inventory_border"
         android:text="@string/empty_string" />
 

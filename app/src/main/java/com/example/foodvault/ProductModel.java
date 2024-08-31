@@ -5,7 +5,7 @@ import java.util.Date;
 public class ProductModel {
     private Integer product_id;
     private String product_name;
-    private Integer product_barcode; //add
+    private String product_barcode; //add
     private Date product_expiration_date;
     private String product_category;
     private boolean product_expired;
@@ -39,11 +39,11 @@ public class ProductModel {
         this.product_name = product_name;
     }
 
-    public Integer getProductBarcode() {
+    public String getProductBarcode() {
         return product_barcode;
     }
 
-    public void setProductBarcode(Integer product_barcode) {
+    public void setProductBarcode(String product_barcode) {
         this.product_barcode = product_barcode;
     }
 
