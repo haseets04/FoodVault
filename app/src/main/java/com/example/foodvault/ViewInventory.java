@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.icu.text.SimpleDateFormat;
+import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -30,7 +31,6 @@ import retrofit2.Retrofit;
 
 
 public class ViewInventory extends AppCompatActivity {
-
     private static final String TAG = "ViewInventory";
     private sbAPI_ViewInventory sbAPI;
     private List<Findrow> findrowsList= new ArrayList<>();
@@ -46,8 +46,16 @@ public class ViewInventory extends AppCompatActivity {
         sbAPI_ViewInventory api = SupabaseClient.getClient().create(sbAPI_ViewInventory.class);
 
         // Fetch and display data
-
         fetchAndDisplayData(api);
+
+        ImageButton addRecord = findViewById(R.id.btnaddproduct);
+        addRecord.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(ViewInventory.this, AddProductActivity.class));
+            }
+        });
+
         ImageButton deleterecord= findViewById(R.id.btnDelete);
         deleterecord.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -227,7 +235,7 @@ public class ViewInventory extends AppCompatActivity {
                                             for (ProductModel product : listproducts) {
                                                 for (InventoryModel inv : inventory) {
                                                     for (LocationModel location : listlocations) {
-                                                        if (product.getProductId().equals(inv.getProductId()) && product.getLocation_id().equals(location.getLocation_id())) {
+                                                        if (product.getProductId().equals(inv.getProductId()) && product.getLocationId().equals(location.getLocation_id())) {
                                                             addProductRecord(tableLayout, product, location, inv);
                                                         }
                                                     }
@@ -268,7 +276,7 @@ public class ViewInventory extends AppCompatActivity {
         });
     }
 
-    private void addProductRecord(TableLayout tableLayout, ProductModel product,LocationModel location, InventoryModel inv) {
+    private void addProductRecord(TableLayout tableLayout, ProductModel product, LocationModel location, InventoryModel inv) {
         LayoutInflater inflater = LayoutInflater.from(this);
         int count=tableLayout.getChildCount();
         String rowTag = "row" + (count);
@@ -290,8 +298,7 @@ public class ViewInventory extends AppCompatActivity {
         locationname.setText(location.getLocation_name());
         category.setText(product.getProductCategory());
         Date today = new Date();//getting todays date
-        expired.setChecked(product.getProductExpirationDate() != null && product.getProductExpirationDate().before(today));
-
+        expired.setChecked(product.getProductExpirationDate() != null && product.getProductExpirationDate().before(today)); //expired if equal to and before today
 
         // Add additional views and set data as needed
 

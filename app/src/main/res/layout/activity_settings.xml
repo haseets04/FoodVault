@@ -20,33 +20,33 @@
             android:layout_height="120dp"
             android:ellipsize="end"
             android:gravity="center"
-            android:maxLines="2"
-            android:text="Settings"
-            android:textAllCaps="true"
+            android:text="@string/settings"
+            android:fontFamily="@font/shrikhand"
+            android:shadowColor="#214069"
             android:textColor="#050C57"
-            android:textSize="40sp"
-            android:textStyle="bold" />
+            android:textSize="40sp" />
 
         <Button
-            android:id="@+id/list_1_btn"
+            android:id="@+id/btn_expire_period"
             android:layout_width="300dp"
             android:layout_height="120dp"
             android:layout_marginTop="30dp"
             android:backgroundTint="#70B1BA"
+            android:onClick="onExpirationReminderClicked"
             android:padding="18dp"
-            android:text="Set Expiration Period for Reminder"
+            android:text="@string/set_expiration_period_for_reminder"
             android:textColor="#311B92"
             android:textSize="20sp"
-            android:onClick="onExpirationReminderClicked" />
+            tools:ignore="TextSizeCheck" />
 
         <Button
-            android:id="@+id/list_2_btn"
+            android:id="@+id/logout_btn"
             android:layout_width="300dp"
             android:layout_height="120dp"
             android:layout_marginTop="30dp"
             android:backgroundTint="#70B1BA"
             android:padding="18dp"
-            android:text="Log out"
+            android:text="@string/log_out"
             android:textColor="#311B92"
             android:textSize="20sp"
             android:onClick="onLogOutClicked" />

@@ -6,6 +6,7 @@ public class UserModel {
     private String user_lastname;
     private String user_email;
     private String user_password;
+    //private int expiration_period; //need?
 
     public Integer getUserId() {
         return user_id;
@@ -46,4 +47,12 @@ public class UserModel {
     public void setUserPassword(String user_password) {
         this.user_password = user_password;
     }
+
+    /*public int getExpirationPeriod() {
+        return expiration_period;
+    }
+
+    public void setExpirationPeriod(int expiration_period) {
+        this.expiration_period = expiration_period;
+    }*/
 }

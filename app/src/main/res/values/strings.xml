@@ -25,18 +25,30 @@
     <string name="view_inventory">View Inventory</string>
     <string name="view_shopping_lists">View Shopping Lists</string>
     <string name="view_groups">View Groups</string>
-    <string name="empty_string" ></string>
-    <string name="category" >Category</string>
+    <string name="empty_string"></string>
+    <string name="category">Category</string>
     <string name="inventory">Inventory</string>
     <string name="add_new_location">Add New Location</string>
     <string name="filter_items">Filter Items</string>
     <string name="add_new_item">Add New Item</string>
     <string-array name="categories">
-        <item>Category 1</item>
-        <item>Category 2</item>
-        <item>Category 3</item>
+        <item>Dairy</item>
+        <item>Vegetables</item>
+        <item>Other</item>
     </string-array>
     <string name="spinner_prompt">Group products in list by:</string>
+    <string name="settings">Settings</string>
+    <string name="set_expiration_period_for_reminder">Set Expiration Period for Reminder</string>
+    <string name="log_out">Log out</string>
+    <string name="select_how_many_days_in_advance_you_would_like_the_app_to_remind_you_before_a_product_reaches_it_s_expiration_date">Select how many days in advance you would like the app to remind you before a product reaches it\'s expiration date:</string>
+    <string name="set_to_30_days_before">Set to 30 days before</string>
+    <string name="save_settings">Save Settings</string>
+    <string name="cancel_edited_settings">Cancel Edited Settings</string>
+    <string name="shopping_lists">Shopping Lists</string>
+    <string name="scrollview_for_shopping_lists">Scrollview for Shopping Lists</string>
+    <string name="edit_shopping_list">Edit Shopping List</string>
+    <string name="remove_shopping_list">Remove Shopping List</string>
+    <string name="add_new_shopping_list">Add New Shopping List</string>
     <string-array name="spinner_options">
         <item>Item Category</item>
         <item>Grocery Store</item>
