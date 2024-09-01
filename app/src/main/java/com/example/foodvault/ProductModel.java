@@ -9,16 +9,17 @@ public class ProductModel {
     private Date product_expiration_date;
     private String product_category;
     private boolean product_expired;
+    private int location_id;
 
-    public Integer getLocation_id() {
+    public int getLocation_id() {
         return location_id;
     }
 
-    public void setLocation_id(Integer location_id) {
+    public void setLocation_id(int location_id) {
         this.location_id = location_id;
     }
 
-    private Integer location_id;
+
 
     public ProductModel() {
     }

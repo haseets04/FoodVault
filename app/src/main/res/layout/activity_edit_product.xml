@@ -2,14 +2,15 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/EditProductRelativelayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
 
     android:background="@drawable/screen_background"
     android:gravity="center"
-    android:padding="16dp"
+    android:orientation="vertical"
 
+    android:padding="16dp"
     tools:context=".AddProductActivity">
 
   <LinearLayout
@@ -21,7 +22,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/add_product_manually"
+        android:text="@string/edit_product"
         android:textAllCaps="true"
         android:textColor="#050C57"
         android:textSize="25sp"
@@ -42,18 +43,13 @@
         android:textColorHint="#3949AB"
         android:textSize="15sp" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal"></LinearLayout>
-
     <TextView
         android:id="@+id/tvquantity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:gravity="center_horizontal"
-        android:text="@string/quantity"
+        android:text="@string/quantity_0"
         android:textColor="#3949AB"
         android:textSize="15sp" />
 
@@ -68,43 +64,40 @@
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
+        android:autofillHints=""
         android:background="@drawable/rounded_corner"
         android:clickable="true"
         android:focusable="false"
         android:gravity="center_horizontal"
-        android:hint="@string/expiration_date"
+        android:hint="@string/enter_an_expiration_date"
         android:inputType="datetime"
         android:padding="14dp"
         android:textColor="#3949AB"
-        android:textColorHint="#3949AB"
+        android:textColorHint="#A8A8A8"
         android:textSize="15sp"
-        android:autofillHints="" />
+        />
 
-    <Spinner
-        android:id="@+id/spinner_category"
-        android:layout_width="300dp"
+    <AutoCompleteTextView
+        android:id="@+id/CategoryTextView"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:gravity="center_horizontal"
-        android:background="@android:drawable/btn_dropdown"
-        android:padding="14dp"
-        android:textAlignment="center"
-        android:textColor="#3949AB"
-        android:textColorHint="#3949AB"
-        android:textSize="15sp" />
+        android:hint="@string/enter_category"
+        android:minHeight="48dp"
+        android:text="@string/empty_string"
+        android:textColor="#000000"
+        android:textColorHint="#A8A8A8"
+        tools:ignore="VisualLintTextFieldSize" />
 
-    <Spinner
-        android:id="@+id/spinner_location"
-        android:layout_width="300dp"
+    <AutoCompleteTextView
+        android:id="@+id/LocationTextView"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:background="@android:drawable/btn_dropdown"
-        android:gravity="center_horizontal"
-        android:padding="14dp"
-        android:textAlignment="center"
-        android:textColor="#3949AB"
-        android:textColorHint="#3949AB"
-        android:textSize="15sp" />
+        android:hint="@string/enter_location"
+        android:minHeight="48dp"
+        android:text="@string/empty_string"
+        android:textColor="#000000"
+        android:textColorHint="#A8A8A8"
+        tools:ignore="VisualLintTextFieldSize" />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -113,15 +106,14 @@
         android:orientation="horizontal">
 
       <Button
-          android:id="@+id/btn_add_product"
-          android:layout_width="200dp"
+          android:id="@+id/btn_edit_product"
+          android:layout_width="147dp"
           android:layout_height="wrap_content"
-          android:layout_marginEnd="10dp"
-          android:text="@string/save_and_add_product_to_inventory"
-          android:textColor="#311B92"
-          android:backgroundTint="#70B1BA"
           android:layout_marginTop="10dp"
-          android:onClick="onAddProductClicked" />
+          android:layout_marginEnd="10dp"
+          android:backgroundTint="#70B1BA"
+          android:text="@string/save_and_update_product"
+          android:textColor="#311B92" />
 
       <Button
           android:id="@+id/btn_cancel_product"
@@ -129,9 +121,9 @@
           android:layout_height="wrap_content"
           android:layout_marginTop="10dp"
           android:backgroundTint="#70B1BA"
-          android:text="@string/cancel_product_entry"
-          android:textColor="#311B92"
-          android:onClick="onCancelProductClicked" />
+          android:onClick="onCancelProductClicked"
+          android:text="@string/cancel_edit"
+          android:textColor="#311B92" />
 
     </LinearLayout>
 

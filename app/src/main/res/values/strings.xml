@@ -37,6 +37,13 @@
         <item>Category 3</item>
     </string-array>
     <string name="spinner_prompt">Group products in list by:</string>
+    <string name="enter_an_expiration_date">Enter an expiration date</string>
+    <string name="quantity_0">Quantity : 0</string>
+    <string name="edit_product">Edit Product</string>
+    <string name="enter_category">Enter Category</string>
+    <string name="cancel_edit">Cancel Edit</string>
+    <string name="enter_location">Enter Location</string>
+    <string name="save_and_update_product">Save and update Product</string>
     <string-array name="spinner_options">
         <item>Item Category</item>
         <item>Grocery Store</item>

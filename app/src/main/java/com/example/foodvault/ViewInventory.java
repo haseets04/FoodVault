@@ -130,8 +130,23 @@ public class ViewInventory extends AppCompatActivity {
                                                intent.putExtra("name",((TextView) tableRow.getChildAt(0)).getText().toString());
                                                intent.putExtra("quantity",qty);
                                                intent.putExtra("expiration",((TextView) tableRow.getChildAt(2)).getText().toString());
-                                               intent.putExtra("category",tableRow.getChildAt(3).toString());
+                                               intent.putExtra("category",((TextView) tableRow.getChildAt(3)).getText().toString());
                                                intent.putExtra("location",((TextView) tableRow.getChildAt(4)).getText().toString());
+                                               for (Findrow row:
+                                                    findrowsList) {
+                                                   if (row!=null&&row.getRecordTag()==tableRow.getTag())
+                                                   {
+                                                       intent.putExtra("product_id",row.getProduct_id());
+                                                       intent.putExtra("inventory_id",row.getProduct_id());
+                                                       for (ProductModel product:
+                                                            listproducts) {
+                                                           if(product!=null &&product.getProductId()==row.getProduct_id())
+                                                           {
+                                                               intent.putExtra("location_id",product.getLocation_id());
+                                                           }
+                                                       }
+                                                   }
+                                               }
                                                startActivity(intent);
 
                                            }
@@ -227,7 +242,7 @@ public class ViewInventory extends AppCompatActivity {
                                             for (ProductModel product : listproducts) {
                                                 for (InventoryModel inv : inventory) {
                                                     for (LocationModel location : listlocations) {
-                                                        if (product.getProductId().equals(inv.getProductId()) && product.getLocation_id().equals(location.getLocation_id())) {
+                                                        if (product.getProductId().equals(inv.getProductId()) && product.getLocation_id()==(location.getLocation_id().intValue())) {
                                                             addProductRecord(tableLayout, product, location, inv);
                                                         }
                                                     }
