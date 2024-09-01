@@ -2,6 +2,7 @@ package com.example.foodvault;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -14,8 +15,11 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     public void onExpirationReminderClicked(View view) {
+        startActivity(new Intent(SettingsActivity.this, ExpirationPeriodActivity.class));
     }
 
     public void onLogOutClicked(View view) {
+        //blank email and password
+        startActivity(new Intent(SettingsActivity.this, MainActivity.class));
     }
 }

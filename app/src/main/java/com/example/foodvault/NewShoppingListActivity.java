@@ -1,5 +1,6 @@
 package com.example.foodvault;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -13,7 +14,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -21,11 +25,22 @@ import retrofit2.Response;
 
 public class NewShoppingListActivity extends AppCompatActivity {
     private LinearLayout shoppingListContainer;
+    private AppState appState;
+    private int currentShopListNameID; //for cancel functionality
+    ShopListModel newShoppingList;
+    String shopListName;
+    EditText shopListNameInput;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_shopping_list);
+
+        appState = AppState.getInstance();
+        currentShopListNameID = appState.getShopListNameID(); //store the last saved value
+
+        shopListNameInput = findViewById(R.id.shopListName);
+        shopListNameInput.setHint("Shopping List " + currentShopListNameID);
 
         shoppingListContainer = findViewById(R.id.shopping_list_container);
 
@@ -83,11 +98,15 @@ public class NewShoppingListActivity extends AppCompatActivity {
     }
 
     public void onSaveNewShopList(View view) {
-        EditText shopListNameInput = findViewById(R.id.shopListName);
-        String shopListName = shopListNameInput.getText().toString();
+        shopListName = shopListNameInput.getText().toString();
 
-        ShopListModel newShoppingList = new ShopListModel();
-        newShoppingList.setShoplistName(shopListName);
+        newShoppingList = new ShopListModel();
+        if(shopListName.isEmpty() || shopListName == null){
+            newShoppingList.setShoplistName("Shopping List " + currentShopListNameID);
+            appState.setShopListNameID(currentShopListNameID + 1);
+        } else{
+            newShoppingList.setShoplistName(shopListName);
+        }
 
         SupabaseAPI api = SupabaseClient.getClient().create(SupabaseAPI.class);
 
@@ -97,6 +116,8 @@ public class NewShoppingListActivity extends AppCompatActivity {
             public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
                 if (response.isSuccessful()) {
                     Toast.makeText(NewShoppingListActivity.this, "Shopping List saved", Toast.LENGTH_SHORT).show();
+                    setResult(RESULT_OK);
+                    finish();
                 } else {
                     try {
                         String errorBody = response.errorBody() != null ? response.errorBody().string() : "No error body";
@@ -112,12 +133,28 @@ public class NewShoppingListActivity extends AppCompatActivity {
                 Toast.makeText(NewShoppingListActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
-
+        //confirm saving of changes
     }
 
-    public void onCancelNewShopList(View view) {
-        //don't add to DB
-        Toast.makeText(NewShoppingListActivity.this, "New Shopping List entry cancelled", Toast.LENGTH_SHORT).show();
-        finish();
+    public void onCancelNewShopList(View view) { //don't add to DB
+        AlertDialog.Builder builder2 = new AlertDialog.Builder(this);
+        builder2.setTitle("Confirm Cancel");
+        builder2.setMessage("Are you sure you want to cancel the new entry?");
+        builder2.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Toast.makeText(NewShoppingListActivity.this, "New Shopping List entry cancelled", Toast.LENGTH_SHORT).show();
+                finish();            }
+        });
+
+        builder2.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+
+        AlertDialog dialog2 = builder2.create();
+        dialog2.show();
     }
 }

@@ -5,8 +5,10 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 /**
@@ -38,5 +40,13 @@ public interface SupabaseAPI {
     @POST("/rest/v1/shoppinglist")
     Call<Void> insertShoppingList(@Body ShopListModel shoppingList); //insert new shoppingList record
 
+    @GET("/rest/v1/shoppinglist")
+    Call<List<ShopListModel>> getShoppingLists(@Query("select") String select);
+
+    @GET("shopping_lists")
+    Call<List<ShopListModel>> getShoppingListRecentID(@Query("order") String order);
+
+    /*@PATCH("/rest/v1/shoppinglist/{shoplist_id}")
+    Call<Void> updateShoppingList(@Path("shoplist_id") Integer id, @Body ShopListModel updatedShoppingList);*/
 
 }

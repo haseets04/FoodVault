@@ -167,23 +167,22 @@
         tools:ignore="TouchTargetSizeCheck" />
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/img_peach_puddle"
         android:layout_width="210dp"
         android:layout_height="102dp"
-        android:layout_marginBottom="96dp"
+        android:layout_marginStart="228dp"
+        android:layout_marginBottom="136dp"
         android:scaleType="fitXY"
         app:layout_constraintBottom_toTopOf="@+id/scrollview"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/peach_puddle"
         tools:ignore="VisualLintBounds" />
 
     <ImageView
-        android:id="@+id/imageView3"
+        android:id="@+id/img_blue_puddle"
         android:layout_width="210dp"
         android:layout_height="118dp"
-        android:layout_marginTop="168dp"
+        android:layout_marginTop="256dp"
         android:layout_marginEnd="260dp"
         android:scaleType="fitXY"
         app:layout_constraintEnd_toEndOf="parent"
@@ -192,27 +191,27 @@
         tools:ignore="VisualLintBounds" />
 
     <ImageView
-        android:id="@+id/imageView4"
-        android:layout_width="87dp"
-        android:layout_height="77dp"
-        android:layout_marginStart="144dp"
-        android:layout_marginBottom="4dp"
+        android:id="@+id/img_lemon_puddle"
+        android:layout_width="99dp"
+        android:layout_height="86dp"
+        android:layout_marginStart="132dp"
+        android:layout_marginBottom="28dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imageView3"
-        app:srcCompat="@drawable/orange" />
+        app:layout_constraintStart_toEndOf="@+id/img_blue_puddle"
+        app:srcCompat="@drawable/lemon" />
 
     <ImageView
-        android:id="@+id/imageView5"
-        android:layout_width="90dp"
-        android:layout_height="71dp"
-        android:layout_marginStart="160dp"
-        android:layout_marginTop="124dp"
+        android:id="@+id/img_box_icon"
+        android:layout_width="99dp"
+        android:layout_height="70dp"
+        android:layout_marginStart="156dp"
+        android:layout_marginTop="172dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/scrollview"
         app:srcCompat="@drawable/box_icon" />
 
     <ImageButton
-        android:id="@+id/imageButton4"
+        android:id="@+id/btnaddproduct"
         android:layout_width="55dp"
         android:layout_height="55dp"
         android:layout_marginStart="76dp"

@@ -22,10 +22,10 @@
             android:gravity="center"
             android:maxLines="2"
             android:text="@string/foodvault"
-            android:textAllCaps="true"
+            android:fontFamily="@font/shrikhand"
+            android:shadowColor="#214069"
             android:textColor="#050C57"
-            android:textSize="40sp"
-            android:textStyle="bold" />
+            android:textSize="40sp" />
 
         <Button
             android:id="@+id/view_inventory_btn"

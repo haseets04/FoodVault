@@ -1,9 +1,11 @@
 package com.example.foodvault;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -20,6 +22,8 @@ import android.widget.Toast;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -29,12 +33,14 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class AddProductActivity extends AppCompatActivity {
+
+    //make note of expiry date, count down to notify user
     private String productName;
     //Barcode
     private int quantityValue;
     private Date expireDate;
     private String selectedCategory;
-    private boolean isProductExpired = false;
+    private boolean isProductExpired;
     EditText productNameInput, expirationDateInput;
     NumberPicker quantityPicker;
     Spinner category;
@@ -82,7 +88,6 @@ public class AddProductActivity extends AppCompatActivity {
                 // Handle the case when no item is selected (if necessary)
             }
         });
-
     }
 
     public void onAddProductClicked(View view) { //doesnt add to product table
@@ -96,9 +101,30 @@ public class AddProductActivity extends AppCompatActivity {
             expireDate = sdf.parse(dateString); //use this to add to DB
         } catch (ParseException e) {
             e.printStackTrace();
-            Toast.makeText(AddProductActivity.this, "Invalid date format", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(AddProductActivity.this, "Invalid date format", Toast.LENGTH_SHORT).show();
+            return;
         }
-        category.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+        //check if product expired
+        Date currentDate = new Date(); //get the current date
+        Log.d("CurrentDate", "Date: " + currentDate);
+
+        //compare the dates
+        if (expireDate != null) {
+            if (expireDate.before(currentDate) || expireDate.equals(currentDate)) {
+                isProductExpired = true; // The chosen date is today or in the past
+            } else {
+                isProductExpired = false; // The chosen date is in the future
+            }
+        } else {
+            // Handle the case where the date couldn't be parsed
+            isProductExpired = true; // Default to expired if date parsing fails
+            Toast.makeText(AddProductActivity.this, "Invalid date format", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        Log.d("DateCheck", "isExpired: " + isProductExpired);
+
+        /*category.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 selectedCategory = (String) parent.getItemAtPosition(position);
@@ -108,10 +134,27 @@ public class AddProductActivity extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> parent) {
                 // Handle the case when no item is selected (if necessary)
             }
-        });
+        });*/
 
         Log.i("Product Info", "Name: " + productName + ", Quantity: " + quantityValue +
                 ", Expiration Date: " + expireDate + ", Category: " + selectedCategory);
+
+        if (productName.isEmpty()) {
+            Toast.makeText(this, "Please enter the product name", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        else if (quantityValue == 0) {
+            Toast.makeText(this, "Please enter a quantity greater than 0", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        else if (dateString.isEmpty()) {
+            Toast.makeText(this, "Please enter the expiration date", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        else if (selectedCategory.isEmpty()) { //check this one
+            Toast.makeText(this, "Please enter the category", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         // Insert into Inventory table
         InventoryModel newInventory = new InventoryModel();
@@ -124,11 +167,17 @@ public class AddProductActivity extends AppCompatActivity {
             public void onResponse(Call<InventoryModel> call, Response<InventoryModel> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     Integer generatedProductId = response.body().getProductId();
+                    //Integer generatedProductId = newInventory.getProductId();
+
+                    Log.d("generatedProductId", "generatedProductId: " + generatedProductId);
+                    Log.i("generatedProductId", "generatedProductId: " + generatedProductId);
 
                     // Insert into Product table
                     ProductModel newProduct = new ProductModel();
                     newProduct.setProductId(generatedProductId);
+                    newProduct.setLocationId(null);
                     newProduct.setProductName(productName);
+                    newProduct.setProductBarcode(null);
                     newProduct.setProductExpirationDate(expireDate);
                     newProduct.setProductCategory(selectedCategory);
                     newProduct.setProductExpired(isProductExpired);
@@ -161,6 +210,7 @@ public class AddProductActivity extends AppCompatActivity {
                 Toast.makeText(AddProductActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+
     }
 
     private void handleApiError(Response<?> response) {
@@ -173,10 +223,28 @@ public class AddProductActivity extends AppCompatActivity {
         }
     }
 
-    public void onCancelProductClicked(View view) {
-        //don't add to DB
-        Toast.makeText(AddProductActivity.this, "Product entry cancelled", Toast.LENGTH_SHORT).show();
-        finish();
+    public void onCancelProductClicked(View view) {  //don't add to DB
+        //confirmation dialog
+        AlertDialog.Builder builder2 = new AlertDialog.Builder(this);
+        builder2.setTitle("Confirm Cancel");
+        builder2.setMessage("Are you sure you want to cancel the entry?");
+        builder2.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Toast.makeText(AddProductActivity.this, "Product entry cancelled", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        });
+
+        builder2.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+
+        AlertDialog dialog2 = builder2.create();
+        dialog2.show();
     }
 
     public void onCameraClicked(View view) {

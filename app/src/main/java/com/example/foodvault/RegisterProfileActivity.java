@@ -20,6 +20,8 @@ public class RegisterProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_profile);
+
+        //do show/hide for passwords
     }
 
     public void onRegisterClicked(View view) {
@@ -35,6 +37,28 @@ public class RegisterProfileActivity extends AppCompatActivity {
         String password = passwordInput.getText().toString();
         String confirmPassword = confirmPasswordInput.getText().toString();
 
+        //validate input fields
+        if (firstName.isEmpty()) {
+            Toast.makeText(this, "Please enter your first name", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        else if (lastName.isEmpty()) {
+            Toast.makeText(this, "Please enter your last name", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        else if (emailAddress.isEmpty()) {
+            Toast.makeText(this, "Please enter your email address", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        else if (password.isEmpty()) {
+            Toast.makeText(this, "Please enter your password", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        else if (confirmPassword.isEmpty()) {
+            Toast.makeText(this, "Please confirm your password", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         if(password.equals(confirmPassword)){  //can register
             //insert new user record to DB (user table)
             UserModel newUser = new UserModel();
@@ -42,6 +66,7 @@ public class RegisterProfileActivity extends AppCompatActivity {
             newUser.setUserLastname(lastName);
             newUser.setUserEmail(emailAddress);
             newUser.setUserPassword(password);
+            //newUser.setExpirationPeriod(30); //default expiration period
 
             SupabaseAPI api = SupabaseClient.getClient().create(SupabaseAPI.class);
 

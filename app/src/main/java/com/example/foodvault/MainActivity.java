@@ -59,9 +59,11 @@ public class MainActivity extends AppCompatActivity { //Login page
         String emailAddress = ((EditText) findViewById(R.id.email_address_input)).getText().toString();
         String password = ((EditText) findViewById(R.id.password_input)).getText().toString();
 
+        //make sure to check with DB if its there
+
         Log.i("Test Credentials", "Email Address: " + emailAddress + " and Password: " + password);
 
-        startActivity(new Intent(MainActivity.this, ExpirationPeriodActivity.class)); //Dashboard
+        startActivity(new Intent(MainActivity.this, DashboardActivity.class)); //DashboardActivity
     }
 
 
