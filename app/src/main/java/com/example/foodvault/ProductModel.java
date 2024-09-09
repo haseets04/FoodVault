@@ -4,12 +4,14 @@ import java.util.Date;
 
 public class ProductModel {
     private Integer product_id;
+    private Integer user_id;
     private Integer location_id; //can be null
     private String product_name;
-    private String product_barcode; //add //can be null
+    private Integer product_barcode; //add //can be null //String rather?
     private Date product_expiration_date;
     private String product_category;
     private boolean product_expired;
+    private int quantity;
 
     public ProductModel() {
     }
@@ -20,6 +22,14 @@ public class ProductModel {
 
     public void setProductId(Integer product_id) {
         this.product_id = product_id;
+    }
+
+    public Integer getUserIdForProduct() {
+        return user_id;
+    }
+
+    public void setUserIdForProduct(Integer user_id) {
+        this.user_id = user_id;
     }
 
     public Integer getLocationId() {
@@ -38,11 +48,11 @@ public class ProductModel {
         this.product_name = product_name;
     }
 
-    public String getProductBarcode() {
+    public Integer getProductBarcode() {
         return product_barcode;
     }
 
-    public void setProductBarcode(String product_barcode) {
+    public void setProductBarcode(Integer product_barcode) {
         this.product_barcode = product_barcode;
     }
 
@@ -68,5 +78,13 @@ public class ProductModel {
 
     public void setProductExpired(boolean product_expired) {
         this.product_expired = product_expired;
+    }
+
+    public int getProductQuantity() { //change to getQuantity later
+        return quantity;
+    }
+
+    public void setProductQuantity(int quantity) {
+        this.quantity = quantity;
     }
 }

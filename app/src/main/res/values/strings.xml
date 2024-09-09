@@ -32,9 +32,7 @@
     <string name="filter_items">Filter Items</string>
     <string name="add_new_item">Add New Item</string>
     <string-array name="categories">
-        <item>Dairy</item>
-        <item>Vegetables</item>
-        <item>Other</item>
+        <item>Add New Category</item>
     </string-array>
     <string name="spinner_prompt">Group products in list by:</string>
     <string name="settings">Settings</string>
@@ -49,6 +47,9 @@
     <string name="edit_shopping_list">Edit Shopping List</string>
     <string name="remove_shopping_list">Remove Shopping List</string>
     <string name="add_new_shopping_list">Add New Shopping List</string>
+    <string name="add_another_item_in_list">Add another item in list</string>
+    <string name="share_shopping_list">Share shopping list</string>
+    <string name="delete_item_in_list">Delete item in list</string>
     <string-array name="spinner_options">
         <item>Item Category</item>
         <item>Grocery Store</item>

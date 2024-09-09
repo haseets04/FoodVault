@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -18,12 +19,13 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity { //Login page
+    private Integer userIdOnLogin;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
+        //delete later
         //get first user record
         TextView textView = findViewById(R.id.text_view);
 
@@ -38,7 +40,7 @@ public class MainActivity extends AppCompatActivity { //Login page
                     if (items != null && !items.isEmpty()) {
                         //textView.setText("Connected. Items: " + items.get(0).user_id);
                         textView.setText("Successfully connected to the Supabase API. Items: \n" +
-                                items.get(1).getUserId() + items.get(1).getUserFirstname() + items.get(1).getUserLastname() + items.get(1).getUserEmail() + items.get(1).getUserPassword());
+                                items.get(0).getUserId() + items.get(0).getUserFirstname() + items.get(0).getUserLastname() + items.get(0).getUserEmail() + items.get(0).getUserPassword());
                     } else {
                         textView.setText("No items found.");
                     }
@@ -56,16 +58,68 @@ public class MainActivity extends AppCompatActivity { //Login page
     }
 
     public void onLoginClicked(View view) {
-        String emailAddress = ((EditText) findViewById(R.id.email_address_input)).getText().toString();
-        String password = ((EditText) findViewById(R.id.password_input)).getText().toString();
+        EditText loginEmailInput = findViewById(R.id.email_address_input);
+        EditText loginPasswordInput = findViewById(R.id.password_input);
 
-        //make sure to check with DB if its there
+        String loginEmail = loginEmailInput.getText().toString();
+        String loginPassword = loginPasswordInput.getText().toString();
 
-        Log.i("Test Credentials", "Email Address: " + emailAddress + " and Password: " + password);
+        //validate input fields
+        if (loginEmail.isEmpty()) {
+            Toast.makeText(this, "Please enter your email address", Toast.LENGTH_SHORT).show();
+            return;
+        } else if (loginPassword.isEmpty()) {
+            Toast.makeText(this, "Please enter your password", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-        startActivity(new Intent(MainActivity.this, DashboardActivity.class)); //DashboardActivity
+        //check if user email in DB
+        SupabaseAPI api = SupabaseClient.getClient().create(SupabaseAPI.class);
+
+        Call<List<UserModel>> checkUserCall = api.getUserByEmail("eq." + loginEmail, "*");
+
+        checkUserCall.enqueue(new Callback<List<UserModel>>() {
+            @Override
+            public void onResponse(@NonNull Call<List<UserModel>> call, @NonNull Response<List<UserModel>> response) {
+                //Log.d("API Response", response.toString());
+                if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
+                    //user email in DB
+                    UserModel currentUser = response.body().get(0); //get the first match
+
+                    //check if password correctly entered
+                    if(loginPassword.equals(currentUser.getUserPassword())){
+                        //work with this user's data in the database till logout
+                        userIdOnLogin = currentUser.getUserId();
+                        UserSession.getInstance().setUserSessionId(userIdOnLogin); //store user ID in singleton class
+
+                        /* //Option 2
+                        //save user ID to SharedPreferences
+                        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putInt("USER_ID", userIdOnLogin);
+                        editor.apply();
+
+                        // Retrieve the user ID from SharedPreferences (use in any other activity)
+                        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+                        int userId = sharedPreferences.getInt("USER_ID", -1); // Default value -1 if not found */
+
+                        Toast.makeText(MainActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(MainActivity.this, DashboardActivity.class)); //DashboardActivity
+                    } else{
+                        Toast.makeText(MainActivity.this, "Incorrect password", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    //user email not in DB
+                    Toast.makeText(MainActivity.this, "Email address not found", Toast.LENGTH_SHORT).show();
+                }
+            }
+            @Override
+            public void onFailure(@NonNull Call<List<UserModel>> call, @NonNull Throwable t) {
+                Toast.makeText(MainActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
-
 
     public void onSignUpClicked(View view) {
         startActivity(new Intent(MainActivity.this, RegisterProfileActivity.class));

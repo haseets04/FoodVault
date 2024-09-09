@@ -30,6 +30,7 @@ public class NewShoppingListActivity extends AppCompatActivity {
     ShopListModel newShoppingList;
     String shopListName;
     EditText shopListNameInput;
+    Integer userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,10 +98,19 @@ public class NewShoppingListActivity extends AppCompatActivity {
         shoppingListContainer.addView(newItemRow);
     }
 
+    public Integer getCurrentUserIDFromSession(){
+        userId = UserSession.getInstance().getUserSessionId();
+        if (userId == null) {
+            Toast.makeText(NewShoppingListActivity.this, "User ID not found", Toast.LENGTH_SHORT).show();
+        }
+        return userId;
+    }
+
     public void onSaveNewShopList(View view) {
         shopListName = shopListNameInput.getText().toString();
 
         newShoppingList = new ShopListModel();
+        newShoppingList.setUserIdForShopList(getCurrentUserIDFromSession());
         if(shopListName.isEmpty() || shopListName == null){
             newShoppingList.setShoplistName("Shopping List " + currentShopListNameID);
             appState.setShopListNameID(currentShopListNameID + 1);

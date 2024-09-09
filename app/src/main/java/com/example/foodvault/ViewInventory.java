@@ -29,14 +29,14 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-
 public class ViewInventory extends AppCompatActivity {
     private static final String TAG = "ViewInventory";
     private sbAPI_ViewInventory sbAPI;
     private List<Findrow> findrowsList= new ArrayList<>();
-    List<InventoryModel> inventory;
     List<ProductModel> listproducts;
     List<LocationModel> listlocations;
+    private Integer userId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,16 +53,17 @@ public class ViewInventory extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(ViewInventory.this, AddProductActivity.class));
+                //fetchAndDisplayData(api);
             }
         });
 
-        ImageButton deleterecord= findViewById(R.id.btnDelete);
+        ImageButton deleterecord = findViewById(R.id.btnDelete);
         deleterecord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(ViewInventory.this, "Click a record you want to delete", Toast.LENGTH_SHORT).show();
                 TableLayout tableLayout = findViewById(R.id.tblInventory);
-                int tblcount=tableLayout.getChildCount();
+                int tblcount = tableLayout.getChildCount();
                 for (int i = 1; i < tblcount; i++) {
                     View child = tableLayout.getChildAt(i);
 
@@ -79,7 +80,7 @@ public class ViewInventory extends AppCompatActivity {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
                                                 // Handle the record deletion here
-                                             deleteRecord(tableRow, tableLayout,api); // Implement deleteRecord() method
+                                             deleteRecord(tableRow, tableLayout, api); // Implement deleteRecord() method
 
                                             }
                                         })
@@ -109,7 +110,7 @@ public class ViewInventory extends AppCompatActivity {
             }
         });
 
-        ImageButton btnedit=findViewById(R.id.btnedit);
+       ImageButton btnedit = findViewById(R.id.btnedit);
        btnedit.setOnClickListener(new View.OnClickListener(){
 
            @Override
@@ -167,17 +168,15 @@ public class ViewInventory extends AppCompatActivity {
                    }
                }
 
-
            }
        });
     }
 
-    private void deleteRecord(TableRow tableRow,TableLayout table,sbAPI_ViewInventory api ){
+    private void deleteRecord(TableRow tableRow, TableLayout table, sbAPI_ViewInventory api){
 
-        for (Findrow row:findrowsList
-             ) {
-            if (tableRow != null&&tableRow.getTag().toString()==row.getRecordTag()) {
-               Call<Void> deleteinventorycall= api.deleteinvrecord("eq."+row.getProduct_id());
+        for (Findrow row:findrowsList) {
+            if (tableRow != null && tableRow.getTag().toString().equals(row.getRecordTag())) {
+               Call<Void> deleteinventorycall = api.deleteproduct("eq."+ row.getProduct_id());
 
                deleteinventorycall.enqueue(new Callback<Void>() {
                    @Override
@@ -206,65 +205,55 @@ public class ViewInventory extends AppCompatActivity {
         }
 
       // table.removeView(tableRow);
+    }
 
-
+    public Integer getCurrentUserIDFromSession(){
+        userId = UserSession.getInstance().getUserSessionId();
+        if (userId == null) {
+            Toast.makeText(ViewInventory.this, "User ID not found", Toast.LENGTH_SHORT).show();
+        }
+        return userId;
     }
 
     private void fetchAndDisplayData(sbAPI_ViewInventory sbAPI) {
-        Call<List<LocationModel>> locations= sbAPI.getLocations();
-        Call<List<InventoryModel>> inventories=sbAPI.getInventory();
-        Call<List<ProductModel>> products=sbAPI.getProducts();
+        Call<List<LocationModel>> locations = sbAPI.getLocations();
+        Call<List<ProductModel>> products = sbAPI.getProducts();
        locations.enqueue(new Callback<List<LocationModel>>() {
             @Override
             public void onResponse(Call<List<LocationModel>> call, Response<List<LocationModel>> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                     listlocations = response.body();
+                    listlocations = response.body();
                     TableLayout tableLayout = findViewById(R.id.tblInventory);
-                   inventories.enqueue(new Callback<List<InventoryModel>>() {
+                    products.enqueue(new Callback<List<ProductModel>>() {
                         @Override
-                        public void onResponse(Call<List<InventoryModel>> call, Response<List<InventoryModel>> response) {
+                        public void onResponse(Call<List<ProductModel>> call, Response<List<ProductModel>> response) {
                             if (response.isSuccessful() && response.body() != null) {
-                                inventory = response.body();
+                                listproducts = response.body();
+                                Log.d(TAG, "Products fetched successfully: " + listproducts.toString());
 
-                                products.enqueue(new Callback<List<ProductModel>>() {
-                                    @Override
-                                    public void onResponse(Call<List<ProductModel>> call, Response<List<ProductModel>> response) {
-                                        if (response.isSuccessful() && response.body() != null) {
-                                             listproducts = response.body();
-
-                                            for (ProductModel product : listproducts) {
-                                                for (InventoryModel inv : inventory) {
-                                                    for (LocationModel location : listlocations) {
-                                                        if (product.getProductId().equals(inv.getProductId()) && product.getLocationId().equals(location.getLocation_id())) {
-                                                            addProductRecord(tableLayout, product, location, inv);
-                                                        }
-                                                    }
-                                                }
+                                for (ProductModel product : listproducts) {
+                                        for (LocationModel location : listlocations) {
+                                            if (product.getUserIdForProduct().equals(getCurrentUserIDFromSession()) && //for that user
+                                                    product.getLocationId() != null &&
+                                                    product.getLocationId().equals(location.getLocation_id()))
+                                            {
+                                                addProductRecord(tableLayout, product, location);
                                             }
-                                        } else {
-                                            Log.e(TAG, "Products response unsuccessful or body is null");
                                         }
-                                    }
-
-                                    @Override
-                                    public void onFailure(Call<List<ProductModel>> call, Throwable t) {
-                                        Toast.makeText(ViewInventory.this, "Failed to display products", Toast.LENGTH_SHORT).show();
-                                        Log.e(TAG, "Failed to fetch products", t);
-                                    }
-                                });
+                                }
                             } else {
-                                Log.e(TAG, "Inventory response unsuccessful or body is null");
+                                Log.e(TAG, "Products response unsuccessful or body is null");
                             }
                         }
 
                         @Override
-                        public void onFailure(Call<List<InventoryModel>> call, Throwable t) {
-                            Toast.makeText(ViewInventory.this, "Failed to display inventory", Toast.LENGTH_SHORT).show();
-                            Log.e(TAG, "Failed to fetch inventory", t);
+                        public void onFailure(Call<List<ProductModel>> call, Throwable t) {
+                            Toast.makeText(ViewInventory.this, "Failed to display products", Toast.LENGTH_SHORT).show();
+                            Log.e(TAG, "Failed to fetch products", t);
                         }
                     });
-                }  else {
-                    Log.e(TAG, "Locations response unsuccessful or body is null");
+                } else {
+                    Log.e(TAG, "Inventory response unsuccessful or body is null");
                 }
             }
 
@@ -276,7 +265,7 @@ public class ViewInventory extends AppCompatActivity {
         });
     }
 
-    private void addProductRecord(TableLayout tableLayout, ProductModel product, LocationModel location, InventoryModel inv) {
+    private void addProductRecord(TableLayout tableLayout, ProductModel product, LocationModel location){  //, InventoryModel inv) {
         LayoutInflater inflater = LayoutInflater.from(this);
         int count=tableLayout.getChildCount();
         String rowTag = "row" + (count);
@@ -290,7 +279,7 @@ public class ViewInventory extends AppCompatActivity {
         TextView category = (TextView) rowView.getChildAt(3);
         CheckBox expired = (CheckBox) rowView.getChildAt(5);
         tvproductname.setText(product.getProductName());
-        int test= inv.getQuantity();
+        int test= product.getProductQuantity(); //inv.getQuantity();
         quantity.setText(""+test);
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         String formattedDate = dateFormat.format(product.getProductExpirationDate());
@@ -306,3 +295,4 @@ public class ViewInventory extends AppCompatActivity {
     }
 
 }
+

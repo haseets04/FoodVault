@@ -12,7 +12,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class SupabaseClient {
     private static Retrofit retrofit = null;
-    private static String baseUrl = "https://rucdnepecnqmfmyyymgt.supabase.co"; //"https://hddpqiabofrxxyptexff.supabase.co"; //add your url
+    private static String baseUrl = "https://rucdnepecnqmfmyyymgt.supabase.co"; //add your url
     private static String apiKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ1Y2RuZXBlY25xbWZteXl5bWd0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjM0MDYwMzksImV4cCI6MjAzODk4MjAzOX0.Bau0CHxYNgngjKF6QBIhRPk805kEirJvrEM7lwjvK1U";
     public static Retrofit getClient() {
         if (retrofit == null) {

@@ -66,12 +66,12 @@ public class RegisterProfileActivity extends AppCompatActivity {
             newUser.setUserLastname(lastName);
             newUser.setUserEmail(emailAddress);
             newUser.setUserPassword(password);
-            //newUser.setExpirationPeriod(30); //default expiration period
+            newUser.setExpirationPeriod(30); //default expiration period
 
             SupabaseAPI api = SupabaseClient.getClient().create(SupabaseAPI.class);
 
             //check if user already exists
-            Call<List<UserModel>> checkUserCall = api.getUserByEmail(emailAddress);
+            Call<List<UserModel>> checkUserCall = api.getUserByEmail("eq." + emailAddress, "*");
             checkUserCall.enqueue(new Callback<List<UserModel>>() {
                 @Override
                 public void onResponse(@NonNull Call<List<UserModel>> call, @NonNull Response<List<UserModel>> response) {

@@ -1,6 +1,6 @@
-package com.example.foodvault;
+//package com.example.foodvault;
 
-public class InventoryModel { //NB write attributes as exactly seen in DB
+/*public class InventoryModel { //NB write attributes as exactly seen in DB
     private Integer product_id;
     private int quantity;
 
@@ -22,4 +22,4 @@ public class InventoryModel { //NB write attributes as exactly seen in DB
     public void setQuantity(int qty) {
         this.quantity = qty;
     }
-}
+}*/
