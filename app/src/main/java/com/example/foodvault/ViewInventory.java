@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.icu.text.SimpleDateFormat;
-import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,6 +15,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
@@ -23,11 +23,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
 
 public class ViewInventory extends AppCompatActivity {
     private static final String TAG = "ViewInventory";
@@ -180,7 +178,7 @@ public class ViewInventory extends AppCompatActivity {
 
                deleteinventorycall.enqueue(new Callback<Void>() {
                    @Override
-                   public void onResponse(Call<Void> call, Response<Void> response) {
+                   public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
 
                        if(response.isSuccessful())
                        {
@@ -196,7 +194,7 @@ public class ViewInventory extends AppCompatActivity {
                    }
 
                    @Override
-                   public void onFailure(Call<Void> call, Throwable t) {
+                   public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
                        Log.e(TAG, "unable to connect to product table, product was not deleted");
                    }
                });
@@ -220,13 +218,13 @@ public class ViewInventory extends AppCompatActivity {
         Call<List<ProductModel>> products = sbAPI.getProducts();
        locations.enqueue(new Callback<List<LocationModel>>() {
             @Override
-            public void onResponse(Call<List<LocationModel>> call, Response<List<LocationModel>> response) {
+            public void onResponse(@NonNull Call<List<LocationModel>> call, @NonNull Response<List<LocationModel>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     listlocations = response.body();
                     TableLayout tableLayout = findViewById(R.id.tblInventory);
                     products.enqueue(new Callback<List<ProductModel>>() {
                         @Override
-                        public void onResponse(Call<List<ProductModel>> call, Response<List<ProductModel>> response) {
+                        public void onResponse(@NonNull Call<List<ProductModel>> call, @NonNull Response<List<ProductModel>> response) {
                             if (response.isSuccessful() && response.body() != null) {
                                 listproducts = response.body();
                                 Log.d(TAG, "Products fetched successfully: " + listproducts.toString());
@@ -247,7 +245,7 @@ public class ViewInventory extends AppCompatActivity {
                         }
 
                         @Override
-                        public void onFailure(Call<List<ProductModel>> call, Throwable t) {
+                        public void onFailure(@NonNull Call<List<ProductModel>> call, @NonNull Throwable t) {
                             Toast.makeText(ViewInventory.this, "Failed to display products", Toast.LENGTH_SHORT).show();
                             Log.e(TAG, "Failed to fetch products", t);
                         }
@@ -258,7 +256,7 @@ public class ViewInventory extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<List<LocationModel>> call, Throwable t) {
+            public void onFailure(@NonNull Call<List<LocationModel>> call, @NonNull Throwable t) {
                // Toast.makeText(ViewInventory.this, "Failed to display locations", Toast.LENGTH_SHORT).show();
                 Log.e(TAG, "Failed to fetch locations", t);
             }

@@ -3,22 +3,17 @@ package com.example.foodvault;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CheckBox;
-import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -52,7 +47,7 @@ public class ShoppingListContentsActivity extends AppCompatActivity {
         Call<List<ProductsOnShopListModel>> productsOnListCall = api.getProductOnListByShoplistID();
         productsOnListCall.enqueue(new Callback<List<ProductsOnShopListModel>>() {
             @Override
-            public void onResponse(Call<List<ProductsOnShopListModel>> call, Response<List<ProductsOnShopListModel>> response) {
+            public void onResponse(@NonNull Call<List<ProductsOnShopListModel>> call, @NonNull Response<List<ProductsOnShopListModel>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     List<ProductsOnShopListModel> productsOnShopList = response.body();
                     if (!productsOnShopList.isEmpty()) {
@@ -66,7 +61,7 @@ public class ShoppingListContentsActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<List<ProductsOnShopListModel>> call, Throwable t) {
+            public void onFailure(@NonNull Call<List<ProductsOnShopListModel>> call, @NonNull Throwable t) {
                 Toast.makeText(ShoppingListContentsActivity.this, "Error loading products", Toast.LENGTH_SHORT).show();
                 Log.e("Supabase Error", "Failed to fetch products on the list", t);
             }
@@ -78,7 +73,7 @@ public class ShoppingListContentsActivity extends AppCompatActivity {
         Call<List<ProductModel>> productsCall = api.getProducts();
         productsCall.enqueue(new Callback<List<ProductModel>>() {
             @Override
-            public void onResponse(Call<List<ProductModel>> call, Response<List<ProductModel>> response) {
+            public void onResponse(@NonNull Call<List<ProductModel>> call, @NonNull Response<List<ProductModel>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     List<ProductModel> products = response.body();
                     TableLayout tableLayout = findViewById(R.id.tblShopListContents);
@@ -109,7 +104,7 @@ public class ShoppingListContentsActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<List<ProductModel>> call, Throwable t) {
+            public void onFailure(@NonNull Call<List<ProductModel>> call, @NonNull Throwable t) {
                 Toast.makeText(ShoppingListContentsActivity.this, "Error loading product details", Toast.LENGTH_SHORT).show();
                 Log.e("Supabase Error", "Failed to fetch product details", t);
             }

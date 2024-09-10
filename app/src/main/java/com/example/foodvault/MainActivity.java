@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -91,17 +90,6 @@ public class MainActivity extends AppCompatActivity { //Login page
                         //work with this user's data in the database till logout
                         userIdOnLogin = currentUser.getUserId();
                         UserSession.getInstance().setUserSessionId(userIdOnLogin); //store user ID in singleton class
-
-                        /* //Option 2
-                        //save user ID to SharedPreferences
-                        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putInt("USER_ID", userIdOnLogin);
-                        editor.apply();
-
-                        // Retrieve the user ID from SharedPreferences (use in any other activity)
-                        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
-                        int userId = sharedPreferences.getInt("USER_ID", -1); // Default value -1 if not found */
 
                         Toast.makeText(MainActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
                         startActivity(new Intent(MainActivity.this, DashboardActivity.class)); //DashboardActivity

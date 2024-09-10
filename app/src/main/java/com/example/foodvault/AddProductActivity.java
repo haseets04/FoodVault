@@ -14,17 +14,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.NumberPicker;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -231,7 +227,7 @@ public class AddProductActivity extends AppCompatActivity {
         Call<Void> insertProductCall = api.insertProduct(newProduct);
         insertProductCall.enqueue(new Callback<Void>() {
             @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
+            public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
                 if (response.isSuccessful()) {
                     Toast.makeText(AddProductActivity.this, "Product added successfully", Toast.LENGTH_SHORT).show();
                     // Clear the input fields
@@ -245,67 +241,10 @@ public class AddProductActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<Void> call, Throwable t) {
+            public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
                 Toast.makeText(AddProductActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
-
-
-        /*// Insert into Inventory table
-        InventoryModel newInventory = new InventoryModel();
-        newInventory.setQuantity(quantityValue);
-
-        SupabaseAPI api = SupabaseClient.getClient().create(SupabaseAPI.class);
-        Call<InventoryModel> inventoryCall = api.insertInventory(newInventory);
-        inventoryCall.enqueue(new Callback<InventoryModel>() {
-            @Override
-            public void onResponse(Call<InventoryModel> call, Response<InventoryModel> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    Integer generatedProductId = response.body().getProductId();
-                    //Integer generatedProductId = newInventory.getProductId();
-
-                    Log.d("generatedProductId", "generatedProductId: " + generatedProductId);
-                    Log.i("generatedProductId", "generatedProductId: " + generatedProductId);
-
-                    // Insert into Product table
-                    ProductModel newProduct = new ProductModel();
-                    newProduct.setProductId(generatedProductId);
-                    newProduct.setLocationId(null);
-                    newProduct.setProductName(productName);
-                    newProduct.setProductBarcode(null);
-                    newProduct.setProductExpirationDate(expireDate);
-                    newProduct.setProductCategory(selectedCategory);
-                    newProduct.setProductExpired(isProductExpired);
-
-                    Call<Void> insertProductCall = api.insertProduct(newProduct);
-                    insertProductCall.enqueue(new Callback<Void>() {
-                        @Override
-                        public void onResponse(Call<Void> call, Response<Void> response) {
-                            if (response.isSuccessful()) {
-                                Toast.makeText(AddProductActivity.this, "Product added successfully", Toast.LENGTH_SHORT).show();
-                                // Clear input fields or redirect if needed
-                            } else {
-                                handleApiError(response);
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(Call<Void> call, Throwable t) {
-                            Toast.makeText(AddProductActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    });
-
-                } else {
-                    handleApiError(response);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<InventoryModel> call, Throwable t) {
-                Toast.makeText(AddProductActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });*/
-
     }
 
     private void handleApiError(Response<?> response) {
