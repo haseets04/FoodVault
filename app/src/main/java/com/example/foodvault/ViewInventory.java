@@ -242,7 +242,7 @@ public class ViewInventory extends AppCompatActivity {
                                             for (ProductModel product : listproducts) {
                                                 for (InventoryModel inv : inventory) {
                                                     for (LocationModel location : listlocations) {
-                                                        if (product.getProductId().equals(inv.getProductId()) && product.getLocation_id()==(location.getLocation_id().intValue())) {
+                                                        if (product.getProductId().equals(inv.getProductId()) && product.getLocation_id()==(location.getLocation_id())) {
                                                             addProductRecord(tableLayout, product, location, inv);
                                                         }
                                                     }

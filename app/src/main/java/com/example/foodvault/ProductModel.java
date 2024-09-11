@@ -9,13 +9,23 @@ public class ProductModel {
     private Date product_expiration_date;
     private String product_category;
     private boolean product_expired;
-    private int location_id;
+    private Integer location_id;
 
-    public int getLocation_id() {
+    public ProductModel(Integer product_id, String product_name, String product_barcode, Date product_expiration_date, String product_category, boolean product_expired, Integer location_id) {
+        this.product_id=product_id;
+        this.product_name = product_name;
+        this.product_barcode = product_barcode;
+        this.product_expiration_date = product_expiration_date;
+        this.product_category = product_category;
+        this.product_expired = product_expired;
+        this.location_id = location_id;
+    }
+
+    public Integer getLocation_id() {
         return location_id;
     }
 
-    public void setLocation_id(int location_id) {
+    public void setLocation_id(Integer location_id) {
         this.location_id = location_id;
     }
 

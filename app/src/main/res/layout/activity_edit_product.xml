@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/EditProductRelativelayout"
+    android:id="@+id/NormalLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
 
@@ -28,6 +28,7 @@
         android:textSize="25sp"
         android:textStyle="bold" />
 
+
     <EditText
         android:id="@+id/product_name_input"
         android:layout_width="300dp"
@@ -51,13 +52,26 @@
         android:gravity="center_horizontal"
         android:text="@string/quantity_0"
         android:textColor="#3949AB"
-        android:textSize="15sp" />
+        android:textSize="18sp" />
 
     <SeekBar
         android:id="@+id/sk_quantity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:max="100" />
+
+    <AutoCompleteTextView
+        android:id="@+id/categoryTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:editable="false"
+        android:gravity="center_horizontal"
+        android:hint="@string/enter_category"
+        android:minHeight="48dp"
+        android:text="@string/enter_an_expiration_date"
+        android:textColor="#3949AB"
+        android:textColorHint="#A8A8A8"
+        tools:ignore="VisualLintTextFieldSize" />
 
     <EditText
         android:id="@+id/expiration_date_input"
@@ -76,6 +90,11 @@
         android:textColorHint="#A8A8A8"
         android:textSize="15sp"
         />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"></LinearLayout>
 
     <AutoCompleteTextView
         android:id="@+id/CategoryTextView"
@@ -106,7 +125,7 @@
         android:orientation="horizontal">
 
       <Button
-          android:id="@+id/btn_edit_product"
+          android:id="@+id/btn_add"
           android:layout_width="147dp"
           android:layout_height="wrap_content"
           android:layout_marginTop="10dp"

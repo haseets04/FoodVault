@@ -6,6 +6,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
@@ -35,4 +36,11 @@ public interface sbAPI_ViewInventory {
     // Update location
     @PUT("/rest/v1/location")
     Call<Void> updateLocation(@Query("location_id") String location_id, @Body LocationModel location);
+
+    @POST("/rest/v1/products_on_shoppinglist")
+    Call<com.example.foodvault.ShoppingListProductsModel> insertShoppingListItem(@Body com.example.foodvault.ShoppingListProductsModel inventory);
+    @POST("/rest/v1/inventory")
+    Call<InventoryModel> insertInventory(@Body InventoryModel inventory);
+    @POST("/rest/v1/product")
+    Call<ProductModel> insertProduct(@Body ProductModel product);
 }

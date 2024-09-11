@@ -1,9 +1,11 @@
 package com.example.foodvault;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
@@ -17,6 +19,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.util.List;
 
 import retrofit2.Call;
@@ -29,6 +33,7 @@ public class NewShoppingListActivity extends AppCompatActivity {
     private int currentShopListNameID; //for cancel functionality
     ShopListModel newShoppingList;
     String shopListName;
+
     EditText shopListNameInput;
 
     @Override
@@ -44,6 +49,8 @@ public class NewShoppingListActivity extends AppCompatActivity {
 
         shoppingListContainer = findViewById(R.id.shopping_list_container);
 
+
+
         if (shoppingListContainer == null) {
             Toast.makeText(this, "Failed to initialize shopping list container", Toast.LENGTH_LONG).show();
         }
@@ -54,8 +61,16 @@ public class NewShoppingListActivity extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spnGroupProducts.setAdapter(adapter);
         spnGroupProducts.setPrompt(getString(R.string.spinner_prompt));
-    }
 
+        FloatingActionButton add=findViewById(R.id.fltbtn_add_item);
+        add.setOnClickListener(new View.OnClickListener() {
+                                   @Override
+                                   public void onClick(View v) {
+                                       startActivity(new Intent(NewShoppingListActivity.this, AddItemToSLActivity.class));
+                                   }
+                               });
+
+    }
     public void onAddItemClicked(View view) { //done in separate Use Case
         LinearLayout newItemRow = new LinearLayout(this);
         newItemRow.setLayoutParams(new LinearLayout.LayoutParams(
@@ -87,7 +102,6 @@ public class NewShoppingListActivity extends AppCompatActivity {
                 2.0f
         ));
         nameTextView.setText("New Item"); // Set default name or obtain from input
-
         // Add the elements to the new row
         newItemRow.addView(checkBox);
         newItemRow.addView(qtyTextView);
@@ -96,6 +110,8 @@ public class NewShoppingListActivity extends AppCompatActivity {
         // Add the new row to the shopping list container
         shoppingListContainer.addView(newItemRow);
     }
+
+
 
     public void onSaveNewShopList(View view) {
         shopListName = shopListNameInput.getText().toString();

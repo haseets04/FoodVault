@@ -175,7 +175,7 @@ public class AddProductActivity extends AppCompatActivity {
                     // Insert into Product table
                     ProductModel newProduct = new ProductModel();
                     newProduct.setProductId(generatedProductId);
-                    newProduct.setLocationId(null);
+                    newProduct.setLocation_id(null);
                     newProduct.setProductName(productName);
                     newProduct.setProductBarcode(null);
                     newProduct.setProductExpirationDate(expireDate);
@@ -212,6 +212,7 @@ public class AddProductActivity extends AppCompatActivity {
         });
 
     }
+
 
     private void handleApiError(Response<?> response) {
         try {

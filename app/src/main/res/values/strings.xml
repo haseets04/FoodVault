@@ -49,6 +49,20 @@
     <string name="edit_shopping_list">Edit Shopping List</string>
     <string name="remove_shopping_list">Remove Shopping List</string>
     <string name="add_new_shopping_list">Add New Shopping List</string>
+    <string name="enter_an_expiration_date">Enter an expiration date</string>
+    <string name="quantity_0">Quantity : 0</string>
+    <string name="edit_product">Edit Product</string>
+    <string name="enter_category">Enter Category</string>
+    <string name="cancel_edit">Cancel Edit</string>
+    <string name="enter_location">Enter Location</string>
+    <string name="save_and_update_product">Save and update Product</string>
+    <string name="update_item">Update Item</string>
+    <string name="quantity_to_buy_0">Quantity To Buy: 0</string>
+    <string name="itembought">Is Item Purchased?</string>
+    <string name="grocerystore">GroceryStore</string>
+    <string name="yes">YES</string>
+    <string name="add_item">Add Item</string>
+    <string name="shoppingproduct_name">Product Name</string>
     <string-array name="spinner_options">
         <item>Item Category</item>
         <item>Grocery Store</item>

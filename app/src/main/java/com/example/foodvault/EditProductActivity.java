@@ -49,7 +49,7 @@ public class EditProductActivity extends AppCompatActivity {
         locationAutoView = findViewById(R.id.LocationTextView);
         categoryAutoView = findViewById(R.id.CategoryTextView);
 
-        Product=findViewById(R.id.product_name_input);
+       Product=findViewById(R.id.product_name_input);
 
         seekBar.setProgress(intent.getIntExtra("quantity",0));
         locationAutoView.setText(intent.getStringExtra("location"));
@@ -105,7 +105,7 @@ public class EditProductActivity extends AppCompatActivity {
                 // Optional: Handle the event when the user stops touching the SeekBar
             }
         });
-        Button btnsavechanges=findViewById(R.id.btn_edit_product);
+        Button btnsavechanges=findViewById(R.id.btn_add);
         btnsavechanges.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -145,16 +145,11 @@ public class EditProductActivity extends AppCompatActivity {
                     }
 
                 }
-                Call<Void> updateinv=sbAPI.updateInventory("eq." + invupdate.getProductId(),invupdate);
+
                 Call<Void> updateloc=sbAPI.updateLocation("eq." + locupdate.getLocation_id(),locupdate);
                 Call<Void> updateprod=sbAPI.updateProduct("eq." +produpdate.getProductId(),produpdate);
 
-                updateinv.enqueue(new Callback<Void>() {
-                    @Override
-                    public void onResponse(Call<Void> call, Response<Void> response) {
-                        boolean test= response.isSuccessful();
-                        if(!response.isSuccessful())
-                            return;
+
                         updateloc.enqueue(new Callback<Void>() {
                             @Override
                             public void onResponse(Call<Void> call, Response<Void> response) {
@@ -183,13 +178,8 @@ public class EditProductActivity extends AppCompatActivity {
                             Log.e("Edit Product","Couldnt edit location");
                             }
                         });
-                    }
 
-                    @Override
-                    public void onFailure(Call<Void> call, Throwable t) {
-                        Log.e("Edit Product","Couldnt edit inventory");
-                    }
-                });
+
 
             }
         });

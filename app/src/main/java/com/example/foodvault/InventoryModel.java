@@ -7,6 +7,11 @@ public class InventoryModel { //NB write attributes as exactly seen in DB
     public InventoryModel() {
     }
 
+    public InventoryModel(Integer product_id, int quantity) {
+        this.product_id = product_id;
+        this.quantity = quantity;
+    }
+
     public Integer getProductId() {
         return product_id;
     }

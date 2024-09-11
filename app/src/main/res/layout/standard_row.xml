@@ -55,6 +55,7 @@
         android:layout_height="match_parent"
         android:layout_column="5"
         android:background="@drawable/inventory_border"
+        android:editable="false"
         android:shadowColor="#4CAF50"
         android:text="@string/empty_string"
         android:textStyle="bold"
