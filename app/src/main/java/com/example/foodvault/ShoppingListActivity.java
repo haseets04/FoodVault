@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -20,6 +19,7 @@ import retrofit2.Response;
 
 public class ShoppingListActivity extends AppCompatActivity {
     private static final int REQUEST_CODE_ADD_LIST = 1;
+    Integer userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,23 +58,29 @@ public class ShoppingListActivity extends AppCompatActivity {
 
         //loop through each shopping list and create a button for it
         for (ShopListModel shoppingList : shoppingLists) {
-            Button button = new Button(this);
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.WRAP_CONTENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-            );
-            params.setMargins(0, 16, 0, 16); // Set margins (left, top, right, bottom)
-            button.setLayoutParams(params);
-            button.setPadding(16, 1, 16, 1); // Set padding (left, top, right, bottom)
-            button.setText(shoppingList.getShoplistName());
-            button.setBackgroundResource(R.drawable.shoplistbtn_background);
-            button.setTextColor(getResources().getColor(R.color.textColor));
-            button.setOnClickListener(v -> {
-                startActivity(new Intent(ShoppingListActivity.this, ShoppingListContentsActivity.class)); //view contents of list
-            });
+            if(shoppingList.getUserIdForShopList().equals(getCurrentUserIDFromSession())){
+                Button button = new Button(this);
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.WRAP_CONTENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT
+                );
+                params.setMargins(0, 16, 0, 16); // Set margins (left, top, right, bottom)
+                button.setLayoutParams(params);
+                button.setPadding(16, 1, 16, 1); // Set padding (left, top, right, bottom)
+                button.setText(shoppingList.getShoplistName());
+                button.setBackgroundResource(R.drawable.shoplistbtn_background);
+                button.setTextColor(getResources().getColor(R.color.textColor));
+                button.setOnClickListener(v -> {
+                    //view contents of list
+                    Intent intent = new Intent(ShoppingListActivity.this, ShoppingListContentsActivity.class);
+                    intent.putExtra("SHOPPING_LIST_ID", shoppingList.getShoplistId()); //pass shopping list ID
+                    intent.putExtra("SHOPPING_LIST_NAME", shoppingList.getShoplistName()); //pass shopping list name
+                    startActivity(intent);
+                });
 
-            //add the button to the layout
-            linearLayout.addView(button);
+                //add the button to the layout
+                linearLayout.addView(button);
+            }
         }
     }
 
@@ -103,6 +109,14 @@ public class ShoppingListActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    public Integer getCurrentUserIDFromSession(){
+        userId = UserSession.getInstance().getUserSessionId();
+        if (userId == null) {
+            Toast.makeText(ShoppingListActivity.this, "User ID not found", Toast.LENGTH_SHORT).show();
+        }
+        return userId;
     }
 
 }

@@ -1,8 +1,5 @@
 package com.example.foodvault;
 
-import com.mysql.cj.conf.IntegerProperty;
-import com.mysql.cj.conf.StringProperty;
-
 public class LocationModel {
    private Integer location_id;
    private String location_name;

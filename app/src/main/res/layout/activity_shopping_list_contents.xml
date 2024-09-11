@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:padding="16dp"
     android:background="@drawable/screen_background"
-    tools:context=".NewShoppingListActivity">
+    tools:context=".ShoppingListContentsActivity">
 
     <ImageView
         android:id="@+id/profile_icon"
@@ -32,107 +32,59 @@
         android:textColor="#050C57"
         android:textSize="35sp" />
 
-    <LinearLayout
-        android:id="@+id/shopping_list_container"
+    <ScrollView
+        android:id="@+id/shopping_list_scrollview"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="450dp"
         android:layout_below="@id/txt_list_name"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="23dp"
+        android:background="@drawable/inventory_border"
         android:orientation="vertical"
-        android:padding="16dp"
-        android:background="@drawable/border">
-        <!-- This container will hold dynamically added items -->
+        android:padding="16dp" >
 
-        <LinearLayout
+        <HorizontalScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingBottom="8dp">
+            android:layout_height="wrap_content">
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Qty"
-                android:textAlignment="center"
-                android:textColor="#050C57"
-                android:textStyle="bold"
-                android:textSize="20sp" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Product"
-                android:textColor="#050C57"
-                android:textStyle="bold"
-                android:textSize="20sp" />
-        </LinearLayout>
-
-        <!-- Sample row with a checkbox, quantity, and product name -->
-        <!--<LinearLayout
-            android:id="@+id/item_row_1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingBottom="8dp">
-
-            <CheckBox
-                android:id="@+id/checkbox_item_1"
+            <TableLayout
+                android:id="@+id/tblShopListContents"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"/>
+                android:stretchColumns="1,2" >
 
-            <TextView
-                android:id="@+id/qty_item_1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center_horizontal"
-                android:text="2"
-                android:textColor="#050C57"
-                android:textSize="20sp" />
+                <TableRow
+                    android:id="@+id/row1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/name_item_1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:text="Item 1"
-                android:textColor="#050C57"
-                android:textSize="20sp" />
-        </LinearLayout>-->
+                    <!--<TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5" />
 
-    </LinearLayout>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text ="Qty"
+                        android:textAlignment="center"
+                        android:textColor="#050C57"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
 
-    <!--<Spinner
-        android:id="@+id/spinner_group_products_list"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/shopping_list_container"
-        android:layout_marginTop="30dp"
-        android:layout_marginStart="20dp"
-        android:background="@android:drawable/btn_dropdown"
-        android:padding="14dp"
-        android:textAlignment="center"
-        android:textSize="15sp"
-        android:textColor="#3949AB"
-        android:textColorHint="#3949AB"
-        android:backgroundTint="#70B1BA"
-        android:spinnerMode="dropdown" />
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:text ="Product"
+                        android:textColor="#050C57"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />-->
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fltbtn_add_item"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/shopping_list_container"
-        android:layout_marginStart="300dp"
-        android:layout_marginTop="20dp"
-        android:clickable="true"
-        android:contentDescription="@string/add_new_item"
-        android:onClick="onAddItemClicked"
-        android:src="@android:drawable/ic_input_add"
-        tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />-->
+                </TableRow>
+            </TableLayout>
+        </HorizontalScrollView>
+    </ScrollView>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -142,26 +94,37 @@
         android:orientation="horizontal"
         android:gravity="center">
 
-        <!--<Button
-            android:id="@+id/btn_save_shopping_list"
-            android:layout_width="0dp"
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fltbtn_add_another_item"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginEnd="8dp"
-            android:text="Save Shopping List"
-            android:textColor="#311B92"
-            android:backgroundTint="#70B1BA"
-            android:onClick="onSaveNewShopList" />
+            android:layout_marginEnd="40dp"
+            android:clickable="true"
+            android:contentDescription="@string/add_another_item_in_list"
+            android:onClick="onAddAnotherItemClicked"
+            android:src="@android:drawable/ic_input_add"
+            android:focusable="true" />
 
-        <Button
-            android:id="@+id/btn_cancel_entry"
-            android:layout_width="0dp"
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fltbtn_share_list"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:backgroundTint="#70B1BA"
-            android:text="Cancel Entry"
-            android:textColor="#311B92"
-            android:onClick="onCancelNewShopList" />-->
+            android:layout_marginEnd="40dp"
+            android:clickable="true"
+            android:contentDescription="@string/share_shopping_list"
+            android:onClick="onShareListClicked"
+            android:src="@drawable/baseline_share_24"
+            android:focusable="true" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fltbtn_delete_item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:contentDescription="@string/delete_item_in_list"
+            android:onClick="onDeleteItemClicked"
+            android:src="@drawable/baseline_remove_24"
+            android:focusable="true" />
 
     </LinearLayout>
 
