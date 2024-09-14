@@ -29,7 +29,7 @@ public class EditProductActivity extends AppCompatActivity {
 
     private sbAPI_ViewInventory sbAPI;
     private List<ProductModel> listproducts = new ArrayList<>();
-    private List<InventoryModel> inventory = new ArrayList<>();
+
     private List<LocationModel> listlocations = new ArrayList<>();
     Intent intent;
     SeekBar seekBar;
@@ -53,6 +53,7 @@ public class EditProductActivity extends AppCompatActivity {
 
         seekBar.setProgress(intent.getIntExtra("quantity",0));
         locationAutoView.setText(intent.getStringExtra("location"));
+        String cat=intent.getStringExtra("category");
         categoryAutoView.setText(intent.getStringExtra("category"));
 
         Product.setText(intent.getStringExtra("name"));
@@ -64,7 +65,6 @@ public class EditProductActivity extends AppCompatActivity {
         seekBarValueTextView.setText("Quantity: " + seekBar.getProgress());
 
         fetchLocations(locationAutoView);
-        fetchInventory();
         fetchProducts(categoryAutoView);
         tvDate = findViewById(R.id.expiration_date_input);
         // Set an OnClickListener on the TextView for DatePicker
@@ -105,91 +105,116 @@ public class EditProductActivity extends AppCompatActivity {
                 // Optional: Handle the event when the user stops touching the SeekBar
             }
         });
-        Button btnsavechanges=findViewById(R.id.btn_add);
+
+        Button btnsavechanges = findViewById(R.id.btn_add);
         btnsavechanges.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              //  Toast.makeText(EditProductActivity.this, "Record Successfully edited", Toast.LENGTH_SHORT).show();
-                InventoryModel invupdate=null;
-                ProductModel produpdate=null;
-                LocationModel locupdate=null;
-                for (ProductModel product :
-                        listproducts) {
+
+                ProductModel produpdate = null;
+                LocationModel locupdate = null;
+                boolean isNewLocation = true;
+
+                // Update product name and quantity
+                for (ProductModel product : listproducts) {
                     if (product.getProductId() == intent.getIntExtra("product_id", 0)) {
-                        product.setProductCategory(categoryAutoView.getText().toString());
                         product.setProductName(Product.getText().toString());
+                        product.setProductQuantity(seekBar.getProgress());
+
+                        // Update product expiration date
                         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
                         try {
                             product.setProductExpirationDate(dateFormat.parse(tvDate.getText().toString()));
                         } catch (ParseException e) {
                             throw new RuntimeException(e);
                         }
-                        produpdate=product;
+
+                        produpdate = product;
+                        break;
                     }
                 }
-                for (LocationModel location:
-                     listlocations) {
-                    if(location.getLocation_id()==intent.getIntExtra("location_id",0))
-                    {
-                        location.setLocation_name(locationAutoView.getText().toString());
-                        locupdate=location;
-                    }
 
-                }
-                for (InventoryModel inv:
-                     inventory) {
-                    if(inv.getProductId()==intent.getIntExtra("product_id",0))
-                    {
-                        inv.setQuantity(seekBar.getProgress());
-                        invupdate=inv;
+                // Check if the selected location already exists in the list
+                for (LocationModel location : listlocations) {
+                    if (location.getLocation_name().equals(locationAutoView.getText().toString())) {
+                        // The location exists, just update the product's location ID
+                        produpdate.setLocationId(location.getLocation_id());
+                        isNewLocation = false;
+                        break;
                     }
-
                 }
 
-                Call<Void> updateloc=sbAPI.updateLocation("eq." + locupdate.getLocation_id(),locupdate);
-                Call<Void> updateprod=sbAPI.updateProduct("eq." +produpdate.getProductId(),produpdate);
+                // If the location does not exist, treat it as a new location and update it
+                if (isNewLocation) {
+                    for (LocationModel location : listlocations) {
+                        if (location.getLocation_id() == intent.getIntExtra("location_id", 0)) {
+                            location.setLocation_name(locationAutoView.getText().toString());
+                            locupdate = location;
+                            break;
+                        }
+                    }
+                }
 
-
-                        updateloc.enqueue(new Callback<Void>() {
-                            @Override
-                            public void onResponse(Call<Void> call, Response<Void> response) {
-                                boolean test2= response.isSuccessful();
-                                if(!response.isSuccessful())
-                                    return;
-                                updateprod.enqueue(new Callback<Void>() {
-                                    @Override
-                                    public void onResponse(Call<Void> call, Response<Void> response) {
-                                        boolean test3= response.isSuccessful();
-                                        if(!response.isSuccessful())
-                                            return;
-                                        Toast.makeText(EditProductActivity.this, "Record Successfully edited", Toast.LENGTH_SHORT).show();
-                                        startActivity(new Intent(EditProductActivity.this, ViewInventory.class));
-                                    }
-
-                                    @Override
-                                    public void onFailure(Call<Void> call, Throwable t) {
-
-                                    }
-                                });
+                // Perform the update for product and/or location
+                if (produpdate != null) {
+                    Call<Void> updateProdCall = sbAPI.updateProduct("eq." + produpdate.getProductId(), produpdate);
+                    updateProdCall.enqueue(new Callback<Void>() {
+                        @Override
+                        public void onResponse(Call<Void> call, Response<Void> response) {
+                            if (response.isSuccessful()) {
+                                Toast.makeText(EditProductActivity.this, "Product Successfully edited", Toast.LENGTH_SHORT).show();
+                                // Navigate back to ViewInventory
+                                Intent intent = new Intent(EditProductActivity.this, ViewInventory.class);
+                                startActivity(intent);
+                                finish();  // Optional: Close EditProductActivity
                             }
+                        }
 
-                            @Override
-                            public void onFailure(Call<Void> call, Throwable t) {
-                            Log.e("Edit Product","Couldnt edit location");
+                        @Override
+                        public void onFailure(Call<Void> call, Throwable t) {
+                            Log.e("Edit Product", "Failed to update product", t);
+                        }
+                    });
+                }
+
+                if (locupdate != null) {
+                    Call<Void> updateLocCall = sbAPI.updateLocation("eq." + locupdate.getLocation_id(), locupdate);
+                    updateLocCall.enqueue(new Callback<Void>() {
+                        @Override
+                        public void onResponse(Call<Void> call, Response<Void> response) {
+                            if (response.isSuccessful()) {
+                                Toast.makeText(EditProductActivity.this, "Location Successfully edited", Toast.LENGTH_SHORT).show();
+                                // Navigate back to ViewInventory
+                                Intent intent = new Intent(EditProductActivity.this, ViewInventory.class);
+                                startActivity(intent);
+                                finish();  // Optional: Close EditProductActivity
                             }
-                        });
+                        }
 
-
-
+                        @Override
+                        public void onFailure(Call<Void> call, Throwable t) {
+                            Log.e("Edit Product", "Failed to update location", t);
+                        }
+                    });
+                }
             }
         });
+
+
+        Button cancel=findViewById(R.id.btn_cancel_product);
+        cancel.setOnClickListener(new View.OnClickListener() {
+                                      @Override
+                                      public void onClick(View v) {
+                                          startActivity(new Intent(EditProductActivity.this, ViewInventory.class));
+                                      }
+                                  }
+
+        );
+
+
     }
 
-    public void onCanceleditClicked(View view) {
-        //don't add to DB
-        Toast.makeText(EditProductActivity.this, "Product edit process was cancelled", Toast.LENGTH_SHORT).show();
-        finish();
-    }
+
     private void fetchLocations(AutoCompleteTextView locationAutoView) {
         Call<List<LocationModel>> locations = sbAPI.getLocations();
         locations.enqueue(new Callback<List<LocationModel>>() {
@@ -244,23 +269,5 @@ public class EditProductActivity extends AppCompatActivity {
         });
     }
 
-    private void fetchInventory() {
-        Call<List<InventoryModel>> inventories = sbAPI.getInventory();
-        inventories.enqueue(new Callback<List<InventoryModel>>() {
-            @Override
-            public void onResponse(Call<List<InventoryModel>> call, Response<List<InventoryModel>> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    inventory = response.body();
-                    // Use the inventory data as needed
-                } else {
-                    Log.e("Edit Product", "Inventory response unsuccessful or body is null");
-                }
-            }
 
-            @Override
-            public void onFailure(Call<List<InventoryModel>> call, Throwable t) {
-                Log.e("Edit Product", "Failed to fetch inventory", t);
-            }
-        });
-    }
 }

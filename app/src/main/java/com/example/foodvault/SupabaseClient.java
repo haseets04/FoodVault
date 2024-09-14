@@ -1,5 +1,8 @@
 package com.example.foodvault;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import retrofit2.Retrofit;
@@ -25,10 +28,16 @@ public class SupabaseClient {
                 return chain.proceed(request);
             }).build();
 
+            Gson gson = new GsonBuilder()
+                    .registerTypeAdapter(ProductModel.class, new ProductModelDeserializer())
+                    .create();
+
+
+
             retrofit = new Retrofit.Builder()
-                    .baseUrl(baseUrl)
+                    .baseUrl(baseUrl + "/rest/v1/")
                     .client(client)
-                    .addConverterFactory(GsonConverterFactory.create())
+                    .addConverterFactory(GsonConverterFactory.create(gson))
                     .build();
         }
         return retrofit;

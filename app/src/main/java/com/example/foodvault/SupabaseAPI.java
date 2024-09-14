@@ -20,28 +20,28 @@ import retrofit2.http.Query;
  *
  */
 public interface SupabaseAPI {
-    @GET("/rest/v1/user") // Your table name is "Example"
+    @GET("user") // Your table name is "Example"
     Call<List<UserModel>> getItems(@Query("select") String select); //first part of your query (select, update, insert, etc.)
 
-    @GET("/rest/v1/user")
+    @GET("user")
     Call<List<UserModel>> getUserByEmail(@Query("user_email") String email, @Query("select") String select);
 
-    @POST("/rest/v1/user")
+    @POST("user")
     Call<Void> insertUser(@Body UserModel user); //insert new user record
 
-    @POST("/rest/v1/product")
+    @POST("product")
     Call<Void> insertProduct(@Body ProductModel product); //insert new product record
 
-    @POST("/rest/v1/shoppinglist")
+    @POST("shoppinglist")
     Call<Void> insertShoppingList(@Body ShopListModel shoppingList); //insert new shoppingList record
 
-    @GET("/rest/v1/shoppinglist")
+    @GET("shoppinglist")
     Call<List<ShopListModel>> getShoppingLists(@Query("select") String select);
 
-    @GET("/rest/v1/product")
+    @GET("product")
     Call<List<ProductModel>> getProducts();
 
-    @GET("/rest/v1/products_on_shoppinglist")
+    @GET("products_on_shoppinglist")
     Call<List<ProductsOnShopListModel>> getProductOnListByShoplistID();
 
     /*@GET("shopping_lists")
@@ -50,14 +50,16 @@ public interface SupabaseAPI {
     /*@PATCH("/rest/v1/shoppinglist/{shoplist_id}")
     Call<Void> updateShoppingList(@Path("shoplist_id") Integer id, @Body ShopListModel updatedShoppingList);*/
 
-    @GET("/rest/v1/user")
+    @GET("user")
     Call<List<UserModel>> getUserDetails(@Query("user_id") String userId);
 
-    @PATCH("/rest/v1/user")     //("/rest/v1/user?id=eq:{user_id}")
+    @PATCH("user")     //("/rest/v1/user?id=eq:{user_id}")
     Call<Void> updateUserExpirationPeriod(
             @Query("user_id") String userId,  // Dynamic query parameter
             @Body UserModel user      // Pass the updated fields as the body
     );
+
+
 
     //Call<Void> updateUserExpirationPeriod(@Path("user_id") Integer userId, @Body UserModel updatedUser);
 

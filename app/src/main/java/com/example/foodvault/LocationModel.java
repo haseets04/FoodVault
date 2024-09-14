@@ -2,7 +2,12 @@ package com.example.foodvault;
 
 public class LocationModel {
    private Integer location_id;
-   private String location_name;
+
+    public LocationModel(String location_name) {
+        this.location_name = location_name;
+    }
+
+    private String location_name;
 
     public Integer getLocation_id() {
         return location_id;

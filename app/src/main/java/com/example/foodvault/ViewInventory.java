@@ -8,7 +8,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -33,15 +36,18 @@ public class ViewInventory extends AppCompatActivity {
     private List<Findrow> findrowsList= new ArrayList<>();
     List<ProductModel> listproducts;
     List<LocationModel> listlocations;
-    private Integer userId;
+    private ArrayAdapter<String> locationAdapter;
+    int locid;
+    private Integer userId=UserSession.getInstance().getUserSessionId();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_inventory);
-
-        // Initialize Retrofit and API interface
         sbAPI_ViewInventory api = SupabaseClient.getClient().create(sbAPI_ViewInventory.class);
+        // Initialize Retrofit and API interface
+
 
         // Fetch and display data
         fetchAndDisplayData(api);
@@ -56,6 +62,61 @@ public class ViewInventory extends AppCompatActivity {
         });
 
         ImageButton deleterecord = findViewById(R.id.btnDelete);
+        Button btnNewLocation = findViewById(R.id.btn_newLocation);
+        btnNewLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Create an AlertDialog
+                AlertDialog.Builder builder = new AlertDialog.Builder(ViewInventory.this);
+                builder.setTitle("Add New Location");
+
+                // Set up the input field
+                final EditText input = new EditText(ViewInventory.this);
+                input.setHint("Enter location name");
+                builder.setView(input);
+
+                // Set up the buttons
+                builder.setPositiveButton("Add Location", (dialog, which) -> {
+                    String newLocationName = input.getText().toString().trim();
+
+                    if (!newLocationName.isEmpty()) {
+                        // Add the new location to the list
+                        LocationModel newLocation = new LocationModel(newLocationName);
+
+                      listlocations.add(newLocation);
+
+
+                        Call<LocationModel> insertLocation= api.insertlocation(new LocationModel(newLocationName));
+                        insertLocation.enqueue(new Callback<LocationModel>() {
+                                                   @Override
+                                                   public void onResponse(Call<LocationModel> call, Response<LocationModel> response) {
+                                                       boolean test=response.isSuccessful();
+                                                       if(!response.isSuccessful())
+                                                           return;
+                                                       Toast.makeText(ViewInventory.this,"Location added successfully",Toast.LENGTH_SHORT).show();
+                                                   }
+
+                                                   @Override
+                                                   public void onFailure(Call<LocationModel> call, Throwable t) {
+                                                       Log.e("Location Insert Error", t.getMessage());
+                                                   }
+                                               }
+
+
+                        );
+
+                        Toast.makeText(ViewInventory.this, "New Location Added: " + newLocationName, Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(ViewInventory.this, "Location name cannot be empty", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+
+                // Show the dialog
+                builder.show();
+            }
+        });
         deleterecord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -137,8 +198,25 @@ public class ViewInventory extends AppCompatActivity {
                                                intent.putExtra("name",((TextView) tableRow.getChildAt(0)).getText().toString());
                                                intent.putExtra("quantity",qty);
                                                intent.putExtra("expiration",((TextView) tableRow.getChildAt(2)).getText().toString());
-                                               intent.putExtra("category",tableRow.getChildAt(3).toString());
+                                               intent.putExtra("category",((TextView) tableRow.getChildAt(3)).getText().toString());
                                                intent.putExtra("location",((TextView) tableRow.getChildAt(4)).getText().toString());
+                                               intent.putExtra("product_id",userId);
+                                               for (Findrow row:
+                                                       findrowsList) {
+                                                   if (row!=null&&row.getRecordTag()==tableRow.getTag())
+                                                   {
+                                                       intent.putExtra("product_id",row.getProduct_id());
+
+                                                       for (ProductModel product:
+                                                               listproducts) {
+                                                           if(product!=null &&product.getProductId()==row.getProduct_id())
+                                                           {
+                                                               intent.putExtra("location_id",product.getLocation_id());
+                                                               locid=product.getLocation_id();
+                                                           }
+                                                       }
+                                                   }
+                                               }
                                                startActivity(intent);
 
                                            }
@@ -169,6 +247,7 @@ public class ViewInventory extends AppCompatActivity {
            }
        });
     }
+
 
     private void deleteRecord(TableRow tableRow, TableLayout table, sbAPI_ViewInventory api){
 

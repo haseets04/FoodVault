@@ -8,7 +8,7 @@ public class UserSession {
     Integer userId = UserSession.getInstance().getUserSessionId();*/
 
     //private constructor to prevent instantiation from other classes
-    private UserSession() {
+    UserSession() {
     }
 
     //get singleton instance of UserSession

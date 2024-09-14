@@ -63,6 +63,10 @@
     <string name="yes">YES</string>
     <string name="add_item">Add Item</string>
     <string name="shoppingproduct_name">Product Name</string>
+    <string name="add_another_item_in_list">Add another item in list</string>
+    <string name="share_shopping_list">Share shopping list</string>
+    <string name="delete_item_in_list">Delete item in list</string>
+    <string name="qty">Qty</string>
     <string-array name="spinner_options">
         <item>Item Category</item>
         <item>Grocery Store</item>

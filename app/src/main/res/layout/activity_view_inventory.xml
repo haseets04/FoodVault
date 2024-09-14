@@ -141,7 +141,7 @@
         app:layout_constraintVertical_bias="0.824" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/btn_newLocation"
         android:layout_width="96dp"
         android:layout_height="45dp"
         android:layout_marginStart="32dp"
