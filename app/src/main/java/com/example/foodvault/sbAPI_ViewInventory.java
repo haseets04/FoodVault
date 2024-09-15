@@ -15,7 +15,8 @@ public interface sbAPI_ViewInventory {
     Call<List<LocationModel>> getLocations();
 
 
-
+    @PUT("products_on_shoppinglist")
+    Call<Void> updateSLproduct(@Query("products_on_list_id") String products_on_list_id,@Body ShoppingListProductsModel product);
     @GET("product")
     Call<List<ProductModel>> getProducts();
     @GET("products_on_shoppinglist")

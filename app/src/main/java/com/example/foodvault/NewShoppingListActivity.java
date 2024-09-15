@@ -25,6 +25,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.io.IOException;
 import java.util.List;
 
 import retrofit2.Call;
@@ -77,8 +78,8 @@ public class NewShoppingListActivity extends AppCompatActivity {
                 startActivity(new Intent(NewShoppingListActivity.this, AddItemToSLActivity.class));
             }
         });
-        loaditems(4);
-        //loadpreviousitems(4);
+        //loaditems(4);
+        loadpreviousitems(4);
 
     }
     public void onAddItemClicked(View view) { //done in separate Use Case
@@ -127,42 +128,30 @@ public class NewShoppingListActivity extends AppCompatActivity {
         getshoppinglistproducts.enqueue(new Callback<List<ShoppingListProductsModel>>() {
             @Override
             public void onResponse(Call<List<ShoppingListProductsModel>> call, Response<List<ShoppingListProductsModel>> response) {
-                if(!response.isSuccessful())
-                    return;
-
-                shoppingListProductsModels=response.body();
-                for (ShoppingListProductsModel slProduct:
-                        shoppingListProductsModels) {
-                    if (slProduct.shoplist_id==shoplistid&&slProduct.getProduct_id()==userId)
-                    {
-
-
-                        LinearLayout linearLayout=inflateLinearLayout(NewShoppingListActivity.this);
-                        CheckBox checkBox = linearLayout.findViewById(R.id.cbxTicked);
-                        TextView textView1 = linearLayout.findViewById(R.id.tvQuantity);
-                        TextView textView2 = linearLayout.findViewById(R.id.tvName);
-                        checkBox.setChecked(slProduct.ticked_or_not);
-                        textView1.setText(""+slProduct.getShoplistprocuts_quantity());
-                        loadproducts(textView2,slProduct);
-
-                        LinearLayout parentlayout=findViewById(R.id.rowholder);
-                        parentlayout.addView(linearLayout);
-
+                boolean test=response.isSuccessful();
+                if(!response.isSuccessful()||response.body()==null) {
+                    try {
+                        Log.e("Custom",response.errorBody().string());
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
                     }
+                    return;
                 }
+                shoppingListProductsModels=response.body();
+                loadproducts(shoplistid);
+
+
             }
 
             @Override
             public void onFailure(Call<List<ShoppingListProductsModel>> call, Throwable t) {
-
+                Toast.makeText(NewShoppingListActivity.this,"Faluire to laod shoppinglist",Toast.LENGTH_SHORT).show();
+                Log.e("Custom","There was an failure loading shopping list products");
             }
         });
 
-
-
-
     }
-    public void loadproducts(TextView tvslproductqty,ShoppingListProductsModel slProduct) {
+    public void loadproducts(int shoplistid) {
         Call<List<ProductModel>> getproducts = sbAPI.getProducts();
 
         getproducts.enqueue(new Callback<List<ProductModel>>() {
@@ -172,13 +161,30 @@ public class NewShoppingListActivity extends AppCompatActivity {
                     Log.e("Custom", "Response unsuccessful or product body is null");
                     return;
                 }
-
-                products = response.body();  // Store the products in your variable
+                products = response.body();
                 for (ProductModel product:
                         products) {
-                    if(product.getProductId()==slProduct.getProducts_on_list_id())
-                        tvslproductqty.setText(product.getProductName());
+                for (ShoppingListProductsModel slProduct:
+                        shoppingListProductsModels) {
+                    if (slProduct.shoplist_id==shoplistid&&slProduct.getProduct_id()==product.getProductId()) {
+
+                        Toast.makeText(NewShoppingListActivity.this, "Connected", Toast.LENGTH_SHORT).show();
+                        LinearLayout linearLayout = inflateLinearLayout(NewShoppingListActivity.this);
+                        CheckBox checkBox = linearLayout.findViewById(R.id.cbxTicked);
+                        TextView textView1 = linearLayout.findViewById(R.id.tvQuantity);
+                        TextView tvslproductqty = linearLayout.findViewById(R.id.tvName);
+                        checkBox.setChecked(slProduct.ticked_or_not);
+                        textView1.setText("" + slProduct.getShoplistprocuts_quantity());
+                            tvslproductqty.setText(product.getProductName());
+
+
+                        LinearLayout parentlayout = findViewById(R.id.rowholder);
+                        parentlayout.addView(linearLayout);
+                    }
+
+                    }
                 }
+
                 // Update the UI or do something with the fetched products
 
             }

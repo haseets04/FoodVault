@@ -13,6 +13,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.util.List;
 
 import retrofit2.Call;
@@ -21,6 +22,7 @@ import retrofit2.Response;
 
 public class ShoppingListContentsActivity extends AppCompatActivity {
     Integer ShopListIDOfBtn;
+    sbAPI_ViewInventory sbAPI=SupabaseClient.getClient().create(sbAPI_ViewInventory.class);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -116,6 +118,34 @@ public class ShoppingListContentsActivity extends AppCompatActivity {
         TableRow rowView = (TableRow) inflater.inflate(R.layout.standard_row2, tableLayout, false);
 
         CheckBox checkBox = rowView.findViewById(R.id.checkbox_ticked);
+       checkBox.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+              // Toast.makeText(ShoppingListContentsActivity.this, "Product Successfully edited", Toast.LENGTH_SHORT).show();
+               String id="eq."+productOnShopList.getProducts_on_list_id();
+               ShoppingListProductsModel product=new ShoppingListProductsModel(productOnShopList.getGrocery_store(),checkBox.isChecked(),productOnShopList.getShoplist_id(), productOnShopList.getProduct_id(),  0);
+               product.setProducts_on_list_id(productOnShopList.getProducts_on_list_id());
+               Call<Void> insertproduct=sbAPI.updateSLproduct(id,product);
+               insertproduct.enqueue(new Callback<Void>() {
+                   @Override
+                   public void onResponse(Call<Void> call, Response<Void> response) {
+                       if(!response.isSuccessful()) {
+                           try {
+                               Log.e("Custom",response.errorBody().string());
+                           } catch (IOException e) {
+                               throw new RuntimeException(e);
+                           }
+                       }
+                       Toast.makeText(ShoppingListContentsActivity.this, "Product Successfully edited", Toast.LENGTH_SHORT).show();
+                   }
+
+                   @Override
+                   public void onFailure(Call<Void> call, Throwable t) {
+
+                   }
+               });
+           }
+       });
         TextView txtQuantity = rowView.findViewById(R.id.txt_quantity);
         TextView txtProductName = rowView.findViewById(R.id.txt_product_name);
 
