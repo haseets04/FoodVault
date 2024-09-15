@@ -6,6 +6,16 @@ public class ShoppingListProductsModel {
    boolean  ticked_or_not;
     Integer shoplist_id;
 
+    public Integer getShoplistprocuts_quantity() {
+        return shoplistproducts_quantity;
+    }
+
+    public void setShoplistprocuts_quantity(Integer shoplistproducts_quantity) {
+        this.shoplistproducts_quantity = shoplistproducts_quantity;
+    }
+
+    Integer shoplistproducts_quantity;
+
     public Integer getProducts_on_list_id() {
         return products_on_list_id;
     }
@@ -46,11 +56,12 @@ public class ShoppingListProductsModel {
         this.product_id = product_id;
     }
 
-    public ShoppingListProductsModel( String grocery_store, boolean ticked_or_not, Integer shoplist_id, Integer product_id) {
+    public ShoppingListProductsModel( String grocery_store, boolean ticked_or_not, Integer shoplist_id, Integer product_id,Integer shoplistproducts_quantity) {
         this.grocery_store = grocery_store;
         this.ticked_or_not = ticked_or_not;
         this.shoplist_id = shoplist_id;
         this.product_id = product_id;
+        this.shoplistproducts_quantity=shoplistproducts_quantity;
     }
 
     Integer product_id;

@@ -1,35 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:orientation="horizontal"
     android:paddingBottom="8dp">
 
     <CheckBox
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:textColor="#050C57"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:buttonTint="#050C57"/>
 
-    <TextView
+        android:id="@+id/cbxTicked"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:textAlignment="center"
+        android:buttonTint="#050C57"
         android:textColor="#050C57"
         android:textSize="20sp"
         android:textStyle="bold" />
 
     <TextView
+        android:id="@+id/tvQuantity"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:text="Qty"
+        android:textAlignment="center"
+        android:textColor="#050C57"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/tvName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:background="@drawable/inventory_border"
+        android:text="@string/product_name"
         android:textColor="#050C57"
-        android:textSize="20sp"
-        android:textStyle="bold" />
+        android:textSize="20sp" />
 
 </LinearLayout>

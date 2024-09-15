@@ -11,35 +11,42 @@ import retrofit2.http.Query;
 
 public interface sbAPI_ViewInventory {
 
-    @GET("/rest/v1/location")
+    @GET("location")
     Call<List<LocationModel>> getLocations();
 
 
 
-    @GET("/rest/v1/product")
+    @GET("product")
     Call<List<ProductModel>> getProducts();
+    @GET("products_on_shoppinglist")
+    Call<List<ShoppingListProductsModel>> getshoppinglistproducts();
 
-    @DELETE("/rest/v1/product")
 
+    @DELETE("product")
     Call<Void> deleteproduct(@Query("product_id") String product_id);
 
-    @PUT("/rest/v1/product")
+
+
+    @PUT("product")
     Call<Void> updateProduct(@Query("product_id") String product_id, @Body ProductModel product);
 
-    @PUT("/rest/v1/location")
+    @PUT("location")
     Call<Void> updateLocation(@Query("location_id") String location_id, @Body LocationModel location);
-    @DELETE("/rest/v1/user")
+    @DELETE("user")
     Call<Void> deleteshoppinglistrecord(@Query("user_id") String product_id);
     @POST("products_on_shoppinglist")
     Call<com.example.foodvault.ShoppingListProductsModel> insertShoppingListItem(@Body com.example.foodvault.ShoppingListProductsModel inventory);
-    @POST("/rest/v1/location")
+    @POST("location")
     Call<com.example.foodvault.LocationModel> insertlocation(@Body com.example.foodvault.LocationModel location);
 
-    @POST("/rest/v1/product")
+    @POST("product")
     Call<com.example.foodvault.ProductModel> insertProduct(@Body com.example.foodvault.ProductModel product);
 
     @GET("rpc/getLastProduct")
     Call<List<ProductModel>> getLastProduct();
+
+    @POST("rpc/addProduct")
+    Call<Void> addProduct(@Body ProductModel product, @Query("shoplist_id") Integer shoplist_id);
 
 
 

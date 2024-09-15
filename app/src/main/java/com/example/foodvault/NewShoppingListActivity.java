@@ -1,8 +1,12 @@
 package com.example.foodvault;
 
+import static androidx.fragment.app.FragmentManager.TAG;
+
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -35,6 +39,10 @@ public class NewShoppingListActivity extends AppCompatActivity {
     String shopListName;
 
     EditText shopListNameInput;
+    List<ShoppingListProductsModel> shoppingListProductsModels;
+    List<ProductModel> products;
+    private Integer userId=UserSession.getInstance().getUserSessionId();
+    sbAPI_ViewInventory sbAPI=SupabaseClient.getClient().create(sbAPI_ViewInventory.class);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,11 +72,13 @@ public class NewShoppingListActivity extends AppCompatActivity {
 
         FloatingActionButton add=findViewById(R.id.fltbtn_add_item);
         add.setOnClickListener(new View.OnClickListener() {
-                                   @Override
-                                   public void onClick(View v) {
-                                       startActivity(new Intent(NewShoppingListActivity.this, AddItemToSLActivity.class));
-                                   }
-                               });
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(NewShoppingListActivity.this, AddItemToSLActivity.class));
+            }
+        });
+        loaditems(4);
+        //loadpreviousitems(4);
 
     }
     public void onAddItemClicked(View view) { //done in separate Use Case
@@ -110,6 +120,110 @@ public class NewShoppingListActivity extends AppCompatActivity {
         // Add the new row to the shopping list container
         shoppingListContainer.addView(newItemRow);
     }
+    public void loadpreviousitems(int shoplistid)
+    {
+
+        Call<List<ShoppingListProductsModel>>getshoppinglistproducts=sbAPI.getshoppinglistproducts();
+        getshoppinglistproducts.enqueue(new Callback<List<ShoppingListProductsModel>>() {
+            @Override
+            public void onResponse(Call<List<ShoppingListProductsModel>> call, Response<List<ShoppingListProductsModel>> response) {
+                if(!response.isSuccessful())
+                    return;
+
+                shoppingListProductsModels=response.body();
+                for (ShoppingListProductsModel slProduct:
+                        shoppingListProductsModels) {
+                    if (slProduct.shoplist_id==shoplistid&&slProduct.getProduct_id()==userId)
+                    {
+
+
+                        LinearLayout linearLayout=inflateLinearLayout(NewShoppingListActivity.this);
+                        CheckBox checkBox = linearLayout.findViewById(R.id.cbxTicked);
+                        TextView textView1 = linearLayout.findViewById(R.id.tvQuantity);
+                        TextView textView2 = linearLayout.findViewById(R.id.tvName);
+                        checkBox.setChecked(slProduct.ticked_or_not);
+                        textView1.setText(""+slProduct.getShoplistprocuts_quantity());
+                        loadproducts(textView2,slProduct);
+
+                        LinearLayout parentlayout=findViewById(R.id.rowholder);
+                        parentlayout.addView(linearLayout);
+
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<ShoppingListProductsModel>> call, Throwable t) {
+
+            }
+        });
+
+
+
+
+    }
+    public void loadproducts(TextView tvslproductqty,ShoppingListProductsModel slProduct) {
+        Call<List<ProductModel>> getproducts = sbAPI.getProducts();
+
+        getproducts.enqueue(new Callback<List<ProductModel>>() {
+            @Override
+            public void onResponse(@NonNull Call<List<ProductModel>> call, @NonNull Response<List<ProductModel>> response) {
+                if (!response.isSuccessful() || response.body() == null) {
+                    Log.e("Custom", "Response unsuccessful or product body is null");
+                    return;
+                }
+
+                products = response.body();  // Store the products in your variable
+                for (ProductModel product:
+                        products) {
+                    if(product.getProductId()==slProduct.getProducts_on_list_id())
+                        tvslproductqty.setText(product.getProductName());
+                }
+                // Update the UI or do something with the fetched products
+
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<List<ProductModel>> call, @NonNull Throwable t) {
+                Log.e("Custom", "Failed to fetch products: " + t.getMessage());
+                Toast.makeText(NewShoppingListActivity.this, "Failed to load products", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void loaditems(int shoplistid)
+    {
+       // loadpreviousitems(shoplistid);
+        Intent intent=getIntent();
+        boolean test=intent.getBooleanExtra("addclicked",false);
+        if(intent.getBooleanExtra("addclicked",false))
+        {
+            int qty= intent.getIntExtra("qty",0);
+            boolean isticked=intent.getBooleanExtra("purchased",false);
+            String name=intent.getStringExtra("name");
+            LinearLayout linearLayout=inflateLinearLayout(this);
+            CheckBox checkBox = linearLayout.findViewById(R.id.cbxTicked);
+            TextView textView1 = linearLayout.findViewById(R.id.tvQuantity);
+            TextView textView2 = linearLayout.findViewById(R.id.tvName);
+            checkBox.setChecked(isticked);
+            textView1.setText(""+qty);
+            textView2.setText(name);
+            LinearLayout parentlayout=findViewById(R.id.rowholder);
+            parentlayout.addView(linearLayout);
+        }
+
+
+    }
+    public LinearLayout inflateLinearLayout(Context context) {
+        // Create a LayoutInflater object
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        // Inflate the layout and return the LinearLayout
+        LinearLayout linearLayout = (LinearLayout) inflater.inflate(R.layout.shoppingitemrow, null);
+
+        return linearLayout;
+    }
+
 
 
 

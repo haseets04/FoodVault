@@ -113,12 +113,12 @@ public class AddItemToSLActivity extends AppCompatActivity {
                 if (name.getText().toString().toUpperCase().equals(product.getProductName().toUpperCase()) && !checked) {
                     addedId = product.getProductId();
                     new AlertDialog.Builder(v.getContext())
-                            .setTitle("Delete Record")
+                            .setTitle("Existing Item")
                             .setMessage("Are you sure you want to add this item it already have in stock in your product table")
                             .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    Call<ShoppingListProductsModel> insertitem = sbAPI.insertShoppingListItem(new ShoppingListProductsModel(store.getText().toString(), cbxbought.isChecked(), 4, addedId));
+                                    Call<ShoppingListProductsModel> insertitem = sbAPI.insertShoppingListItem(new ShoppingListProductsModel(store.getText().toString(), cbxbought.isChecked(), 4, addedId,quanty.getValue()));
                                     insertitem.enqueue(new Callback<ShoppingListProductsModel>() {
 
                                         @Override
@@ -137,6 +137,8 @@ public class AddItemToSLActivity extends AppCompatActivity {
 
                                     Toast.makeText(AddItemToSLActivity.this, "Record Successfully edited", Toast.LENGTH_SHORT).show();
                                     Intent intent = new Intent(AddItemToSLActivity.this, NewShoppingListActivity.class);
+                                    intent.putExtra("addclicked",true);
+                                    intent.putExtra("purchased",cbxbought.isChecked());
                                     intent.putExtra("qty", quanty.getValue());
                                     intent.putExtra("name", name.getText().toString());
                                     startActivity(intent);
@@ -194,12 +196,14 @@ public class AddItemToSLActivity extends AppCompatActivity {
                                                 return;
 
                                             Intent intent=new Intent(AddItemToSLActivity.this,NewShoppingListActivity.class);
-                                        fetchLastProduct(store,cbxbought,new ProductModel());
+                                        fetchLastProduct(store,cbxbought,quanty);
 
                                             boolean itemadded=true;
                                             intent.putExtra("itemadded",itemadded);
                                             Toast.makeText(AddItemToSLActivity.this, "Product Successfully added to ", Toast.LENGTH_SHORT).show();
                                              intent = new Intent(AddItemToSLActivity.this, NewShoppingListActivity.class);
+                                             intent.putExtra("addclicked",true);
+                                             intent.putExtra("purchased",cbxbought.isChecked());
                                             intent.putExtra("qty", quanty.getValue());
                                             intent.putExtra("name", name.getText().toString());
                                             startActivity(intent);
@@ -260,7 +264,7 @@ public class AddItemToSLActivity extends AppCompatActivity {
             }
         }
     }
-    public void fetchLastProduct(TextView store,CheckBox cbxbought,ProductModel newproduct) {
+    public void fetchLastProduct(TextView store,CheckBox cbxbought,NumberPicker quantity) {
 
 
 
@@ -271,7 +275,7 @@ public class AddItemToSLActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
                     ProductModel lastProduct = response.body().get(0);
 
-                    Call<ShoppingListProductsModel> insertitem = sbAPI.insertShoppingListItem(new ShoppingListProductsModel(store.getText().toString(), cbxbought.isChecked(), 4,lastProduct.getProductId() ));
+                    Call<ShoppingListProductsModel> insertitem = sbAPI.insertShoppingListItem(new ShoppingListProductsModel(store.getText().toString(), cbxbought.isChecked(), 4,lastProduct.getProductId() ,quantity.getValue()));
 
 
                     insertitem.enqueue(new Callback<ShoppingListProductsModel>() {

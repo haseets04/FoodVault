@@ -65,6 +65,17 @@
             android:paddingBottom="8dp">
 
             <TextView
+
+                android:id="@+id/cbxticked"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:buttonTint="#050C57"
+                android:textColor="#050C57"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -84,6 +95,19 @@
                 android:textSize="20sp"
                 android:textStyle="bold" />
         </LinearLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:ignore="SpeakableTextPresentCheck">
+
+            <LinearLayout
+                android:id="@+id/rowholder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="8dp"
+                android:orientation="vertical"></LinearLayout>
+        </ScrollView>
 
     </LinearLayout>
 
