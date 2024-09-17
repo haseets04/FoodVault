@@ -120,6 +120,7 @@ public class EditProductActivity extends AppCompatActivity {
                     if (product.getProductId() == intent.getIntExtra("product_id", 0)) {
                         product.setProductName(Product.getText().toString());
                         product.setProductQuantity(seekBar.getProgress());
+                        product.setProductCategory(categoryAutoView.getText().toString());
 
                         // Update product expiration date
                         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);

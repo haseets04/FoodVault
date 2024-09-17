@@ -26,6 +26,9 @@ public interface sbAPI_ViewInventory {
     @DELETE("product")
     Call<Void> deleteproduct(@Query("product_id") String product_id);
 
+    @DELETE("products_on_shoppinglist")
+    Call<Void> deleteSLproduct(@Query("products_on_list_id") String products_on_list_id);
+
 
 
     @PUT("product")

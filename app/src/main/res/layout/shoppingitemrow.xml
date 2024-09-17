@@ -9,9 +9,10 @@
 
         android:id="@+id/cbxTicked"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="1"
         android:buttonTint="#050C57"
+        android:enabled="false"
         android:textColor="#050C57"
         android:textSize="20sp"
         android:textStyle="bold" />
@@ -29,7 +30,7 @@
     <TextView
         android:id="@+id/tvName"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="1"
         android:background="@drawable/inventory_border"
         android:text="@string/product_name"

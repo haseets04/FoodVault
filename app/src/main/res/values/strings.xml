@@ -67,6 +67,7 @@
     <string name="share_shopping_list">Share shopping list</string>
     <string name="delete_item_in_list">Delete item in list</string>
     <string name="qty">Qty</string>
+    <string name="delete_records">Delete Records</string>
     <string-array name="spinner_options">
         <item>Item Category</item>
         <item>Grocery Store</item>

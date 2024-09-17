@@ -154,7 +154,7 @@
         tools:ignore="TouchTargetSizeCheck" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/btn_filteritems"
         android:layout_width="96dp"
         android:layout_height="46dp"
         android:layout_marginStart="268dp"
@@ -244,7 +244,7 @@
         android:background="@drawable/circular_background"
         android:onClick="OnClickEvent"
         android:scaleType="centerInside"
-        app:layout_constraintBottom_toTopOf="@+id/button2"
+        app:layout_constraintBottom_toTopOf="@+id/btn_filteritems"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.84"
         app:layout_constraintStart_toStartOf="parent"

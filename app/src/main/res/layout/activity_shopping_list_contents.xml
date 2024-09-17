@@ -87,12 +87,17 @@
     </ScrollView>
 
     <LinearLayout
+        android:layout_width="392dp"
+        android:layout_height="74dp"
+        android:orientation="vertical"></LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="50dp"
-        android:orientation="horizontal"
-        android:gravity="center">
+        android:layout_marginBottom="14dp"
+        android:gravity="center"
+        android:orientation="horizontal">
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fltbtn_add_another_item"
@@ -101,9 +106,9 @@
             android:layout_marginEnd="40dp"
             android:clickable="true"
             android:contentDescription="@string/add_another_item_in_list"
+            android:focusable="true"
             android:onClick="onAddAnotherItemClicked"
-            android:src="@android:drawable/ic_input_add"
-            android:focusable="true" />
+            android:src="@android:drawable/ic_input_add" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fltbtn_share_list"
@@ -112,9 +117,9 @@
             android:layout_marginEnd="40dp"
             android:clickable="true"
             android:contentDescription="@string/share_shopping_list"
+            android:focusable="true"
             android:onClick="onShareListClicked"
-            android:src="@drawable/baseline_share_24"
-            android:focusable="true" />
+            android:src="@drawable/baseline_share_24" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fltbtn_delete_item"
@@ -122,9 +127,17 @@
             android:layout_height="wrap_content"
             android:clickable="true"
             android:contentDescription="@string/delete_item_in_list"
+            android:focusable="true"
             android:onClick="onDeleteItemClicked"
-            android:src="@drawable/baseline_remove_24"
-            android:focusable="true" />
+            android:src="@drawable/baseline_remove_24" />
+
+        <Button
+            android:id="@+id/btndeleterecords"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:enabled="false"
+            android:text="@string/delete_records" />
 
     </LinearLayout>
 

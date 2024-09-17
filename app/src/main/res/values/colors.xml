@@ -4,4 +4,5 @@
     <color name="white">#FFFFFFFF</color>
     <color name="buttonColor">#70B1BA</color>
     <color name="textColor">#311B92</color>
+    <color name="rowdelete">#70B1BA</color>
 </resources>

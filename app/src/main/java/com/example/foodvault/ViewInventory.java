@@ -7,12 +7,16 @@ import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ListView;
+import android.widget.PopupMenu;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -60,6 +64,10 @@ public class ViewInventory extends AppCompatActivity {
                 //fetchAndDisplayData(api);
             }
         });
+
+        Button filteritems=findViewById(R.id.btn_filteritems);
+        setupmenu(filteritems);
+
 
         ImageButton deleterecord = findViewById(R.id.btnDelete);
         Button btnNewLocation = findViewById(R.id.btn_newLocation);
@@ -291,6 +299,67 @@ public class ViewInventory extends AppCompatActivity {
         }
         return userId;
     }
+    public void setupmenu(Button btnfilter)
+    {
+        btnfilter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PopupMenu popupMenu = new PopupMenu(ViewInventory.this, btnfilter);
+                // Inflate the popup menu using the XML file
+                Menu menu= popupMenu.getMenu();
+                menu.add(0,1,Menu.NONE,"Categorize Inventory by location");
+                menu.add(0,2,Menu.NONE,"Filter by Category");
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        switch(item.getItemId()) {
+                            case 1:
+                                showMultipleChoiceDialog();
+                                return true;
+                            case 2:
+                                showMultipleChoiceDialog();
+                                return true;
+                        }
+                       return true;
+                    }
+                });
+                popupMenu.show();
+            }
+        });
+    }
+    private void showMultipleChoiceDialog() {
+        // Inflate the custom layout for the dialog
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_listview, null);
+
+        ListView listView = dialogView.findViewById(R.id.list_view);
+
+        // Define the data for the ListView
+        String[] items = {"Option 1", "Option 2", "Option 3","Option 4","Option 5","Option 1", "Option 2", "Option 3","Option 4","Option 5","Option 1", "Option 2", "Option 3","Option 4","Option 5"};
+
+        // Create and set the custom adapter for the ListView
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.list_item, R.id.text_view, items);
+        listView.setAdapter(adapter);
+
+        // Create and show the AlertDialog
+        new AlertDialog.Builder(this)
+                .setTitle("Select an Option")
+                .setView(dialogView)
+                .setPositiveButton("OK", (dialog, which) -> {
+                    // Get the selected item
+                    int selectedPosition = listView.getCheckedItemPosition();
+                    if (selectedPosition != ListView.INVALID_POSITION) {
+                        String selectedItem = items[selectedPosition];
+                        Toast.makeText(this, "Selected: " + selectedItem, Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
+                .show();
+    }
+
+
+
+
 
     private void fetchAndDisplayData(sbAPI_ViewInventory sbAPI) {
         Call<List<LocationModel>> locations = sbAPI.getLocations();
