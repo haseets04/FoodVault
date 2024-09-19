@@ -418,7 +418,7 @@ public class ViewInventory extends AppCompatActivity {
                     int selectedPosition = listView.getCheckedItemPosition();
                     if (selectedPosition != ListView.INVALID_POSITION) {
                         String selectedItem = items.get(selectedPosition);
-                        Toast.makeText(this, "Selected: " + selectedItem, Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(this, "Selected: " + selectedItem, Toast.LENGTH_SHORT).show();
                         TableLayout tableLayout=findViewById(R.id.tblInventory);
                         HashSet<Integer> set=new HashSet<>();
 
