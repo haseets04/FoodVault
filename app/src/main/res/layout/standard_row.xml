@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
     <TextView
         android:id="@+id/textView16"
         android:layout_width="wrap_content"
@@ -59,7 +60,8 @@
         android:shadowColor="#4CAF50"
         android:text="@string/empty_string"
         android:textStyle="bold"
-        tools:ignore="TouchTargetSizeCheck" />
+        tools:ignore="TouchTargetSizeCheck"
+        android:clickable="false"/>
 
 </TableRow>
 

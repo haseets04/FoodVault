@@ -3,6 +3,7 @@ package com.example.foodvault;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,9 +25,12 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 
@@ -125,6 +129,7 @@ public class ViewInventory extends AppCompatActivity {
                 builder.show();
             }
         });
+
         deleterecord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -176,6 +181,7 @@ public class ViewInventory extends AppCompatActivity {
 
             }
         });
+
 
        ImageButton btnedit = findViewById(R.id.btnedit);
        btnedit.setOnClickListener(new View.OnClickListener(){
@@ -314,10 +320,11 @@ public class ViewInventory extends AppCompatActivity {
                     public boolean onMenuItemClick(MenuItem item) {
                         switch(item.getItemId()) {
                             case 1:
-                                showMultipleChoiceDialog();
+                                showLocations();
+
                                 return true;
                             case 2:
-                                showMultipleChoiceDialog();
+                                showCategory();
                                 return true;
                         }
                        return true;
@@ -327,19 +334,24 @@ public class ViewInventory extends AppCompatActivity {
             }
         });
     }
-    private void showMultipleChoiceDialog() {
+    private void showCategory() {
         // Inflate the custom layout for the dialog
         LayoutInflater inflater = getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.dialog_listview, null);
 
         ListView listView = dialogView.findViewById(R.id.list_view);
+        HashSet<String> uniqueCategories = new HashSet<>();
 
         // Define the data for the ListView
-        String[] items = {"Option 1", "Option 2", "Option 3","Option 4","Option 5","Option 1", "Option 2", "Option 3","Option 4","Option 5","Option 1", "Option 2", "Option 3","Option 4","Option 5"};
+        for (int i = 0; i < listproducts.size(); i++) {
+            uniqueCategories.add(listproducts.get(i).getProductCategory());
+        }
+        ArrayList<String> items = new ArrayList<>(uniqueCategories);
 
         // Create and set the custom adapter for the ListView
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.list_item, R.id.text_view, items);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_single_choice, items);
         listView.setAdapter(adapter);
+        listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE); // Ensure single choice mode
 
         // Create and show the AlertDialog
         new AlertDialog.Builder(this)
@@ -349,8 +361,24 @@ public class ViewInventory extends AppCompatActivity {
                     // Get the selected item
                     int selectedPosition = listView.getCheckedItemPosition();
                     if (selectedPosition != ListView.INVALID_POSITION) {
-                        String selectedItem = items[selectedPosition];
-                        Toast.makeText(this, "Selected: " + selectedItem, Toast.LENGTH_SHORT).show();
+                        String selectedItem = items.get(selectedPosition);
+                        TableLayout tableLayout=findViewById(R.id.tblInventory);
+                        for (int i = tableLayout.getChildCount() - 1; i > 0; i--) {
+                            tableLayout.removeViewAt(i);
+                        }
+                        for (ProductModel product : listproducts) {
+                            for (LocationModel location : listlocations) {
+                                if (product.getUserIdForProduct().equals(getCurrentUserIDFromSession()) && //for that user
+                                        product.getLocationId() != null && product.getProductCategory().equals(selectedItem)&&
+                                        product.getLocationId().equals(location.getLocation_id()))
+                                {
+                                    addProductRecord(tableLayout, product, location);
+                                }
+                            }
+                        }
+
+
+
                     }
                 })
                 .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
@@ -358,10 +386,165 @@ public class ViewInventory extends AppCompatActivity {
     }
 
 
+    private void showLocations() {
+        // Inflate the custom layout for the dialog
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_listview, null);
+
+        ListView listView = dialogView.findViewById(R.id.list_view);
+        HashSet<String> uniques=new HashSet<>();
+
+        for (int i = 0; i < listlocations.size(); i++) {
+            uniques.add(listlocations.get(i).getLocation_name());
+        }
+
+        // Define the data for the ListView
+        ArrayList<String> items=new ArrayList<>(uniques);
+
+        // Create and set the adapter for the ListView
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_list_item_single_choice, items);
+        listView.setAdapter(adapter);
+        listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+        List<Integer> ids=new ArrayList<>();
+
+
+        // Create and show the AlertDialog
+        new AlertDialog.Builder(this)
+                .setTitle("Select an Option")
+                .setView(dialogView)
+                .setPositiveButton("OK", (dialog, which) -> {
+                    // Get the selected item
+                    int selectedPosition = listView.getCheckedItemPosition();
+                    if (selectedPosition != ListView.INVALID_POSITION) {
+                        String selectedItem = items.get(selectedPosition);
+                        Toast.makeText(this, "Selected: " + selectedItem, Toast.LENGTH_SHORT).show();
+                        TableLayout tableLayout=findViewById(R.id.tblInventory);
+                        HashSet<Integer> set=new HashSet<>();
+
+
+                            for (int i = 0; i < tableLayout.getChildCount(); i++) {
+                                View tblrow= tableLayout.getChildAt(i);
+                              //  sbAPI_ViewInventory api = SupabaseClient.getClient().create(sbAPI_ViewInventory.class);
+                                if(tblrow instanceof TableRow) {
+                                    TableRow row1=(TableRow) tblrow;
+                                    row1.setClickable(true);
+                                    processrow(row1, findrowsList, ids,set);
+                                    findViewById(R.id.btnupdatelocations).setEnabled(true);
+                                    findViewById(R.id.btnupdatelocations).setVisibility(View.VISIBLE);
+                                }
+
+                            }
+
+                        Button updatelocations=findViewById(R.id.btnupdatelocations);
+                        updatelocations.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                                updatelocation(ids,selectedItem);
+                            }
+                        });
+                        Toast.makeText(ViewInventory.this,"Please select the rows which locations you want to change",Toast.LENGTH_SHORT).show();
+
+                    }
+                })
+                .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
+                .show();
+
+
+    }
+    private void updatelocation(List<Integer> ids,String selectedItem)
+    {
+        Integer locIDselected=null;
+        for (LocationModel loc:
+             listlocations) {
+            if(loc.getLocation_name().equals(selectedItem))
+            {
+                locIDselected=loc.getLocation_id();
+            }
+        }
+        sbAPI_ViewInventory api = SupabaseClient.getClient().create(sbAPI_ViewInventory.class);
+        for (Integer id:
+             ids) {
+            int i=id;
+            //  Toast.makeText(ShoppingListContentsActivity.this,i+"",Toast.LENGTH_SHORT);
+            for (ProductModel prod:
+                 listproducts) {
+                if(prod.getProductId()==id) {
+                    prod.setLocationId(locIDselected);
+                    Call<Void> deleterecorscall=api.updateProduct("eq."+i,prod);
+                    deleterecorscall.enqueue(new Callback<Void>() {
+                        @Override
+                        public void onResponse(Call<Void> call, Response<Void> response) {
+                            if (!response.isSuccessful()) {
+                                try {
+                                    Log.e("Custom", response.errorBody().string());
+                                } catch (IOException e) {
+                                    throw new RuntimeException(e);
+                                }
+                            }
+
+                        }
+
+                        @Override
+                        public void onFailure(Call<Void> call, Throwable t) {
+
+                        }
+                    });
+                }
+            }
+
+
+        }
+
+        findViewById(R.id.btnupdatelocations).setVisibility(View.GONE);
+        findViewById(R.id.btnupdatelocations).setEnabled(false);
+        TableLayout table=findViewById(R.id.tblInventory);
+        for (int i = table.getChildCount() - 1; i > 0; i--) {
+            table.removeViewAt(i);
+        }
+       // sbAPI_ViewInventory api = SupabaseClient.getClient().create(sbAPI_ViewInventory.class);
+        fetchAndDisplayData(api);
 
 
 
-    private void fetchAndDisplayData(sbAPI_ViewInventory sbAPI) {
+
+    }
+    private void processrow(TableRow tblrow,List<Findrow> row,List<Integer> ids,HashSet<Integer> set)
+    {
+
+        tblrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                for (int i = 0; i < tblrow.getChildCount(); i++) {
+                    View view=tblrow.getChildAt(i);
+                    view.setBackgroundColor(Color.TRANSPARENT);
+                }
+                tblrow.setBackgroundColor(ContextCompat.getColor(ViewInventory.this, R.color.rowdelete));
+                tblrow.setBackgroundColor(ContextCompat.getColor(ViewInventory.this, R.color.rowdelete));
+                for (Findrow row:
+                     findrowsList) {
+                    if(tblrow.getTag().equals(row.getRecordTag()))
+                    {
+                        for (ProductModel product:
+                                listproducts) {
+                            if(product.getProductId()==row.getProduct_id())
+                            {
+                                ids.add(row.getProduct_id());
+                            }
+                        }
+                    }
+                }
+
+            }
+        });
+    }
+
+
+
+
+
+        private void fetchAndDisplayData(sbAPI_ViewInventory sbAPI) {
         Call<List<LocationModel>> locations = sbAPI.getLocations();
         Call<List<ProductModel>> products = sbAPI.getProducts();
        locations.enqueue(new Callback<List<LocationModel>>() {
@@ -433,10 +616,9 @@ public class ViewInventory extends AppCompatActivity {
         locationname.setText(location.getLocation_name());
         category.setText(product.getProductCategory());
         Date today = new Date();//getting todays date
-        expired.setChecked(product.getProductExpirationDate() != null && product.getProductExpirationDate().before(today)); //expired if equal to and before today
+        expired.setChecked(product.getProductExpirationDate() != null && product.getProductExpirationDate().before(today));//expired if equal to and before today
 
         // Add additional views and set data as needed
-
         tableLayout.addView(rowView);
     }
 

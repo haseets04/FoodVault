@@ -41,7 +41,7 @@ public class ShoppingListContentsActivity extends AppCompatActivity {
         if (listName != null) {
             txtListName.setText(listName); //pass button text
         }
-
+        findViewById(R.id.btndeleterecords).setVisibility(View.GONE);
         ShopListIDOfBtn = getIntent().getIntExtra("SHOPPING_LIST_ID", -1);
         if (ShopListIDOfBtn == -1) {
             Toast.makeText(this, "Invalid shopping list ID", Toast.LENGTH_SHORT).show();
@@ -204,6 +204,7 @@ public class ShoppingListContentsActivity extends AppCompatActivity {
         }
         Button deleterecords=findViewById(R.id.btndeleterecords);
         deleterecords.setEnabled(true);
+        deleterecords.setVisibility(View.VISIBLE);
         FloatingActionButton fabdelete=findViewById(R.id.fltbtn_delete_item);
         fabdelete.setEnabled(false);
         deleterecords.setOnClickListener(new View.OnClickListener() {
@@ -211,6 +212,7 @@ public class ShoppingListContentsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 deleterecords(id);
                 deleterecords.setEnabled(false);
+                deleterecords.setVisibility(View.GONE);
             }
         });
 
@@ -235,6 +237,7 @@ public class ShoppingListContentsActivity extends AppCompatActivity {
                     {
                         FloatingActionButton fabdelete=findViewById(R.id.fltbtn_delete_item);
                         fabdelete.setEnabled(true);
+                        fabdelete.setVisibility(View.VISIBLE);
 
                     }
                 }

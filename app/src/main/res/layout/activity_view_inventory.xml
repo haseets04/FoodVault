@@ -7,6 +7,19 @@
     android:background="@drawable/inventory_border"
     tools:context=".ViewInventory">
 
+    <Button
+        android:id="@+id/btn_newLocation"
+        android:layout_width="96dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="108dp"
+        android:backgroundTint="#9AD0D3"
+        android:text="@string/add_new_location"
+        android:textSize="10sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/scrollview"
+        tools:ignore="TouchTargetSizeCheck" />
+
     <ImageButton
         android:id="@+id/imageButton3"
         android:layout_width="46dp"
@@ -141,14 +154,17 @@
         app:layout_constraintVertical_bias="0.824" />
 
     <Button
-        android:id="@+id/btn_newLocation"
+        android:id="@+id/btnupdatelocations"
         android:layout_width="96dp"
         android:layout_height="45dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="108dp"
+        android:layout_marginStart="152dp"
+        android:layout_marginTop="120dp"
         android:backgroundTint="#9AD0D3"
-        android:text="@string/add_new_location"
+        android:enabled="false"
+        android:text="@string/update_locations"
+        android:textColor="#FFFFFF"
         android:textSize="10sp"
+        android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/scrollview"
         tools:ignore="TouchTargetSizeCheck" />
