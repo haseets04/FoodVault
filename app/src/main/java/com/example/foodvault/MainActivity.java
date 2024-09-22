@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity { //Login page
 
         //delete later
         //get first user record
-        TextView textView = findViewById(R.id.text_view);
+        /*TextView textView = findViewById(R.id.text_view);
 
         SupabaseAPI api = SupabaseClient.getClient().create(SupabaseAPI.class);
         Call<List<UserModel>> call = api.getItems("*"); //second half of your sql statement
@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity { //Login page
                 Toast.makeText(MainActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
                 textView.setText("Error connecting to the Supabase API: " + t.getMessage());
             }
-        });
+        });*/
 
     }
 

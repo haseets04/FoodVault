@@ -118,11 +118,11 @@ public class AddItemToSLActivity extends AppCompatActivity {
                             .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    Call<ShoppingListProductsModel> insertitem = sbAPI.insertShoppingListItem(new ShoppingListProductsModel(store.getText().toString(), cbxbought.isChecked(), 4, addedId,quanty.getValue()));
-                                    insertitem.enqueue(new Callback<ShoppingListProductsModel>() {
+                                    Call<ProductsOnShopListModel> insertitem = sbAPI.insertShoppingListItem(new ProductsOnShopListModel(store.getText().toString(), cbxbought.isChecked(), 4, addedId,quanty.getValue()));
+                                    insertitem.enqueue(new Callback<ProductsOnShopListModel>() {
 
                                         @Override
-                                        public void onResponse(Call<ShoppingListProductsModel> call, Response<ShoppingListProductsModel> response) {
+                                        public void onResponse(Call<ProductsOnShopListModel> call, Response<ProductsOnShopListModel> response) {
                                             if (response.isSuccessful()) {
 
 
@@ -130,7 +130,7 @@ public class AddItemToSLActivity extends AppCompatActivity {
                                         }
 
                                         @Override
-                                        public void onFailure(Call<ShoppingListProductsModel> call, Throwable t) {
+                                        public void onFailure(Call<ProductsOnShopListModel> call, Throwable t) {
                                             Log.e("Shopping list insertion", "Item not added to shoppinglist table");
                                         }
                                     });
@@ -275,13 +275,13 @@ public class AddItemToSLActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
                     ProductModel lastProduct = response.body().get(0);
 
-                    Call<ShoppingListProductsModel> insertitem = sbAPI.insertShoppingListItem(new ShoppingListProductsModel(store.getText().toString(), cbxbought.isChecked(), 4,lastProduct.getProductId() ,quantity.getValue()));
+                    Call<ProductsOnShopListModel> insertitem = sbAPI.insertShoppingListItem(new ProductsOnShopListModel(store.getText().toString(), cbxbought.isChecked(), 4,lastProduct.getProductId() ,quantity.getValue()));
 
 
-                    insertitem.enqueue(new Callback<ShoppingListProductsModel>() {
+                    insertitem.enqueue(new Callback<ProductsOnShopListModel>() {
 
                         @Override
-                        public void onResponse(Call<ShoppingListProductsModel> call, Response<ShoppingListProductsModel> response) {
+                        public void onResponse(Call<ProductsOnShopListModel> call, Response<ProductsOnShopListModel> response) {
                             if (!response.isSuccessful())
                                 return;
                             else{
@@ -296,7 +296,7 @@ public class AddItemToSLActivity extends AppCompatActivity {
                         }
 
                         @Override
-                        public void onFailure(Call<ShoppingListProductsModel> call, Throwable t) {
+                        public void onFailure(Call<ProductsOnShopListModel> call, Throwable t) {
                             Log.e("Shopping list insertion", "Item not added to shoppinglist table");
                         }
                     });

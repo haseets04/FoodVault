@@ -49,6 +49,29 @@
     <string name="edit_shopping_list">Edit Shopping List</string>
     <string name="remove_shopping_list">Remove Shopping List</string>
     <string name="add_new_shopping_list">Add New Shopping List</string>
+    <string name="add_another_item_in_list">Add another item in list</string>
+    <string name="share_shopping_list">Share shopping list</string>
+    <string name="delete_item_in_list">Delete item in list</string>
+    <string name="group_products_in_list_by">Group products in list by:</string>
+    <string name="grouping_by_grocery_store">Grouping by Grocery Store:</string>
+    <string name="enter_grocery_store_name">Enter grocery store name</string>
+    <string name="tick_products_that_fall_under_grocery_store_1">Tick products that fall under Grocery Store 1:</string>
+    <string name="add_grocery_store">Add Grocery Store</string>
+    <string name="save_grouping">Save Grouping</string>
+    <string name="cancel_grouping">Cancel Grouping</string>
+    <string name="new_shopping_list">New Shopping List</string>
+    <string name="update_profile">Update Profile</string>
+    <string name="change_password_optional">Change Password (optional):</string>
+    <string name="save_updated_information">Save Updated Information</string>
+    <string name="cancel_profile_updates">Cancel Profile Updates</string>
+    <string name="name_surname">Name Surname</string>
+    <string name="_0">0</string>
+    <string name="groups">Groups</string>
+    <string-array name="spinner_options">
+        <item>Product Category</item>
+        <item>Grocery Store</item>
+        <item>Both</item>
+    </string-array>
     <string name="enter_an_expiration_date">Enter an expiration date</string>
     <string name="quantity_0">Quantity : 0</string>
     <string name="edit_product">Edit Product</string>
@@ -63,13 +86,7 @@
     <string name="yes">YES</string>
     <string name="add_item">Add Item</string>
     <string name="shoppingproduct_name">Product Name</string>
-    <string name="add_another_item_in_list">Add another item in list</string>
-    <string name="share_shopping_list">Share shopping list</string>
-    <string name="delete_item_in_list">Delete item in list</string>
     <string name="qty">Qty</string>
-    <string-array name="spinner_options">
-        <item>Item Category</item>
-        <item>Grocery Store</item>
-        <item>Both</item>
-    </string-array>
+    <string name="profile_icon">Profile icon</string>
+    <string name="settings_icon">Settings icon</string>
 </resources>

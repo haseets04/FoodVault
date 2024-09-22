@@ -123,7 +123,7 @@ public class ShoppingListContentsActivity extends AppCompatActivity {
            public void onClick(View v) {
               // Toast.makeText(ShoppingListContentsActivity.this, "Product Successfully edited", Toast.LENGTH_SHORT).show();
                String id="eq."+productOnShopList.getProducts_on_list_id();
-               ShoppingListProductsModel product=new ShoppingListProductsModel(productOnShopList.getGrocery_store(),checkBox.isChecked(),productOnShopList.getShoplist_id(), productOnShopList.getProduct_id(),  0);
+               ProductsOnShopListModel product=new ProductsOnShopListModel(productOnShopList.getGrocery_store(),checkBox.isChecked(),productOnShopList.getShoplist_id(), productOnShopList.getProduct_id(),  0);
                product.setProducts_on_list_id(productOnShopList.getProducts_on_list_id());
                Call<Void> insertproduct=sbAPI.updateSLproduct(id,product);
                insertproduct.enqueue(new Callback<Void>() {

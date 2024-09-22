@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
     android:background="@drawable/screen_background"
+    android:padding="16dp"
     tools:context=".NewShoppingListActivity">
 
     <ImageView
@@ -16,148 +16,167 @@
         android:layout_alignParentTop="true"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:src="@drawable/account_circle_icon" />
+        android:src="@drawable/account_circle_icon"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
         android:layout_below="@id/profile_icon"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="20dp"
         android:layout_marginTop="30dp"
-        android:gravity="center"
-        android:text="New Shopping List"
+        android:layout_marginRight="20dp"
         android:fontFamily="@font/shrikhand"
+        android:gravity="center"
         android:shadowColor="#214069"
+        android:text="@string/new_shopping_list"
         android:textColor="#050C57"
-        android:textSize="35sp" />
+        android:textSize="35sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/profile_icon" />
 
-    <LinearLayout
-        android:id="@+id/shopping_list_container"
+    <ScrollView
+        android:id="@+id/scrollView2"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_below="@id/title"
-        android:layout_marginTop="20dp"
-        android:orientation="vertical"
-        android:padding="16dp"
-        android:background="@drawable/inventory_border">
-        <!-- This container will hold dynamically added items -->
-
-        <!--<ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:contentDescription="ScrollView" />-->
-
-        <EditText
-            android:id="@+id/shopListName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:hint="Shopping List Name"
-            android:inputType="text"
-            android:minHeight="48dp"
-            android:textSize="18sp" />
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title">
 
         <LinearLayout
+            android:id="@+id/shopping_list_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingBottom="8dp">
+            android:background="@drawable/inventory_border"
+            android:orientation="vertical"
+            android:padding="16dp">
 
-            <TextView
-
-                android:id="@+id/cbxticked"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:buttonTint="#050C57"
-                android:textColor="#050C57"
-                android:textSize="20sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="Qty"
-                android:textAlignment="center"
-                android:textColor="#050C57"
-                android:textSize="20sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="0dp"
+            <EditText
+                android:id="@+id/shopListName"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@drawable/inventory_border"
-                android:text="@string/product_name"
-                android:textColor="#050C57"
-                android:textSize="20sp"
-                android:textStyle="bold" />
-        </LinearLayout>
-
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:ignore="SpeakableTextPresentCheck">
+                android:layout_gravity="center_horizontal"
+                android:hint="Shopping List Name"
+                android:inputType="text"
+                android:minHeight="48dp"
+                android:textSize="18sp" />
 
             <LinearLayout
-                android:id="@+id/rowholder"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingBottom="8dp"
-                android:orientation="vertical"></LinearLayout>
-        </ScrollView>
+                android:orientation="horizontal"
+                android:paddingBottom="8dp">
 
-    </LinearLayout>
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Qty"
+                    android:textAlignment="center"
+                    android:textColor="#050C57"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Product"
+                    android:textColor="#050C57"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fltbtn_add_item"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="270dp"
+                android:layout_marginTop="220dp"
+                android:layout_marginBottom="10dp"
+                android:clickable="true"
+                android:contentDescription="@string/add_new_item"
+                android:onClick="onAddItemClicked"
+                android:src="@android:drawable/ic_input_add"
+                tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_weight="1"
+        android:text="@string/group_products_in_list_by"
+        android:textAlignment="center"
+        android:textColor="#050C57"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/scrollView2" />
 
     <Spinner
         android:id="@+id/spinner_group_products_list"
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_below="@id/shopping_list_container"
-        android:layout_marginTop="30dp"
         android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
         android:background="@android:drawable/btn_dropdown"
+        android:backgroundTint="#70B1BA"
         android:padding="14dp"
-        android:textAlignment="center"
-        android:textSize="15sp"
+        android:spinnerMode="dropdown"
         android:textColor="#3949AB"
         android:textColorHint="#3949AB"
-        android:backgroundTint="#70B1BA"
-        android:spinnerMode="dropdown" />
+        android:textSize="15sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fltbtn_add_item"
+    <ImageView
+        android:id="@+id/spn_arrow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/shopping_list_container"
-        android:layout_marginStart="300dp"
-        android:layout_marginTop="20dp"
-        android:clickable="true"
-        android:contentDescription="@string/add_new_item"
-        android:onClick="onAddItemClicked"
-        android:src="@android:drawable/ic_input_add"
-        tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="150dp"
+        android:layout_marginTop="18dp"
+        android:src="@android:drawable/arrow_down_float"
+        app:layout_constraintEnd_toEndOf="@+id/spinner_group_products_list"
+        app:layout_constraintStart_toStartOf="@+id/spinner_group_products_list"
+        app:layout_constraintTop_toTopOf="@+id/spinner_group_products_list" />
+
+
 
     <LinearLayout
+        android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginBottom="50dp"
+        android:gravity="center"
         android:orientation="horizontal"
-        android:gravity="center">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
         <Button
             android:id="@+id/btn_save_shopping_list"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_marginEnd="8dp"
-            android:text="Save Shopping List"
-            android:textColor="#311B92"
+            android:layout_weight="1"
             android:backgroundTint="#70B1BA"
-            android:onClick="onSaveNewShopList" />
+            android:onClick="onSaveNewShopList"
+            android:text="Save Shopping List"
+            android:textColor="#311B92" />
 
         <Button
             android:id="@+id/btn_cancel_entry"
@@ -165,10 +184,10 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:backgroundTint="#70B1BA"
+            android:onClick="onCancelNewShopList"
             android:text="Cancel Entry"
-            android:textColor="#311B92"
-            android:onClick="onCancelNewShopList" />
+            android:textColor="#311B92" />
 
     </LinearLayout>
 
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

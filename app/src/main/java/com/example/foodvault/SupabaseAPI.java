@@ -4,7 +4,9 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
+import retrofit2.http.Headers;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
@@ -20,48 +22,55 @@ import retrofit2.http.Query;
  *
  */
 public interface SupabaseAPI {
-    @GET("user") // Your table name is "Example"
+    @GET("/rest/v1/user") // Your table name is "Example"
     Call<List<UserModel>> getItems(@Query("select") String select); //first part of your query (select, update, insert, etc.)
 
-    @GET("user")
+    @GET("/rest/v1/user")
     Call<List<UserModel>> getUserByEmail(@Query("user_email") String email, @Query("select") String select);
 
-    @POST("user")
+    @POST("/rest/v1/user")
     Call<Void> insertUser(@Body UserModel user); //insert new user record
 
-    @POST("product")
+    @POST("/rest/v1/product")
     Call<Void> insertProduct(@Body ProductModel product); //insert new product record
 
-    @POST("shoppinglist")
-    Call<Void> insertShoppingList(@Body ShopListModel shoppingList); //insert new shoppingList record
+    @POST("/rest/v1/shoppinglist")
+    @Headers("Prefer: return=representation")
+    Call<List<ShopListModel>> insertShoppingList(@Body ShopListModel shopList); //insert new shopping list record
 
-    @GET("shoppinglist")
+    @PATCH("/rest/v1/shoppinglist")
+    Call<Void> updateShopListDetails(
+            @Query("shoplist_id") String shoppingList, @Body ShopListModel shopList);
+
+    @DELETE("/rest/v1/shoppinglist")
+    Call<Void> deleteShoppingList(@Query("shoplist_id") String shoppingList);
+
+    @GET("/rest/v1/shoppinglist")
     Call<List<ShopListModel>> getShoppingLists(@Query("select") String select);
 
-    @GET("product")
+    @GET("/rest/v1/product")
     Call<List<ProductModel>> getProducts();
 
-    @GET("products_on_shoppinglist")
+    @GET("/rest/v1/products_on_shoppinglist")
     Call<List<ProductsOnShopListModel>> getProductOnListByShoplistID();
 
-    /*@GET("shopping_lists")
-    Call<List<ShopListModel>> getShoppingListRecentID(@Query("order") String order);*/
-
-    /*@PATCH("/rest/v1/shoppinglist/{shoplist_id}")
-    Call<Void> updateShoppingList(@Path("shoplist_id") Integer id, @Body ShopListModel updatedShoppingList);*/
-
-    @GET("user")
+    @GET("/rest/v1/user")
     Call<List<UserModel>> getUserDetails(@Query("user_id") String userId);
 
-    @PATCH("user")     //("/rest/v1/user?id=eq:{user_id}")
-    Call<Void> updateUserExpirationPeriod(
+    @PATCH("/rest/v1/user")     //("/rest/v1/user?id=eq:{user_id}")
+    Call<Void> updateUserDetails(
             @Query("user_id") String userId,  // Dynamic query parameter
             @Body UserModel user      // Pass the updated fields as the body
     );
 
+    @POST("/rest/v1/group")
+    Call<Void> insertGroup(@Body GroupModel group); //insert new group record
 
+    @GET("/rest/v1/shoppinglist")
+    Call<List<ShopListModel>> getShopListCountByUserId(@Query("select") String select, @Query("user_id") String userId);
 
-    //Call<Void> updateUserExpirationPeriod(@Path("user_id") Integer userId, @Body UserModel updatedUser);
+    @GET("/rest/v1/group")
+    Call<List<GroupModel>> getGroupCountByUserId(@Query("select") String select, @Query("user_id") String userId);
 
 
 }
