@@ -150,8 +150,17 @@ public class NewShoppingListActivity extends AppCompatActivity {
     }
 
     public void createShoppingListRecord(){
+        shopListName = shopListNameInput.getText().toString();
+
         newShoppingList = new ShopListModel();
         newShoppingList.setUserIdForShopList(getCurrentUserIDFromSession());
+
+        if(shopListName.isEmpty()){
+            newShoppingList.setShoplistName("Shopping List " + currentShopListNameID);
+            appState.setShopListNameID(currentShopListNameID + 1);
+        } else{
+            newShoppingList.setShoplistName(shopListName);
+        }
 
         Call<List<ShopListModel>> insertListCall = api.insertShoppingList(newShoppingList);
         insertListCall.enqueue(new Callback<List<ShopListModel>>() {

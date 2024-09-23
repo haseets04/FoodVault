@@ -9,6 +9,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 /**
@@ -64,13 +65,24 @@ public interface SupabaseAPI {
     );
 
     @POST("/rest/v1/group")
-    Call<Void> insertGroup(@Body GroupModel group); //insert new group record
+    @Headers("Prefer: return=representation")
+    Call<List<GroupModel>> insertGroup(@Body GroupModel group); //insert new group record
+
+    @PATCH("/rest/v1/group")
+    Call<Void> updateGroupDetails(
+            @Query("group_id") String group, @Body GroupModel groupModel);
+
+    @DELETE("/rest/v1/group")
+    Call<Void> deleteGroup(@Query("group_id") String group);
+
+    @POST("/rest/v1/users_in_group")
+    Call<Void> insertUserInGroup(@Body UsersInGroupModel userInGroup); //insert new user in group record
 
     @GET("/rest/v1/shoppinglist")
     Call<List<ShopListModel>> getShopListCountByUserId(@Query("select") String select, @Query("user_id") String userId);
 
-    @GET("/rest/v1/group")
-    Call<List<GroupModel>> getGroupCountByUserId(@Query("select") String select, @Query("user_id") String userId);
+    @GET("/rest/v1/users_in_group")
+    Call<List<UsersInGroupModel>> getGroupCountByUserId(@Query("select") String select, @Query("user_id") String userId);
 
 
 }

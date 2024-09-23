@@ -37,10 +37,10 @@ public class ViewProfileActivity extends AppCompatActivity {
 
     public void fetchAndDisplayUserNumGroups(){ //just gets groups created, not if its linked with a shoplist
         getCurrentUserIDFromSession();
-        Call<List<GroupModel>> call = api.getGroupCountByUserId("*", "eq." + userId);
-        call.enqueue(new Callback<List<GroupModel>>() {
+        Call<List<UsersInGroupModel>> call = api.getGroupCountByUserId("*", "eq." + userId);
+        call.enqueue(new Callback<List<UsersInGroupModel>>() {
             @Override
-            public void onResponse(@NonNull Call<List<GroupModel>> call, @NonNull Response<List<GroupModel>> response) {
+            public void onResponse(@NonNull Call<List<UsersInGroupModel>> call, @NonNull Response<List<UsersInGroupModel>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     int count = response.body().size(); //count of groups for the user
                     numGroups.setText(String.valueOf(count));
@@ -53,7 +53,7 @@ public class ViewProfileActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(@NonNull Call<List<GroupModel>> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<List<UsersInGroupModel>> call, @NonNull Throwable t) {
                 Toast.makeText(ViewProfileActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
