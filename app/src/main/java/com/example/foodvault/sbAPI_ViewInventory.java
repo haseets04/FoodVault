@@ -33,6 +33,8 @@ public interface sbAPI_ViewInventory {
 
     @PUT("product")
     Call<Void> updateProduct(@Query("product_id") String product_id, @Body ProductModel product);
+    @PUT("shoppinglist")
+    Call<Void> updateShoplist(@Query("shoplist_id") String shoplist_id, @Body ShopListModel product);
 
     @PUT("location")
     Call<Void> updateLocation(@Query("location_id") String location_id, @Body LocationModel location);

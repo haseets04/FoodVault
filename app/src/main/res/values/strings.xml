@@ -69,6 +69,7 @@
     <string name="qty">Qty</string>
     <string name="delete_records">Delete Records</string>
     <string name="update_locations">Update Locations</string>
+    <string name="group_by">Group by</string>
     <string-array name="spinner_options">
         <item>Item Category</item>
         <item>Grocery Store</item>

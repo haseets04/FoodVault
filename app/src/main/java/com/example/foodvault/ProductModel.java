@@ -1,6 +1,7 @@
 package com.example.foodvault;
 
 import java.util.Date;
+import java.util.Objects;
 
 public class ProductModel {
     private Integer product_id;
@@ -34,7 +35,13 @@ public class ProductModel {
     public Integer getUserIdForProduct() {
         return user_id;
     }
-
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ProductModel)) return false;
+        ProductModel that = (ProductModel) o;
+        return Objects.equals(product_category, that.product_category);
+    }
 
     @Override
     public String toString() {

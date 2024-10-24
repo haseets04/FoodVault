@@ -28,4 +28,11 @@ public class ShopListModel {
     public void setShoplistName(String shoplist_name) {
         this.shoplist_name = shoplist_name;
     }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ShopListModel that = (ShopListModel) o;
+        return shoplist_id != null && shoplist_id.equals(that.shoplist_id);
+    }
 }

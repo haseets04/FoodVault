@@ -20,6 +20,7 @@ import retrofit2.Response;
 public class ShoppingListActivity extends AppCompatActivity {
     private static final int REQUEST_CODE_ADD_LIST = 1;
     Integer userId;
+    List<ShopListModel> shoppingLists;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +33,48 @@ public class ShoppingListActivity extends AppCompatActivity {
     public void onAddListClicked(View view) {
         //startActivity(new Intent(ShoppingListActivity.this, NewShoppingListActivity.class));
         Intent intent = new Intent(ShoppingListActivity.this, NewShoppingListActivity.class);
-        startActivityForResult(intent, REQUEST_CODE_ADD_LIST);
+        SupabaseAPI api = SupabaseClient.getClient().create(SupabaseAPI.class);
+        ShopListModel sl=new ShopListModel();
+        sl.setUserIdForShopList(userId);
+        Call<Void> newshoppinglist= api.insertShoppingList(sl);
+        newshoppinglist.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if(response.isSuccessful()) {
+                 //   Toast.makeText(ShoppingListActivity.this, "test", Toast.LENGTH_SHORT).show();
+                    Call<List<ShopListModel>> secondsshoppinglistscall = api.getShoppingLists("*");
+                    secondsshoppinglistscall.enqueue(new Callback<List<ShopListModel>>() {
+                        @Override
+                        public void onResponse(Call<List<ShopListModel>> call, Response<List<ShopListModel>> response) {
+                            if (!response.isSuccessful())
+                                return;
+                            List<ShopListModel> secondshoplists = response.body();
+                            secondshoplists.removeAll(shoppingLists);
+                            if (!secondshoplists.isEmpty()) {
+                                intent.putExtra("SHOPPING_LIST_ID", secondshoplists.get(0).getShoplistId());
+                               Toast.makeText(ShoppingListActivity.this, ""+secondshoplists.get(0).getShoplistId().intValue(), Toast.LENGTH_SHORT).show();
+                                startActivityForResult(intent, REQUEST_CODE_ADD_LIST);
+                            } else {
+                                Toast.makeText(ShoppingListActivity.this, "Shoplist not found", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+
+                        @Override
+                        public void onFailure(Call<List<ShopListModel>> call, Throwable t) {
+
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+
+            }
+        });
+
+
     }
 
     @Override
@@ -91,7 +133,7 @@ public class ShoppingListActivity extends AppCompatActivity {
             @Override
             public void onResponse(@NonNull Call<List<ShopListModel>> call, @NonNull Response<List<ShopListModel>> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    List<ShopListModel> shoppingLists = response.body();
+                    shoppingLists = response.body();
                     Log.d("Supabase Response", response.toString());
                     if (shoppingLists != null && !shoppingLists.isEmpty()) {
                         createButtonsForShoppingLists(shoppingLists);

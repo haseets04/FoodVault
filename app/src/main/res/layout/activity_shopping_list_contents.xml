@@ -15,32 +15,32 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="3dp"
         android:src="@drawable/account_circle_icon" />
 
     <TextView
         android:id="@+id/txt_list_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
         android:layout_below="@id/profile_icon"
-        android:layout_marginTop="30dp"
-        android:gravity="center"
-        android:text="Shopping List"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="2dp"
         android:fontFamily="@font/shrikhand"
+        android:gravity="center"
         android:shadowColor="#214069"
+        android:text="Shopping List"
         android:textColor="#050C57"
-        android:textSize="35sp" />
+        android:textSize="20sp" />
 
     <ScrollView
         android:id="@+id/shopping_list_scrollview"
-        android:layout_width="match_parent"
-        android:layout_height="450dp"
+        android:layout_width="393dp"
+        android:layout_height="466dp"
         android:layout_below="@id/txt_list_name"
-        android:layout_marginTop="23dp"
+        android:layout_marginTop="3dp"
         android:background="@drawable/inventory_border"
         android:orientation="vertical"
-        android:padding="16dp" >
+        android:padding="16dp">
 
         <HorizontalScrollView
             android:layout_width="match_parent"
@@ -50,7 +50,7 @@
                 android:id="@+id/tblShopListContents"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:stretchColumns="1,2" >
+                android:stretchColumns="1,2">
 
                 <TableRow
                     android:id="@+id/row1"
@@ -87,57 +87,67 @@
     </ScrollView>
 
     <LinearLayout
-        android:layout_width="392dp"
-        android:layout_height="74dp"
-        android:orientation="vertical"></LinearLayout>
+        android:layout_width="wrap_content"
+        android:layout_height="143dp"
+        android:layout_below="@+id/shopping_list_scrollview"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="14dp"
-        android:gravity="center"
-        android:orientation="horizontal">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="72dp"
+            android:layout_marginBottom="10dp"
+            android:gravity="center"
+            android:orientation="horizontal">
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fltbtn_add_another_item"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="40dp"
-            android:clickable="true"
-            android:contentDescription="@string/add_another_item_in_list"
-            android:focusable="true"
-            android:onClick="onAddAnotherItemClicked"
-            android:src="@android:drawable/ic_input_add" />
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fltbtn_add_another_item"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="40dp"
+                android:clickable="true"
+                android:contentDescription="@string/add_another_item_in_list"
+                android:focusable="true"
+                android:onClick="onAddAnotherItemClicked"
+                android:src="@android:drawable/ic_input_add" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fltbtn_share_list"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="40dp"
-            android:clickable="true"
-            android:contentDescription="@string/share_shopping_list"
-            android:focusable="true"
-            android:onClick="onShareListClicked"
-            android:src="@drawable/baseline_share_24" />
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fltbtn_share_list"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="40dp"
+                android:clickable="true"
+                android:contentDescription="@string/share_shopping_list"
+                android:focusable="true"
+                android:onClick="onShareListClicked"
+                android:src="@drawable/baseline_share_24" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fltbtn_delete_item"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:contentDescription="@string/delete_item_in_list"
-            android:focusable="true"
-            android:onClick="onDeleteItemClicked"
-            android:src="@drawable/baseline_remove_24" />
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fltbtn_delete_item"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:contentDescription="@string/delete_item_in_list"
+                android:focusable="true"
+                android:onClick="onDeleteItemClicked"
+                android:src="@drawable/baseline_remove_24" />
+
+            <Button
+                android:id="@+id/btndeleterecords"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:enabled="false"
+                android:text="@string/delete_records"
+                android:visibility="visible" />
+
+        </LinearLayout>
 
         <Button
-            android:id="@+id/btndeleterecords"
-            android:layout_width="0dp"
+            android:id="@+id/btngroup"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:enabled="false"
-            android:text="@string/delete_records" />
+            android:text="@string/group_by" />
 
     </LinearLayout>
 

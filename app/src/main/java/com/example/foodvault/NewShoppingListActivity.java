@@ -35,30 +35,33 @@ import retrofit2.Response;
 public class NewShoppingListActivity extends AppCompatActivity {
     private LinearLayout shoppingListContainer;
     private AppState appState;
-    private int currentShopListNameID; //for cancel functionality
+    private int currentShopListNameID; // for cancel functionality
     ShopListModel newShoppingList;
     String shopListName;
 
     EditText shopListNameInput;
     List<ShoppingListProductsModel> shoppingListProductsModels;
     List<ProductModel> products;
-    private Integer userId=UserSession.getInstance().getUserSessionId();
-    sbAPI_ViewInventory sbAPI=SupabaseClient.getClient().create(sbAPI_ViewInventory.class);
+    private Integer userId;
+    sbAPI_ViewInventory sbAPI = SupabaseClient.getClient().create(sbAPI_ViewInventory.class);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_shopping_list);
 
+        userId = UserSession.getInstance().getUserSessionId();
+        if (userId == null || userId == 0) {
+            userId = getIntent().getIntExtra("USER_ID", 0);
+            UserSession.getInstance().setUserSessionId(userId);
+        }
         appState = AppState.getInstance();
-        currentShopListNameID = appState.getShopListNameID(); //store the last saved value
+        currentShopListNameID = appState.getShopListNameID(); // store the last saved value
 
         shopListNameInput = findViewById(R.id.shopListName);
         shopListNameInput.setHint("Shopping List " + currentShopListNameID);
 
         shoppingListContainer = findViewById(R.id.shopping_list_container);
-
-
 
         if (shoppingListContainer == null) {
             Toast.makeText(this, "Failed to initialize shopping list container", Toast.LENGTH_LONG).show();
@@ -71,18 +74,20 @@ public class NewShoppingListActivity extends AppCompatActivity {
         spnGroupProducts.setAdapter(adapter);
         spnGroupProducts.setPrompt(getString(R.string.spinner_prompt));
 
-        FloatingActionButton add=findViewById(R.id.fltbtn_add_item);
+        FloatingActionButton add = findViewById(R.id.fltbtn_add_item);
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(NewShoppingListActivity.this, AddItemToSLActivity.class));
+                Intent intent = new Intent(NewShoppingListActivity.this, AddItemToSLActivity.class);
+                intent.putExtra("SHOPPING_LIST_ID", getIntent().getIntExtra("SHOPPING_LIST_ID", 0));
+                intent.putExtra("USER_ID", UserSession.getInstance().getUserSessionId()); // Add this line
+                startActivity(intent);
             }
         });
-        //loaditems(4);
-        loadpreviousitems(4);
-
+        loadpreviousitems(getIntent().getIntExtra("SHOPPING_LIST_ID", -1));
     }
-    public void onAddItemClicked(View view) { //done in separate Use Case
+
+    public void onAddItemClicked(View view) {
         LinearLayout newItemRow = new LinearLayout(this);
         newItemRow.setLayoutParams(new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
@@ -113,44 +118,39 @@ public class NewShoppingListActivity extends AppCompatActivity {
                 2.0f
         ));
         nameTextView.setText("New Item"); // Set default name or obtain from input
-        // Add the elements to the new row
+
         newItemRow.addView(checkBox);
         newItemRow.addView(qtyTextView);
         newItemRow.addView(nameTextView);
 
-        // Add the new row to the shopping list container
         shoppingListContainer.addView(newItemRow);
     }
-    public void loadpreviousitems(int shoplistid)
-    {
 
-        Call<List<ShoppingListProductsModel>>getshoppinglistproducts=sbAPI.getshoppinglistproducts();
+    public void loadpreviousitems(int shoplistid) {
+        Call<List<ShoppingListProductsModel>> getshoppinglistproducts = sbAPI.getshoppinglistproducts();
         getshoppinglistproducts.enqueue(new Callback<List<ShoppingListProductsModel>>() {
             @Override
             public void onResponse(Call<List<ShoppingListProductsModel>> call, Response<List<ShoppingListProductsModel>> response) {
-                boolean test=response.isSuccessful();
-                if(!response.isSuccessful()||response.body()==null) {
+                if (!response.isSuccessful() || response.body() == null) {
                     try {
-                        Log.e("Custom",response.errorBody().string());
+                        Log.e("Custom", response.errorBody().string());
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
                     return;
                 }
-                shoppingListProductsModels=response.body();
+                shoppingListProductsModels = response.body();
                 loadproducts(shoplistid);
-
-
             }
 
             @Override
             public void onFailure(Call<List<ShoppingListProductsModel>> call, Throwable t) {
-                Toast.makeText(NewShoppingListActivity.this,"Faluire to laod shoppinglist",Toast.LENGTH_SHORT).show();
-                Log.e("Custom","There was an failure loading shopping list products");
+                Toast.makeText(NewShoppingListActivity.this, "Failure to load shopping list", Toast.LENGTH_SHORT).show();
+                Log.e("Custom", "There was a failure loading shopping list products");
             }
         });
-
     }
+
     public void loadproducts(int shoplistid) {
         Call<List<ProductModel>> getproducts = sbAPI.getProducts();
 
@@ -162,31 +162,22 @@ public class NewShoppingListActivity extends AppCompatActivity {
                     return;
                 }
                 products = response.body();
-                for (ProductModel product:
-                        products) {
-                for (ShoppingListProductsModel slProduct:
-                        shoppingListProductsModels) {
-                    if (slProduct.shoplist_id==shoplistid&&slProduct.getProduct_id()==product.getProductId()) {
-
-                        Toast.makeText(NewShoppingListActivity.this, "Connected", Toast.LENGTH_SHORT).show();
-                        LinearLayout linearLayout = inflateLinearLayout(NewShoppingListActivity.this);
-                        CheckBox checkBox = linearLayout.findViewById(R.id.cbxTicked);
-                        TextView textView1 = linearLayout.findViewById(R.id.tvQuantity);
-                        TextView tvslproductqty = linearLayout.findViewById(R.id.tvName);
-                        checkBox.setChecked(slProduct.ticked_or_not);
-                        textView1.setText("" + slProduct.getShoplistprocuts_quantity());
+                for (ProductModel product : products) {
+                    for (ShoppingListProductsModel slProduct : shoppingListProductsModels) {
+                        if (slProduct.shoplist_id == shoplistid && slProduct.getProduct_id() == product.getProductId()) {
+                            LinearLayout linearLayout = inflateLinearLayout(NewShoppingListActivity.this);
+                            CheckBox checkBox = linearLayout.findViewById(R.id.cbxTicked);
+                            TextView textView1 = linearLayout.findViewById(R.id.tvQuantity);
+                            TextView tvslproductqty = linearLayout.findViewById(R.id.tvName);
+                            checkBox.setChecked(slProduct.ticked_or_not);
+                            textView1.setText("" + slProduct.getShoplistprocuts_quantity());
                             tvslproductqty.setText(product.getProductName());
 
-
-                        LinearLayout parentlayout = findViewById(R.id.rowholder);
-                        parentlayout.addView(linearLayout);
-                    }
-
+                            LinearLayout parentlayout = findViewById(R.id.rowholder);
+                            parentlayout.addView(linearLayout);
+                        }
                     }
                 }
-
-                // Update the UI or do something with the fetched products
-
             }
 
             @Override
@@ -197,56 +188,27 @@ public class NewShoppingListActivity extends AppCompatActivity {
         });
     }
 
-    public void loaditems(int shoplistid)
-    {
-       // loadpreviousitems(shoplistid);
-        Intent intent=getIntent();
-        boolean test=intent.getBooleanExtra("addclicked",false);
-        if(intent.getBooleanExtra("addclicked",false))
-        {
-            int qty= intent.getIntExtra("qty",0);
-            boolean isticked=intent.getBooleanExtra("purchased",false);
-            String name=intent.getStringExtra("name");
-            LinearLayout linearLayout=inflateLinearLayout(this);
-            CheckBox checkBox = linearLayout.findViewById(R.id.cbxTicked);
-            TextView textView1 = linearLayout.findViewById(R.id.tvQuantity);
-            TextView textView2 = linearLayout.findViewById(R.id.tvName);
-            checkBox.setChecked(isticked);
-            textView1.setText(""+qty);
-            textView2.setText(name);
-            LinearLayout parentlayout=findViewById(R.id.rowholder);
-            parentlayout.addView(linearLayout);
-        }
-
-
-    }
     public LinearLayout inflateLinearLayout(Context context) {
-        // Create a LayoutInflater object
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-        // Inflate the layout and return the LinearLayout
-        LinearLayout linearLayout = (LinearLayout) inflater.inflate(R.layout.shoppingitemrow, null);
-
-        return linearLayout;
+        return (LinearLayout) inflater.inflate(R.layout.shoppingitemrow, null);
     }
-
-
-
 
     public void onSaveNewShopList(View view) {
         shopListName = shopListNameInput.getText().toString();
-
+        int id= getIntent().getIntExtra("SHOPPING_LIST_ID", 0);
         newShoppingList = new ShopListModel();
-        if(shopListName.isEmpty() || shopListName == null){
+        if (shopListName.isEmpty()) {
             newShoppingList.setShoplistName("Shopping List " + currentShopListNameID);
             appState.setShopListNameID(currentShopListNameID + 1);
-        } else{
+        } else {
+            newShoppingList.setShoplistId(id);
             newShoppingList.setShoplistName(shopListName);
+            newShoppingList.setUserIdForShopList(userId);
         }
 
-        SupabaseAPI api = SupabaseClient.getClient().create(SupabaseAPI.class);
+        sbAPI_ViewInventory api = SupabaseClient.getClient().create(sbAPI_ViewInventory.class);
 
-        Call<Void> insertListCall = api.insertShoppingList(newShoppingList);
+        Call<Void> insertListCall = api.updateShoplist("eq." + id, newShoppingList);
         insertListCall.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
@@ -254,6 +216,7 @@ public class NewShoppingListActivity extends AppCompatActivity {
                     Toast.makeText(NewShoppingListActivity.this, "Shopping List saved", Toast.LENGTH_SHORT).show();
                     setResult(RESULT_OK);
                     finish();
+                    startActivity(new Intent(NewShoppingListActivity.this,ShoppingListActivity.class));
                 } else {
                     try {
                         String errorBody = response.errorBody() != null ? response.errorBody().string() : "No error body";
@@ -264,33 +227,12 @@ public class NewShoppingListActivity extends AppCompatActivity {
                     Toast.makeText(NewShoppingListActivity.this, "Saving of Shopping List Failed: " + response.message(), Toast.LENGTH_SHORT).show();
                 }
             }
+
             @Override
             public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
-                Toast.makeText(NewShoppingListActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(NewShoppingListActivity.this, "Failed to save Shopping List", Toast.LENGTH_SHORT).show();
+                Log.e("Supabase Error", "Failure to save shopping list: " + t.getMessage());
             }
         });
-        //confirm saving of changes
-    }
-
-    public void onCancelNewShopList(View view) { //don't add to DB
-        AlertDialog.Builder builder2 = new AlertDialog.Builder(this);
-        builder2.setTitle("Confirm Cancel");
-        builder2.setMessage("Are you sure you want to cancel the new entry?");
-        builder2.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                Toast.makeText(NewShoppingListActivity.this, "New Shopping List entry cancelled", Toast.LENGTH_SHORT).show();
-                finish();            }
-        });
-
-        builder2.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.dismiss();
-            }
-        });
-
-        AlertDialog dialog2 = builder2.create();
-        dialog2.show();
     }
 }

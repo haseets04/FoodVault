@@ -23,6 +23,13 @@ public class UserSession {
         this.user_id = user_id;
     }
 
+    public void setUser_id(Integer user_id) {
+        this.user_id = user_id;
+    }
+    public boolean isValidSession() {
+        return user_id != null && user_id > 0;
+    }
+
     public Integer getUserSessionId() {
         return user_id;
     }
@@ -30,5 +37,6 @@ public class UserSession {
     public void clearSession() { //call at logout: UserSession.getInstance().clearSession();
         user_id = null;
     }
+
 
 }

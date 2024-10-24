@@ -4,12 +4,16 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.PopupMenu;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -21,6 +25,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -29,8 +34,11 @@ import retrofit2.Response;
 public class ShoppingListContentsActivity extends AppCompatActivity {
     Integer ShopListIDOfBtn;
     sbAPI_ViewInventory sbAPI=SupabaseClient.getClient().create(sbAPI_ViewInventory.class);
+    List<ProductModel> groupproducts=new ArrayList<>();
+    List<ProductsOnShopListModel>groupslproducts=new ArrayList<>();
     HashMap<String,Integer> findrows=new HashMap<>();
     List<Integer> id=new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,7 +58,100 @@ public class ShoppingListContentsActivity extends AppCompatActivity {
         //Log.i("ID", ShopListIDOfBtn.toString());
 
         fetchAndDisplayProductsOnShopListFromDB();
+        Button btnGroup = findViewById(R.id.btngroup);
+        btnGroup.setOnClickListener(v -> showGroupMenu(v));
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Refresh the product list when the activity becomes visible
+        fetchAndDisplayProductsOnShopListFromDB();
+    }
+
+    private void showGroupMenu(View view) {
+        PopupMenu popupMenu = new PopupMenu(this, view);
+        popupMenu.getMenuInflater().inflate(R.menu.group_menu, popupMenu.getMenu()); // Create a menu resource
+
+        popupMenu.setOnMenuItemClickListener(item -> {
+            int id = item.getItemId();
+
+            if (id == R.id.group_by_category) {
+                groupItemsByCategory();
+                return true;
+            } else if (id == R.id.group_by_shop) {
+                groupItemsByShop();
+                return true;
+            } else {
+                return false;
+            }
+        });
+        popupMenu.show();
+    }
+    private void groupItemsByCategory() {
+        // Fetch products and group them by category
+        List<ProductModel> products = groupproducts;
+        List<ProductsOnShopListModel> SLproducts =groupslproducts;// Fetch your products
+        String correct="";
+        Map<String, List<ProductsOnShopListModel>> groupedProducts = new HashMap<>();
+        for (ProductModel product : products) {
+            String category = product.getProductCategory(); // Assuming you have a method to get the category
+            groupedProducts.putIfAbsent(category, new ArrayList<>());
+            for(ProductsOnShopListModel SLproduct: SLproducts)
+            {
+                if(SLproduct.getProduct_id()==112&&SLproduct.getShoplist_id()==161&&product.getProductId().equals(112)==true)
+                     correct="dlfj";
+                if(SLproduct.getProduct_id().equals(product.getProductId())&&SLproduct.getShoplist_id().equals(ShopListIDOfBtn)==true)
+                groupedProducts.get(category).add(SLproduct);
+            }
+
+        }
+        displayGroupedProducts(groupedProducts,products);
+    }
+
+    private void groupItemsByShop() {
+        // Fetch products and group them by shop/store
+        List<ProductsOnShopListModel> productsOnShopList =groupslproducts; // Fetch your products
+        List<ProductModel> products = groupproducts;
+        Map<String, List<ProductsOnShopListModel>> groupedProducts = new HashMap<>();
+        for (ProductsOnShopListModel product : productsOnShopList) {
+            if(product.getShoplist_id().equals(ShopListIDOfBtn)) {
+                String shop = product.getGrocery_store(); // Assuming you have a method to get the shop
+                groupedProducts.putIfAbsent(shop, new ArrayList<>());
+                groupedProducts.get(shop).add(product);
+            }
+        }
+        displayGroupedProducts(groupedProducts,products);
+    }
+
+    private void displayGroupedProducts(Map<String, List<ProductsOnShopListModel>> groupedProducts,List<ProductModel> groupprods) {
+        TableLayout tableLayout = findViewById(R.id.tblShopListContents);
+        tableLayout.removeAllViews(); // Clear existing rows
+
+        for (Map.Entry<String, List<ProductsOnShopListModel>> entry : groupedProducts.entrySet()) {
+            String groupHeader = entry.getKey();
+            if(!entry.getValue().isEmpty()) {
+                // Add header for the group
+                TableRow headerRow = new TableRow(this);
+                TextView headerTextView = new TextView(this);
+                headerTextView.setText(groupHeader);
+                headerTextView.setTextSize(18); // Set text size
+                headerTextView.setTypeface(null, Typeface.BOLD); // Make it bold
+                headerRow.addView(headerTextView);
+                tableLayout.addView(headerRow);
+                int userid = UserSession.getInstance().getUserSessionId();
+                for (ProductsOnShopListModel product : entry.getValue()) {
+                    // Display each product in a row
+                    for (ProductModel prod : groupprods) {
+                        if (product.getProduct_id().equals(prod.getProductId()) && product.getShoplist_id().equals(ShopListIDOfBtn)&&userid==prod.getUserIdForProduct().intValue())
+                            addProductRow(tableLayout, product, prod);
+                    }
+                    // Adjust as necessary
+                }
+            }
+        }
+    }
+
 
     private void fetchAndDisplayProductsOnShopListFromDB() {
         SupabaseAPI api = SupabaseClient.getClient().create(SupabaseAPI.class);
@@ -97,7 +198,8 @@ public class ShoppingListContentsActivity extends AppCompatActivity {
                     headerQty.setText("Qty");
                     headerProductName.setText("Product");
                     tableLayout.addView(headerRow);
-
+                    groupslproducts=productsOnShopList;
+                    groupproducts=products;
                     //add rows for each product
                     for (ProductsOnShopListModel productOnShopList : productsOnShopList) {
                         for (ProductModel product : products) {
@@ -175,6 +277,11 @@ public class ShoppingListContentsActivity extends AppCompatActivity {
     }
 
     public void onAddAnotherItemClicked(View view) {
+        Intent intent=new Intent(ShoppingListContentsActivity.this,AddItemToSLActivity.class);
+        Intent getintent=getIntent();
+        intent.putExtra("Activity","ShoppingListContentsActivity");
+        intent.putExtra("SHOPPING_LIST_ID",getintent.getIntExtra("SHOPPING_LIST_ID",-1));
+        startActivity(intent);
     }
 
     public void onShareListClicked(View view) {
