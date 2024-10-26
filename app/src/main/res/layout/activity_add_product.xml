@@ -64,7 +64,7 @@
             android:layout_marginTop="15dp"
             android:background="@drawable/rounded_corner"
             android:clickable="true"
-            android:focusable="false"
+            android:focusable="true"
             android:gravity="center_horizontal"
             android:hint="@string/expiration_date"
             android:inputType="datetime"

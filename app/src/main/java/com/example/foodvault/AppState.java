@@ -2,7 +2,6 @@ package com.example.foodvault;
 
 public class AppState {
     private static AppState instance;
-    //private int expirationPeriod = 30; //default value
     private int shopListNameID = 1; //default
     private int groupNameID = 1; //default
 
@@ -14,14 +13,6 @@ public class AppState {
         }
         return instance;
     }
-
-    /*public int getExpirationPeriod() {
-        return expirationPeriod;
-    }
-
-    public void setExpirationPeriod(int expirationPeriod) {
-        this.expirationPeriod = expirationPeriod;
-    }*/
 
     public int getShopListNameID() {
         return shopListNameID;

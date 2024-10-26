@@ -116,4 +116,8 @@ public class ViewProfileActivity extends AppCompatActivity {
     public void onUpdateProfileClicked(View view) {
         startActivity(new Intent(ViewProfileActivity.this, UpdateProfileActivity.class));
     }
+
+    public void onNotificationIconClicked(View view) {
+        startActivity(new Intent(ViewProfileActivity.this, NotificationsActivity.class));
+    }
 }

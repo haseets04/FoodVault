@@ -29,9 +29,6 @@ public class ExpirationPeriodActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_expiration_period);
 
-        /*appState = AppState.getInstance();
-        currentExpirationPeriod = appState.getExpirationPeriod(); //store the last saved value*/
-
         expPeriodPicker = findViewById(R.id.number_picker_expiration_period);
         expPeriodPicker.setMinValue(0);
         expPeriodPicker.setMaxValue(365); //change later
@@ -103,6 +100,7 @@ public class ExpirationPeriodActivity extends AppCompatActivity {
 
                 UserModel updatedUser = new UserModel();
                 updatedUser.setExpirationPeriod(currentExpirationPeriod);
+                UserSession.getInstance().setExpiration_period(currentExpirationPeriod); //to use in NotificationActivity
 
                 Call<Void> updateCall = api.updateUserDetails("eq." + userId, updatedUser);
                 updateCall.enqueue(new Callback<Void>() {

@@ -3,6 +3,7 @@ package com.example.foodvault;
 public class UserSession {
     private static UserSession instance;
     private Integer user_id;
+    private int expiration_period;
 
     /* // Retrieve the user ID from the singleton class
     Integer userId = UserSession.getInstance().getUserSessionId();*/
@@ -32,6 +33,14 @@ public class UserSession {
 
     public Integer getUserSessionId() {
         return user_id;
+    }
+
+    public int getExpiration_period() {
+        return expiration_period;
+    }
+
+    public void setExpiration_period(int expiration_period) {
+        this.expiration_period = expiration_period;
     }
 
     public void clearSession() { //call at logout: UserSession.getInstance().clearSession();

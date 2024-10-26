@@ -9,7 +9,6 @@ import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
-import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 /**
@@ -34,6 +33,9 @@ public interface SupabaseAPI {
 
     @POST("/rest/v1/product")
     Call<Void> insertProduct(@Body ProductModel product); //insert new product record
+
+    @POST("shoppinglist")
+    Call<Void> insertShoppingList2(@Body ShopListModel shoppingList); //insert new shoppingList record
 
     @POST("/rest/v1/shoppinglist")
     @Headers("Prefer: return=representation")
@@ -84,5 +86,27 @@ public interface SupabaseAPI {
     @GET("/rest/v1/users_in_group")
     Call<List<UsersInGroupModel>> getGroupCountByUserId(@Query("select") String select, @Query("user_id") String userId);
 
+    /*@GET("/rest/v1/product")
+    Call<List<ProductModel>> getProductsReachingExpiration(
+            @Query("product_expiration_date") String expirationDateCondition,
+            @Query("select") String select);*/
+
+
+
+    /*// Delete multiple users in a group
+    @HTTP(method = "DELETE", path = "users_in_group", hasBody = true)
+    Call<Void> deleteUsersInGroup(@Body List<Integer> userIds);*/
+
+    @GET("/rest/v1/group")
+    Call<List<GroupModel>> getGroups(@Query("select") String select);
+
+    @GET("/rest/v1/users_in_group")
+    Call<List<UsersInGroupModel>> getUsersInGroups(@Query("select") String select);
+
+    @GET("/rest/v1/users_in_group")
+    Call<List<UsersInGroupModel>> getMembersByGroupID(@Query("group_id") String groupId);
+
+    @GET("/rest/v1/shoppinglist")
+    Call<List<ShopListModel>> getShopListByGroupID(@Query("group_id") String groupId);
 
 }

@@ -7,6 +7,18 @@
     tools:context=".ViewProfileActivity">
 
     <ImageView
+        android:id="@+id/notification_icon"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_marginEnd="30dp"
+        android:contentDescription="@string/notification_icon"
+        android:src="@drawable/baseline_notifications_24"
+        app:layout_constraintBottom_toTopOf="@+id/imageView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:onClick="onNotificationIconClicked" />
+
+    <ImageView
         android:id="@+id/imageView"
         android:layout_width="100dp"
         android:layout_height="100dp"

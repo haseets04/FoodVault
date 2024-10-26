@@ -9,6 +9,15 @@ public class ProductsOnShopListModel {
     private boolean ticked_or_not;
     private int shoplistproducts_quantity;
 
+    public int getShoplistproducts_quantity() {
+        return shoplistproducts_quantity;
+    }
+
+    public void setShoplistproducts_quantity(int shoplistproducts_quantity) {
+        this.shoplistproducts_quantity = shoplistproducts_quantity;
+    }
+
+
     public ProductsOnShopListModel( String grocery_store, boolean ticked_or_not, Integer shoplist_id, Integer product_id,Integer shoplistproducts_quantity) {
         this.grocery_store = grocery_store;
         this.ticked_or_not = ticked_or_not;

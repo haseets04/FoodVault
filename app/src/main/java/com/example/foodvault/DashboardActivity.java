@@ -24,8 +24,7 @@ public class DashboardActivity extends AppCompatActivity {
 
 
     public void onViewGroupsClicked(View view) {
-        startActivity(new Intent(DashboardActivity.this, NewGroupActivity.class));
-        //startActivity(new Intent(DashboardActivity.this, GroupsActivity.class));
+        startActivity(new Intent(DashboardActivity.this, ViewGroupsActivity.class));
     }
 
     public void onSettingsIconClicked(View view) {

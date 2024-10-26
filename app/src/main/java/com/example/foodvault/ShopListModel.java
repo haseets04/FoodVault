@@ -4,6 +4,15 @@ public class ShopListModel {
     private Integer shoplist_id;
     private Integer user_id;
     private String shoplist_name;
+    private Integer group_id;
+
+    public Integer getGroup_id() {
+        return group_id;
+    }
+
+    public void setGroup_id(Integer group_id) {
+        this.group_id = group_id;
+    }
 
     public Integer getShoplistId() {
         return shoplist_id;

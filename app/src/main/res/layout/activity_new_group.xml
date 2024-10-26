@@ -16,6 +16,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
+        android:contentDescription="@string/profile_icon"
         android:src="@drawable/account_circle_icon" />
 
     <TextView
@@ -26,7 +27,7 @@
         android:layout_below="@id/profile_icon"
         android:layout_marginTop="30dp"
         android:gravity="center"
-        android:text="Create Group"
+        android:text="@string/create_group"
         android:fontFamily="@font/shrikhand"
         android:shadowColor="#214069"
         android:textColor="#050C57"
@@ -53,7 +54,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:hint="Group Name"
+            android:hint="@string/group_name"
             android:inputType="text"
             android:minHeight="48dp"
             android:textSize="18sp" />
@@ -67,7 +68,7 @@
         android:layout_below="@id/group_container"
         android:layout_marginStart="200dp"
         android:layout_marginTop="20dp"
-        android:text="Add Members to Group"
+        android:text="@string/add_members_to_group"
         android:textColor="#311B92"
         android:backgroundTint="#70B1BA"
         android:onClick="onAddMembersToGroupClicked" />
@@ -86,7 +87,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginEnd="8dp"
-            android:text="Save New Group"
+            android:text="@string/save_new_group"
             android:textColor="#311B92"
             android:backgroundTint="#70B1BA"
             android:onClick="onSaveNewGroupClicked" />
@@ -97,7 +98,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:backgroundTint="#70B1BA"
-            android:text="Cancel Entry"
+            android:text="@string/cancel_entry"
             android:textColor="#311B92"
             android:onClick="onCancelNewGroupClicked" />
 

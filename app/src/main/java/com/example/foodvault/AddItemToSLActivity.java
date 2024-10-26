@@ -3,12 +3,10 @@ package com.example.foodvault;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
-import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -18,7 +16,6 @@ import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -147,12 +144,12 @@ public class AddItemToSLActivity extends AppCompatActivity {
     }
 
     private void addItemToShoppingList(TextView store, CheckBox cbxbought, NumberPicker quanty, AutoCompleteTextView name) {
-        Call<ShoppingListProductsModel> insertItem = sbAPI.insertShoppingListItem(
-                new ShoppingListProductsModel(store.getText().toString(), cbxbought.isChecked(), slid, addedId, quanty.getValue()));
+        Call<ProductsOnShopListModel> insertItem = sbAPI.insertShoppingListItem(
+                new ProductsOnShopListModel(store.getText().toString(), cbxbought.isChecked(), slid, addedId, quanty.getValue()));
 
-        insertItem.enqueue(new Callback<ShoppingListProductsModel>() {
+        insertItem.enqueue(new Callback<ProductsOnShopListModel>() {
             @Override
-            public void onResponse(Call<ShoppingListProductsModel> call, Response<ShoppingListProductsModel> response) {
+            public void onResponse(Call<ProductsOnShopListModel> call, Response<ProductsOnShopListModel> response) {
                 if (response.isSuccessful()) {
                     // Successfully added to the shopping list
                     Log.d("Add Item", "Item successfully added to the shopping list.");
@@ -164,7 +161,7 @@ public class AddItemToSLActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<ShoppingListProductsModel> call, Throwable t) {
+            public void onFailure(Call<ProductsOnShopListModel> call, Throwable t) {
                 Log.e("Add Item", "Error adding item to the shopping list.", t);
             }
         });

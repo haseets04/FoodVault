@@ -1,9 +1,6 @@
 package com.example.foodvault;
 
-import static androidx.fragment.app.FragmentManager.TAG;
-
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -20,7 +17,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -40,7 +36,7 @@ public class NewShoppingListActivity extends AppCompatActivity {
     String shopListName;
 
     EditText shopListNameInput;
-    List<ShoppingListProductsModel> shoppingListProductsModels;
+    List<ProductsOnShopListModel> shoppingListProductsModels;
     List<ProductModel> products;
     private Integer userId;
     sbAPI_ViewInventory sbAPI = SupabaseClient.getClient().create(sbAPI_ViewInventory.class);
@@ -127,10 +123,10 @@ public class NewShoppingListActivity extends AppCompatActivity {
     }
 
     public void loadpreviousitems(int shoplistid) {
-        Call<List<ShoppingListProductsModel>> getshoppinglistproducts = sbAPI.getshoppinglistproducts();
-        getshoppinglistproducts.enqueue(new Callback<List<ShoppingListProductsModel>>() {
+        Call<List<ProductsOnShopListModel>> getshoppinglistproducts = sbAPI.getshoppinglistproducts();
+        getshoppinglistproducts.enqueue(new Callback<List<ProductsOnShopListModel>>() {
             @Override
-            public void onResponse(Call<List<ShoppingListProductsModel>> call, Response<List<ShoppingListProductsModel>> response) {
+            public void onResponse(Call<List<ProductsOnShopListModel>> call, Response<List<ProductsOnShopListModel>> response) {
                 if (!response.isSuccessful() || response.body() == null) {
                     try {
                         Log.e("Custom", response.errorBody().string());
@@ -144,7 +140,7 @@ public class NewShoppingListActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<List<ShoppingListProductsModel>> call, Throwable t) {
+            public void onFailure(Call<List<ProductsOnShopListModel>> call, Throwable t) {
                 Toast.makeText(NewShoppingListActivity.this, "Failure to load shopping list", Toast.LENGTH_SHORT).show();
                 Log.e("Custom", "There was a failure loading shopping list products");
             }
@@ -163,14 +159,14 @@ public class NewShoppingListActivity extends AppCompatActivity {
                 }
                 products = response.body();
                 for (ProductModel product : products) {
-                    for (ShoppingListProductsModel slProduct : shoppingListProductsModels) {
-                        if (slProduct.shoplist_id == shoplistid && slProduct.getProduct_id() == product.getProductId()) {
+                    for (ProductsOnShopListModel slProduct : shoppingListProductsModels) {
+                        if (slProduct.getShoplist_id() == shoplistid && slProduct.getProduct_id() == product.getProductId()) {
                             LinearLayout linearLayout = inflateLinearLayout(NewShoppingListActivity.this);
                             CheckBox checkBox = linearLayout.findViewById(R.id.cbxTicked);
                             TextView textView1 = linearLayout.findViewById(R.id.tvQuantity);
                             TextView tvslproductqty = linearLayout.findViewById(R.id.tvName);
-                            checkBox.setChecked(slProduct.ticked_or_not);
-                            textView1.setText("" + slProduct.getShoplistprocuts_quantity());
+                            checkBox.setChecked(slProduct.isTicked_or_not());
+                            textView1.setText("" + slProduct.getShoplistproducts_quantity());
                             tvslproductqty.setText(product.getProductName());
 
                             LinearLayout parentlayout = findViewById(R.id.rowholder);
@@ -234,5 +230,8 @@ public class NewShoppingListActivity extends AppCompatActivity {
                 Log.e("Supabase Error", "Failure to save shopping list: " + t.getMessage());
             }
         });
+    }
+
+    public void onCancelNewShopList(View view) {
     }
 }

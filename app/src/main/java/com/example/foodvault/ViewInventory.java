@@ -40,7 +40,6 @@ import retrofit2.Response;
 
 public class ViewInventory extends AppCompatActivity {
     private static final String TAG = "ViewInventory";
-    private sbAPI_ViewInventory sbAPI;
     private List<Findrow> findrowsList= new ArrayList<>();
     List<ProductModel> listproducts;
     List<LocationModel> listlocations;

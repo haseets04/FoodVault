@@ -3,7 +3,7 @@ package com.example.foodvault;
 public class GroupModel {
     private Integer group_id;
     //private Integer user_id;
-    private Integer shoplist_id;
+    //private Integer shoplist_id;
     private String group_name;
 
     public Integer getGroupId() {
@@ -22,13 +22,13 @@ public class GroupModel {
         this.user_id = user_id;
     }*/
 
-    public Integer getShoplistIdForGroup() {
+    /*public Integer getShoplistIdForGroup() {
         return shoplist_id;
     }
 
     public void setShoplistIdForGroup(Integer shoplist_id) {
         this.shoplist_id = shoplist_id;
-    }
+    }*/
 
     public String getGroupName() {
         return group_name;

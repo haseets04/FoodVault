@@ -5,10 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
@@ -90,6 +88,7 @@ public class MainActivity extends AppCompatActivity { //Login page
                         //work with this user's data in the database till logout
                         userIdOnLogin = currentUser.getUserId();
                         UserSession.getInstance().setUserSessionId(userIdOnLogin); //store user ID in singleton class
+                        UserSession.getInstance().setExpiration_period(currentUser.getExpirationPeriod()); //to use in NotificationActivity
 
                         Toast.makeText(MainActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
                         startActivity(new Intent(MainActivity.this, DashboardActivity.class)); //DashboardActivity

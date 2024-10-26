@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:background="@drawable/screen_background"
+    tools:context=".GroupContentsActivity">
+
+    <ImageView
+        android:id="@+id/profile_icon"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:contentDescription="@string/profile_icon"
+        android:src="@drawable/account_circle_icon" />
+
+    <TextView
+        android:id="@+id/txt_group_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/profile_icon"
+        android:layout_marginTop="30dp"
+        android:gravity="center"
+        android:text="@string/group"
+        android:fontFamily="@font/shrikhand"
+        android:shadowColor="#214069"
+        android:textColor="#050C57"
+        android:textSize="35sp" />
+
+    <ScrollView
+        android:id="@+id/group_scrollview"
+        android:layout_width="match_parent"
+        android:layout_height="450dp"
+        android:layout_below="@id/txt_group_name"
+        android:layout_marginTop="23dp"
+        android:background="@drawable/inventory_border"
+        android:orientation="vertical"
+        android:padding="16dp" >
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TableLayout
+                android:id="@+id/tblGroupContents"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:stretchColumns="1,2" >
+
+                <TableRow
+                    android:id="@+id/row1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <!--<TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text ="Qty"
+                        android:textAlignment="center"
+                        android:textColor="#050C57"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:text ="Product"
+                        android:textColor="#050C57"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />-->
+
+                </TableRow>
+            </TableLayout>
+        </HorizontalScrollView>
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="50dp"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fltbtn_add_another_member"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="40dp"
+            android:clickable="true"
+            android:contentDescription="@string/add_member_to_group"
+            android:onClick="onAddMemberClicked"
+            android:src="@android:drawable/ic_input_add"
+            android:focusable="true" />
+
+        <!--<com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fltbtn_share_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="40dp"
+            android:clickable="true"
+            android:contentDescription="Share Group"
+            android:onClick="onShareGroupClicked"
+            android:src="@drawable/baseline_share_24"
+            android:focusable="true" />-->
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fltbtn_remove_member"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:contentDescription="@string/remove_member"
+            android:onClick="onRemoveMemberClicked"
+            android:src="@drawable/baseline_remove_24"
+            android:focusable="true" />
+
+    </LinearLayout>
+
+</RelativeLayout>

@@ -14,14 +14,14 @@ public interface sbAPI_ViewInventory {
     @GET("location")
     Call<List<LocationModel>> getLocations();
 
-
     @PUT("products_on_shoppinglist")
     Call<Void> updateSLproduct(@Query("products_on_list_id") String products_on_list_id,@Body ProductsOnShopListModel product);
+
     @GET("product")
     Call<List<ProductModel>> getProducts();
+
     @GET("products_on_shoppinglist")
     Call<List<ProductsOnShopListModel>> getshoppinglistproducts();
-
 
     @DELETE("product")
     Call<Void> deleteproduct(@Query("product_id") String product_id);
