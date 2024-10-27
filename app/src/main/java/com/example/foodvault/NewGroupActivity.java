@@ -61,27 +61,6 @@ public class NewGroupActivity extends AppCompatActivity {
     public void onAddMembersToGroupClicked(View view) {
     }
 
-    /*public void removeMembersFromGroupOnDB() { //make a button here also?
-        List<Integer> userIds = new ArrayList<>();
-        Call<Void> deleteUsersCall = api.deleteUsersInGroup(userIds);
-        deleteUsersCall.enqueue(new Callback<Void>() {
-            @Override
-            public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
-                if (response.isSuccessful()) {
-                    Toast.makeText(NewGroupActivity.this, "Users deleted successfully", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(NewGroupActivity.this, "Failed to delete users: " + response.message(), Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
-                Toast.makeText(NewGroupActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
-
-    }*/
-
     public void createNewGroupRecord(){
         groupName = groupNameInput.getText().toString();
 

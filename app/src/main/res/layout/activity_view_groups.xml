@@ -71,7 +71,7 @@
             android:src="@android:drawable/ic_input_add"
             android:focusable="true" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
+        <!--<com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fltbtn_edit_group"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -80,7 +80,7 @@
             android:contentDescription="@string/edit_group"
             android:onClick="onEditGroupClicked"
             android:src="@drawable/baseline_edit_24"
-            android:focusable="true" />
+            android:focusable="true" />-->
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fltbtn_delete_group"

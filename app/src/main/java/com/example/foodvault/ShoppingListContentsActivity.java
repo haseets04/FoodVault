@@ -326,8 +326,7 @@ public class ShoppingListContentsActivity extends AppCompatActivity {
     }
     private void deleterecords(List<Integer> ids)
     {
-        for (Integer id:
-             ids) {
+        for (Integer id: ids) {
             int i=id;
           //  Toast.makeText(ShoppingListContentsActivity.this,i+"",Toast.LENGTH_SHORT);
             Call<Void> deleterecorscall=sbAPI.deleteSLproduct("eq."+i);

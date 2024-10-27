@@ -10,6 +10,7 @@ import retrofit2.http.Headers;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
+import retrofit2.http.HTTP;
 
 /**
  * SupabaseApi interface to define the API endpoints
@@ -92,11 +93,6 @@ public interface SupabaseAPI {
             @Query("select") String select);*/
 
 
-
-    /*// Delete multiple users in a group
-    @HTTP(method = "DELETE", path = "users_in_group", hasBody = true)
-    Call<Void> deleteUsersInGroup(@Body List<Integer> userIds);*/
-
     @GET("/rest/v1/group")
     Call<List<GroupModel>> getGroups(@Query("select") String select);
 
@@ -108,5 +104,12 @@ public interface SupabaseAPI {
 
     @GET("/rest/v1/shoppinglist")
     Call<List<ShopListModel>> getShopListByGroupID(@Query("group_id") String groupId);
+
+    // Delete multiple members in a group
+    @HTTP(method = "DELETE", path = "users_in_group", hasBody = true)
+    Call<Void> deleteMembersInGroup(@Query("user_id") String userIdFilter, @Query("group_id") String groupIdFilter);
+
+    @DELETE("users_in_group")
+    Call<Void> deleteGroupMembers(@Query("user_id") String userID);
 
 }

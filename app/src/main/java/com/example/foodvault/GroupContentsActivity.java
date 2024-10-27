@@ -3,15 +3,20 @@ package com.example.foodvault;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.View;
+import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -19,8 +24,13 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class GroupContentsActivity extends AppCompatActivity {
+    private SupabaseAPI api = SupabaseClient.getClient().create(SupabaseAPI.class);
     private Integer groupIDOfBtn;
     private String shopListName;
+    private List<Integer> selectedUserIds;
+
+    // Declare a map to hold the member IDs and their corresponding TableRows
+    private SparseArray<TableRow> memberRowsMap = new SparseArray<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +53,6 @@ public class GroupContentsActivity extends AppCompatActivity {
     }
 
     private void fetchAndDisplayGroupMembersFromDB() {
-        SupabaseAPI api = SupabaseClient.getClient().create(SupabaseAPI.class);
         Call<List<UsersInGroupModel>> groupMembersCall = api.getMembersByGroupID("eq." + groupIDOfBtn);
 
         groupMembersCall.enqueue(new Callback<List<UsersInGroupModel>>() {
@@ -71,15 +80,12 @@ public class GroupContentsActivity extends AppCompatActivity {
 
     private void displayGroupMembers(List<UsersInGroupModel> groupMembers) {
         TableLayout tableLayout = findViewById(R.id.tblGroupContents);
-
-        // Clear any existing rows except the header row
-        tableLayout.removeAllViews();
+        tableLayout.removeAllViews();   //clear any existing rows except the header row
 
         fetchShoppingListLinkedWithGroupID(groupMembers, tableLayout);
     }
 
     private void fetchShoppingListLinkedWithGroupID(List<UsersInGroupModel> groupMembers, TableLayout tableLayout) {
-        SupabaseAPI api = SupabaseClient.getClient().create(SupabaseAPI.class);
         Call<List<ShopListModel>> call = api.getShopListByGroupID("eq." + groupIDOfBtn);
 
         call.enqueue(new Callback<List<ShopListModel>>() {
@@ -145,10 +151,14 @@ public class GroupContentsActivity extends AppCompatActivity {
     }
 
     private void displayGroupMemberRows(List<UsersInGroupModel> groupMembers, TableLayout tableLayout) {
+        selectedUserIds = new ArrayList<>();
+
+        // Clear previous rows from TableLayout
+        //tableLayout.removeAllViews();
+        memberRowsMap.clear();
+
         for (UsersInGroupModel member : groupMembers) {
             Integer memberUserID = member.getUser_id();
-
-            SupabaseAPI api = SupabaseClient.getClient().create(SupabaseAPI.class);
             Call<List<UserModel>> getUserCall = api.getUserDetails("eq." + memberUserID);
 
             getUserCall.enqueue(new Callback<List<UserModel>>() {
@@ -158,23 +168,50 @@ public class GroupContentsActivity extends AppCompatActivity {
                         UserModel currentUser = response.body().get(0);
                         String firstName = currentUser.getUserFirstname();
                         String lastName = currentUser.getUserLastname();
+                        boolean isAnAdmin = member.isIs_admin();
 
-                        // Create a new TableRow for each member with retrieved details
                         TableRow row = new TableRow(GroupContentsActivity.this);
+                        row.setLayoutParams(new TableLayout.LayoutParams(
+                                TableLayout.LayoutParams.MATCH_PARENT,
+                                TableLayout.LayoutParams.WRAP_CONTENT));
 
-                        String isAdmin = member.isIs_admin() ? " (Admin)" : " (Member)";
+                        if (isAnAdmin) {
+                            TextView adminTextView = new TextView(GroupContentsActivity.this);
+                            adminTextView.setText(firstName + " " + lastName + " (Admin)");
+                            adminTextView.setTextColor(getResources().getColor(R.color.black));
+                            adminTextView.setTextSize(18);
 
-                        TextView memberTextView = new TextView(GroupContentsActivity.this);
-                        memberTextView.setText(firstName + " " + lastName + isAdmin);
-                        memberTextView.setTextColor(getResources().getColor(R.color.black));
-                        memberTextView.setTextSize(18); // Adjust text size as needed
-                        memberTextView.setPadding(8, 8, 8, 8);
+                            row.addView(adminTextView);
 
-                        // Add TextViews to the TableRow
-                        row.addView(memberTextView);
+                            tableLayout.addView(row); // Add admin row at the top
+                        } else {
+                            CheckBox checkBox = new CheckBox(GroupContentsActivity.this);
+                            checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                                if (isChecked) {
+                                    selectedUserIds.add(memberUserID);
+                                } else {
+                                    selectedUserIds.remove(memberUserID);
+                                }
+                            });
+                            checkBox.setLayoutParams(new TableRow.LayoutParams(
+                                    0, TableRow.LayoutParams.WRAP_CONTENT, 0.1f));
+                            row.addView(checkBox);
 
-                        // Add the TableRow to the TableLayout
-                        tableLayout.addView(row);
+                            TextView memberTextView = new TextView(GroupContentsActivity.this);
+                            memberTextView.setText(firstName + " " + lastName + " (Member)");
+                            memberTextView.setTextColor(getResources().getColor(R.color.black));
+                            memberTextView.setTextSize(18);
+                            memberTextView.setLayoutParams(new TableRow.LayoutParams(
+                                    0, TableRow.LayoutParams.WRAP_CONTENT, 1.0f));
+                            memberTextView.setPadding(4, 0, 0, 0);
+
+                            row.addView(memberTextView);
+
+                            tableLayout.addView(row);
+
+                            // Store this row in the map with memberUserID as the key
+                            memberRowsMap.put(memberUserID, row);
+                        }
                     } else {
                         Toast.makeText(GroupContentsActivity.this, "Failed to get member details", Toast.LENGTH_SHORT).show();
                     }
@@ -189,12 +226,53 @@ public class GroupContentsActivity extends AppCompatActivity {
     }
 
 
-
-
-
     public void onAddMemberClicked(View view) {
     }
 
     public void onRemoveMemberClicked(View view) {
+        if (selectedUserIds.isEmpty()) {
+            Toast.makeText(GroupContentsActivity.this, "Please select members to remove", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        new AlertDialog.Builder(GroupContentsActivity.this)
+                .setTitle("Confirm Removal of Member(s)")
+                .setMessage("Are you sure you want to remove the selected member(s)?")
+                .setPositiveButton("Yes", (dialog, which) -> {
+                    // Proceed with deletion
+                    for (Integer memberUserID : selectedUserIds) {
+                        Call<Void> deleteUsersCall = api.deleteMembersInGroup("eq." + memberUserID, "eq." + groupIDOfBtn);
+                        deleteUsersCall.enqueue(new Callback<Void>() {
+                            @Override
+                            public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
+                                if (response.isSuccessful()) {
+                                    // Remove row from TableLayout
+                                    TableRow row = memberRowsMap.get(memberUserID);
+                                    if (row != null) {
+                                        TableLayout tableLayout = findViewById(R.id.tblGroupContents);
+                                        tableLayout.removeView(row); // Remove row from the display
+                                        memberRowsMap.remove(memberUserID); // Remove entry from map
+                                    }
+                                } else {
+                                    Toast.makeText(GroupContentsActivity.this, "Failed to delete Members: " + response.message(), Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
+                                Toast.makeText(GroupContentsActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+
+                    // Clear selected IDs list after processing
+                    selectedUserIds.clear();
+                    Toast.makeText(GroupContentsActivity.this, "Members deleted successfully", Toast.LENGTH_SHORT).show();
+                })
+                .setNegativeButton("No", (dialog, which) -> {
+                    dialog.dismiss();
+                })
+                .show();
     }
+
 }
