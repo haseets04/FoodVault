@@ -1,16 +1,12 @@
 package com.example.foodvault;
 
-import static androidx.fragment.app.FragmentManager.TAG;
-
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-
 import android.util.Log;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -23,9 +19,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
-import java.io.IOException;
 import java.util.List;
 
 import retrofit2.Call;
@@ -35,6 +28,7 @@ import retrofit2.Response;
 public class NewShoppingListActivity extends AppCompatActivity {
     private LinearLayout shoppingListContainer;
     private AppState appState;
+<<<<<<< HEAD
     private int currentShopListNameID; // for cancel functionality
     ShopListModel newShoppingList;
     String shopListName;
@@ -44,6 +38,15 @@ public class NewShoppingListActivity extends AppCompatActivity {
     List<ProductModel> products;
     private Integer userId;
     sbAPI_ViewInventory sbAPI = SupabaseClient.getClient().create(sbAPI_ViewInventory.class);
+=======
+    private int currentShopListNameID; //for cancel functionality
+    private ShopListModel newShoppingList;
+    private String shopListName;
+    private EditText shopListNameInput;
+    private Integer userId;
+    private Integer currentShopListID;
+    private SupabaseAPI api = SupabaseClient.getClient().create(SupabaseAPI.class);
+>>>>>>> 6d00511cc4c4dab33eef064a1ce8e179ab75b474
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,16 +65,60 @@ public class NewShoppingListActivity extends AppCompatActivity {
         shopListNameInput.setHint("Shopping List " + currentShopListNameID);
 
         shoppingListContainer = findViewById(R.id.shopping_list_container);
+<<<<<<< HEAD
 
+=======
+>>>>>>> 6d00511cc4c4dab33eef064a1ce8e179ab75b474
         if (shoppingListContainer == null) {
             Toast.makeText(this, "Failed to initialize shopping list container", Toast.LENGTH_LONG).show();
         }
 
+        createShoppingListRecord();
+
         Spinner spnGroupProducts = findViewById(R.id.spinner_group_products_list);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+        String[] groupingOptions = {"", "Product Category", "Grocery Store", "Both"};
+
+        // Create an ArrayAdapter for the Spinner, with custom spinner item layout
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, groupingOptions);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        spnGroupProducts.setAdapter(adapter);
+
+        // Set an item selected listener for the Spinner
+        spnGroupProducts.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // Handle what happens when an item is selected
+                String selectedGroupingOption = (String) parent.getItemAtPosition(position);
+
+                // Open the GroceryStoreActivity when "Grocery Store" is selected
+                if ("Grocery Store".equals(selectedGroupingOption)) {
+                    Intent intent = new Intent(NewShoppingListActivity.this, GroceryStoreActivity.class);
+                    intent.putExtra("shoppingListName", shopListNameInput.getText().toString());
+                    startActivity(intent);
+                } else if("Product Category".equals(selectedGroupingOption)) {
+
+
+                } else if("Both".equals(selectedGroupingOption)) {
+
+
+                } else if (!selectedGroupingOption.isEmpty()) {
+                    // Show a toast for other selected items
+                    Toast.makeText(NewShoppingListActivity.this, "Selected: " + selectedGroupingOption, Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Do nothing when no item is selected
+            }
+        });
+
+        /*ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.spinner_options, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spnGroupProducts.setAdapter(adapter);
+<<<<<<< HEAD
         spnGroupProducts.setPrompt(getString(R.string.spinner_prompt));
 
         FloatingActionButton add = findViewById(R.id.fltbtn_add_item);
@@ -88,6 +135,12 @@ public class NewShoppingListActivity extends AppCompatActivity {
     }
 
     public void onAddItemClicked(View view) {
+=======
+        spnGroupProducts.setPrompt(getString(R.string.spinner_prompt));*/
+    }
+
+    public void onAddItemClicked(View view) { //done in separate Use Case
+>>>>>>> 6d00511cc4c4dab33eef064a1ce8e179ab75b474
         LinearLayout newItemRow = new LinearLayout(this);
         newItemRow.setLayoutParams(new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
@@ -119,6 +172,10 @@ public class NewShoppingListActivity extends AppCompatActivity {
         ));
         nameTextView.setText("New Item"); // Set default name or obtain from input
 
+<<<<<<< HEAD
+=======
+        // Add the elements to the new row
+>>>>>>> 6d00511cc4c4dab33eef064a1ce8e179ab75b474
         newItemRow.addView(checkBox);
         newItemRow.addView(qtyTextView);
         newItemRow.addView(nameTextView);
@@ -126,6 +183,7 @@ public class NewShoppingListActivity extends AppCompatActivity {
         shoppingListContainer.addView(newItemRow);
     }
 
+<<<<<<< HEAD
     public void loadpreviousitems(int shoplistid) {
         Call<List<ShoppingListProductsModel>> getshoppinglistproducts = sbAPI.getshoppinglistproducts();
         getshoppinglistproducts.enqueue(new Callback<List<ShoppingListProductsModel>>() {
@@ -194,10 +252,27 @@ public class NewShoppingListActivity extends AppCompatActivity {
     }
 
     public void onSaveNewShopList(View view) {
+=======
+    public Integer getCurrentUserIDFromSession(){
+        userId = UserSession.getInstance().getUserSessionId();
+        if (userId == null) {
+            Toast.makeText(NewShoppingListActivity.this, "User ID not found", Toast.LENGTH_SHORT).show();
+        }
+        return userId;
+    }
+
+    public void createShoppingListRecord(){
+>>>>>>> 6d00511cc4c4dab33eef064a1ce8e179ab75b474
         shopListName = shopListNameInput.getText().toString();
         int id= getIntent().getIntExtra("SHOPPING_LIST_ID", 0);
         newShoppingList = new ShopListModel();
+<<<<<<< HEAD
         if (shopListName.isEmpty()) {
+=======
+        newShoppingList.setUserIdForShopList(getCurrentUserIDFromSession());
+
+        if(shopListName.isEmpty()){
+>>>>>>> 6d00511cc4c4dab33eef064a1ce8e179ab75b474
             newShoppingList.setShoplistName("Shopping List " + currentShopListNameID);
             appState.setShopListNameID(currentShopListNameID + 1);
         } else {
@@ -206,17 +281,29 @@ public class NewShoppingListActivity extends AppCompatActivity {
             newShoppingList.setUserIdForShopList(userId);
         }
 
+<<<<<<< HEAD
         sbAPI_ViewInventory api = SupabaseClient.getClient().create(sbAPI_ViewInventory.class);
 
         Call<Void> insertListCall = api.updateShoplist("eq." + id, newShoppingList);
         insertListCall.enqueue(new Callback<Void>() {
+=======
+        Call<List<ShopListModel>> insertListCall = api.insertShoppingList(newShoppingList);
+        insertListCall.enqueue(new Callback<List<ShopListModel>>() {
+>>>>>>> 6d00511cc4c4dab33eef064a1ce8e179ab75b474
             @Override
-            public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
-                if (response.isSuccessful()) {
+            public void onResponse(@NonNull Call<List<ShopListModel>> call, @NonNull Response<List<ShopListModel>> response) {
+                if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
+                    ShopListModel insertedShopList = response.body().get(0);
+                    currentShopListID = insertedShopList.getShoplistId();
+
+                    Log.i("ShopList Id", String.valueOf(currentShopListID));
                     Toast.makeText(NewShoppingListActivity.this, "Shopping List saved", Toast.LENGTH_SHORT).show();
                     setResult(RESULT_OK);
+<<<<<<< HEAD
                     finish();
                     startActivity(new Intent(NewShoppingListActivity.this,ShoppingListActivity.class));
+=======
+>>>>>>> 6d00511cc4c4dab33eef064a1ce8e179ab75b474
                 } else {
                     try {
                         String errorBody = response.errorBody() != null ? response.errorBody().string() : "No error body";
@@ -228,11 +315,94 @@ public class NewShoppingListActivity extends AppCompatActivity {
                 }
             }
 
+<<<<<<< HEAD
+=======
+            @Override
+            public void onFailure(@NonNull Call<List<ShopListModel>> call, @NonNull Throwable t) {
+                Toast.makeText(NewShoppingListActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
+
+    public void onSaveNewShopList(View view) {
+        shopListName = shopListNameInput.getText().toString();
+
+        ShopListModel updatedShopList = new ShopListModel();
+        if(shopListName.isEmpty() || shopListName == null){
+            updatedShopList.setShoplistName("Shopping List " + currentShopListNameID);
+            appState.setShopListNameID(currentShopListNameID + 1);
+        } else{
+            updatedShopList.setShoplistName(shopListName);
+        }
+
+        Call<Void> updateCall = api.updateShopListDetails("eq." + currentShopListID, updatedShopList);
+        updateCall.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
+                if (response.isSuccessful()) {
+                    Toast.makeText(NewShoppingListActivity.this, "Current Settings Saved: " + shopListName, Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(NewShoppingListActivity.this, "Failed to save settings", Toast.LENGTH_SHORT).show();
+                }
+            }
+>>>>>>> 6d00511cc4c4dab33eef064a1ce8e179ab75b474
             @Override
             public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
                 Toast.makeText(NewShoppingListActivity.this, "Failed to save Shopping List", Toast.LENGTH_SHORT).show();
                 Log.e("Supabase Error", "Failure to save shopping list: " + t.getMessage());
             }
         });
+<<<<<<< HEAD
     }
+=======
+        finish(); //go back to ShoppingListActivity
+        //confirm saving of changes
+    }
+
+    public void onCancelNewShopList(View view) { //don't add to DB
+        AlertDialog.Builder builder2 = new AlertDialog.Builder(this);
+        builder2.setTitle("Confirm Cancel");
+        builder2.setMessage("Are you sure you want to cancel the new entry?");
+        builder2.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                //delete shopping list entry
+                deleteCurrentShoppingList();
+                Toast.makeText(NewShoppingListActivity.this, "New Shopping List entry cancelled", Toast.LENGTH_SHORT).show();
+                finish();            }
+        });
+
+        builder2.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+
+        AlertDialog dialog2 = builder2.create();
+        dialog2.show();
+    }
+
+    public void deleteCurrentShoppingList(){
+        Call<Void> deleteCall = api.deleteShoppingList("eq."+ currentShopListID);
+
+        deleteCall.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
+                if(response.isSuccessful())
+                {
+                    Toast.makeText(NewShoppingListActivity.this, "Record Deleted", Toast.LENGTH_SHORT).show();
+                }
+                else
+                    Toast.makeText(NewShoppingListActivity.this, "Failed to delete record", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
+                Toast.makeText(NewShoppingListActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+>>>>>>> 6d00511cc4c4dab33eef064a1ce8e179ab75b474
 }

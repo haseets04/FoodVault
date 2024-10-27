@@ -225,8 +225,8 @@ public class ViewInventory extends AppCompatActivity {
                                                                listproducts) {
                                                            if(product!=null &&product.getProductId()==row.getProduct_id())
                                                            {
-                                                               intent.putExtra("location_id",product.getLocationId());
-                                                               locid=product.getLocationId();
+                                                               intent.putExtra("location_id",product.getLocation_id());
+                                                               locid=product.getLocation_id();
                                                            }
                                                        }
                                                    }

@@ -104,7 +104,7 @@ public class ExpirationPeriodActivity extends AppCompatActivity {
                 UserModel updatedUser = new UserModel();
                 updatedUser.setExpirationPeriod(currentExpirationPeriod);
 
-                Call<Void> updateCall = api.updateUserDetails("eq." + userId, updatedUser);
+                Call<Void> updateCall = api.updateUserExpirationPeriod("eq." + userId, updatedUser);
                 updateCall.enqueue(new Callback<Void>() {
                     @Override
                     public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {

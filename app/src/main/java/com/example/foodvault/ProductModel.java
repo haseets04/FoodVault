@@ -6,9 +6,6 @@ import java.util.Objects;
 public class ProductModel {
     private Integer product_id;
     private Integer user_id;
-
-
-
     private Integer location_id; //can be null
     private String product_name;
     private String product_barcode; //add //can be null //String rather?
@@ -16,13 +13,6 @@ public class ProductModel {
     private String product_category;
     private boolean product_expired;
     private int quantity;
-
-    public Integer getLocation_id() {
-        return location_id;
-    }
-
-    public ProductModel() {
-    }
 
     public Integer getProductId() {
         return product_id;
@@ -35,6 +25,7 @@ public class ProductModel {
     public Integer getUserIdForProduct() {
         return user_id;
     }
+<<<<<<< HEAD
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -57,6 +48,8 @@ public class ProductModel {
                 ", quantity=" + quantity +
                 '}';
     }
+=======
+>>>>>>> 6d00511cc4c4dab33eef064a1ce8e179ab75b474
 
     public void setUserIdForProduct(Integer user_id) {
         this.user_id = user_id;
@@ -116,5 +109,20 @@ public class ProductModel {
 
     public void setProductQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    @Override
+    public String toString() {
+        return "ProductModel{" +
+                "product_id=" + product_id +
+                ", user_id=" + user_id +
+                ", location_id=" + location_id +
+                ", product_name='" + product_name + '\'' +
+                ", product_barcode=" + product_barcode +
+                ", product_expiration_date=" + product_expiration_date +
+                ", product_category='" + product_category + '\'' +
+                ", product_expired=" + product_expired +
+                ", quantity=" + quantity +
+                '}';
     }
 }
