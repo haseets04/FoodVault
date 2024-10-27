@@ -53,7 +53,7 @@ public class EditProductActivity extends AppCompatActivity {
 
         seekBar.setProgress(intent.getIntExtra("quantity",0));
         locationAutoView.setText(intent.getStringExtra("location"));
-        String cat=intent.getStringExtra("category");
+        String cat = intent.getStringExtra("category");
         categoryAutoView.setText(intent.getStringExtra("category"));
 
         Product.setText(intent.getStringExtra("name"));

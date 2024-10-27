@@ -16,6 +16,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginStart="16dp"
         android:layout_marginTop="3dp"
+        android:contentDescription="@string/profile_icon"
         android:src="@drawable/account_circle_icon" />
 
     <TextView
@@ -28,7 +29,7 @@
         android:fontFamily="@font/shrikhand"
         android:gravity="center"
         android:shadowColor="#214069"
-        android:text="Shopping List"
+        android:text="@string/shopping_list"
         android:textColor="#050C57"
         android:textSize="20sp" />
 

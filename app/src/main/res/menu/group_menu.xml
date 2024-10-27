@@ -1,8 +1,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/group_by_category"
-        android:title="Group by Category" />
+        android:title="@string/group_by_category" />
     <item
         android:id="@+id/group_by_shop"
-        android:title="Group by Shop" />
+        android:title="@string/group_by_shop" />
 </menu>

@@ -14,14 +14,14 @@ public interface sbAPI_ViewInventory {
     @GET("location")
     Call<List<LocationModel>> getLocations();
 
-
     @PUT("products_on_shoppinglist")
-    Call<Void> updateSLproduct(@Query("products_on_list_id") String products_on_list_id,@Body ShoppingListProductsModel product);
+    Call<Void> updateSLproduct(@Query("products_on_list_id") String products_on_list_id,@Body ProductsOnShopListModel product);
+
     @GET("product")
     Call<List<ProductModel>> getProducts();
-    @GET("products_on_shoppinglist")
-    Call<List<ShoppingListProductsModel>> getshoppinglistproducts();
 
+    @GET("products_on_shoppinglist")
+    Call<List<ProductsOnShopListModel>> getshoppinglistproducts();
 
     @DELETE("product")
     Call<Void> deleteproduct(@Query("product_id") String product_id);
@@ -41,7 +41,7 @@ public interface sbAPI_ViewInventory {
     @DELETE("user")
     Call<Void> deleteshoppinglistrecord(@Query("user_id") String product_id);
     @POST("products_on_shoppinglist")
-    Call<com.example.foodvault.ShoppingListProductsModel> insertShoppingListItem(@Body com.example.foodvault.ShoppingListProductsModel inventory);
+    Call<com.example.foodvault.ProductsOnShopListModel> insertShoppingListItem(@Body com.example.foodvault.ProductsOnShopListModel inventory);
     @POST("location")
     Call<com.example.foodvault.LocationModel> insertlocation(@Body com.example.foodvault.LocationModel location);
 

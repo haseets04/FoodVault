@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -99,10 +98,11 @@ public class ShoppingListContentsActivity extends AppCompatActivity {
             groupedProducts.putIfAbsent(category, new ArrayList<>());
             for(ProductsOnShopListModel SLproduct: SLproducts)
             {
-                if(SLproduct.getProduct_id()==112&&SLproduct.getShoplist_id()==161&&product.getProductId().equals(112)==true)
+                if(SLproduct.getProduct_id()== 112 && SLproduct.getShoplist_id()== 161 && product.getProductId().equals(112))
                      correct="dlfj";
-                if(SLproduct.getProduct_id().equals(product.getProductId())&&SLproduct.getShoplist_id().equals(ShopListIDOfBtn)==true)
-                groupedProducts.get(category).add(SLproduct);
+                if(SLproduct.getProduct_id().equals(product.getProductId()) && SLproduct.getShoplist_id().equals(ShopListIDOfBtn)){
+                    groupedProducts.get(category).add(SLproduct);
+                }
             }
 
         }
@@ -306,7 +306,7 @@ public class ShoppingListContentsActivity extends AppCompatActivity {
 
                     }
                 });
-                ;
+
             }
         }
         Button deleterecords=findViewById(R.id.btndeleterecords);
@@ -326,8 +326,7 @@ public class ShoppingListContentsActivity extends AppCompatActivity {
     }
     private void deleterecords(List<Integer> ids)
     {
-        for (Integer id:
-             ids) {
+        for (Integer id: ids) {
             int i=id;
           //  Toast.makeText(ShoppingListContentsActivity.this,i+"",Toast.LENGTH_SHORT);
             Call<Void> deleterecorscall=sbAPI.deleteSLproduct("eq."+i);
@@ -357,8 +356,5 @@ public class ShoppingListContentsActivity extends AppCompatActivity {
         }
 
         fetchAndDisplayProductsOnShopListFromDB();
-
-
-
     }
 }

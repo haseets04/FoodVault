@@ -6,10 +6,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -279,16 +277,5 @@ public class AddProductActivity extends AppCompatActivity {
 
         AlertDialog dialog2 = builder2.create();
         dialog2.show();
-    }
-
-    public void onCameraClicked(View view) {
-        try{
-            Intent intentCameraApp = new Intent();
-            intentCameraApp.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
-            startActivity(intentCameraApp);
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-        //make it scan a barcode on camera app
     }
 }

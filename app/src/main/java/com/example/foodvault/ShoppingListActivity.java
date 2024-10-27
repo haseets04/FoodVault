@@ -36,7 +36,7 @@ public class ShoppingListActivity extends AppCompatActivity {
         SupabaseAPI api = SupabaseClient.getClient().create(SupabaseAPI.class);
         ShopListModel sl=new ShopListModel();
         sl.setUserIdForShopList(userId);
-        Call<Void> newshoppinglist= api.insertShoppingList(sl);
+        Call<Void> newshoppinglist= api.insertShoppingList2(sl);
         newshoppinglist.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
@@ -160,5 +160,4 @@ public class ShoppingListActivity extends AppCompatActivity {
         }
         return userId;
     }
-
 }

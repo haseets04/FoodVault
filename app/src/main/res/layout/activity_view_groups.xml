@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/screen_background"
+    android:gravity="center"
+    android:padding="16dp"
+    tools:context=".ViewGroupsActivity">
+
+    <TextView
+        android:id="@+id/txt_groups"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="110dp"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:text="@string/groups"
+        android:fontFamily="@font/shrikhand"
+        android:shadowColor="#214069"
+        android:textColor="#050C57"
+        android:textSize="35sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <ScrollView
+        android:id="@+id/scrollview_groups"
+        android:layout_width="377dp"
+        android:layout_height="450dp"
+        android:layout_marginTop="50dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:contentDescription="@string/scrollview_for_groups" >
+
+        <LinearLayout
+            android:id="@+id/linear_layout_groups"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            app:layout_constraintTop_toBottomOf="@+id/txt_groups" >
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/scrollview_groups">
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fltbtn_add_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="40dp"
+            android:clickable="true"
+            android:contentDescription="@string/add_new_group"
+            android:onClick="onAddGroupClicked"
+            android:src="@android:drawable/ic_input_add"
+            android:focusable="true" />
+
+        <!--<com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fltbtn_edit_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="40dp"
+            android:clickable="true"
+            android:contentDescription="@string/edit_group"
+            android:onClick="onEditGroupClicked"
+            android:src="@drawable/baseline_edit_24"
+            android:focusable="true" />-->
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fltbtn_delete_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:contentDescription="@string/remove_group"
+            android:onClick="onRemoveGroupClicked"
+            android:src="@drawable/baseline_remove_24"
+            android:focusable="true" />
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -16,6 +16,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
+        android:contentDescription="@string/profile_icon"
         android:src="@drawable/account_circle_icon" />
 
     <TextView
@@ -26,7 +27,7 @@
         android:layout_below="@id/profile_icon"
         android:layout_marginTop="30dp"
         android:gravity="center"
-        android:text="New Shopping List"
+        android:text="@string/new_shopping_list"
         android:fontFamily="@font/shrikhand"
         android:shadowColor="#214069"
         android:textColor="#050C57"
@@ -53,7 +54,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:hint="Shopping List Name"
+            android:hint="@string/shopping_list_name"
             android:inputType="text"
             android:minHeight="48dp"
             android:textSize="18sp" />
@@ -79,7 +80,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="Qty"
+                android:text="@string/qty"
                 android:textAlignment="center"
                 android:textColor="#050C57"
                 android:textSize="20sp"
@@ -105,8 +106,8 @@
                 android:id="@+id/rowholder"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingBottom="8dp"
-                android:orientation="vertical"></LinearLayout>
+                android:orientation="vertical"
+                android:paddingBottom="8dp" />
         </ScrollView>
 
     </LinearLayout>
@@ -138,7 +139,8 @@
         android:contentDescription="@string/add_new_item"
         android:onClick="onAddItemClicked"
         android:src="@android:drawable/ic_input_add"
-        tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
+        tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck"
+        android:focusable="true" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -154,7 +156,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginEnd="8dp"
-            android:text="Save Shopping List"
+            android:text="@string/save_shopping_list"
             android:textColor="#311B92"
             android:backgroundTint="#70B1BA"
             android:onClick="onSaveNewShopList" />
@@ -165,7 +167,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:backgroundTint="#70B1BA"
-            android:text="Cancel Entry"
+            android:text="@string/cancel_entry"
             android:textColor="#311B92"
             android:onClick="onCancelNewShopList" />
 
