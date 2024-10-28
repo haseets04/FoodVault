@@ -3,6 +3,7 @@ package com.example.foodvault;
 public class AppState {
     private static AppState instance;
     private int shopListNameID = 1; //default
+    private int groupNameID = 1; //default
 
     private AppState() {}
 
@@ -19,5 +20,13 @@ public class AppState {
 
     public void setShopListNameID(int shopListNameID) {
         this.shopListNameID = shopListNameID;
+    }
+
+    public int getGroupNameID() {
+        return groupNameID;
+    }
+
+    public void setGroupNameID(int groupNameID) {
+        this.groupNameID = groupNameID;
     }
 }

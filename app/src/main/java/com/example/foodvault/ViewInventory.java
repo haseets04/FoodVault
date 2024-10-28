@@ -543,7 +543,9 @@ public class ViewInventory extends AppCompatActivity {
 
 
 
-        private void fetchAndDisplayData(sbAPI_ViewInventory sbAPI) {
+
+
+    private void fetchAndDisplayData(sbAPI_ViewInventory sbAPI) {
         Call<List<LocationModel>> locations = sbAPI.getLocations();
         Call<List<ProductModel>> products = sbAPI.getProducts();
        locations.enqueue(new Callback<List<LocationModel>>() {

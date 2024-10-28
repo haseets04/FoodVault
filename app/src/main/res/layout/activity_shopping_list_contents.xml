@@ -148,7 +148,9 @@
             android:id="@+id/btngroup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/group_by" />
+            android:minHeight="48dp"
+            android:text="@string/group_by"
+            tools:ignore="TouchTargetSizeCheck" />
 
     </LinearLayout>
 

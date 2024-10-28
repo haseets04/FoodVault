@@ -13,6 +13,13 @@ public interface sbAPI_ViewInventory {
 
     @GET("location")
     Call<List<LocationModel>> getLocations();
+    @GET("shoppinglist")
+    Call<List<ShopListModel>> getShoppingLists();
+    @GET("group")
+    Call<List<GroupModel>> getGroups();
+
+    @GET("users_in_group")
+    Call<List<UsersInGroupModel>> getusersingroups();
 
     @PUT("products_on_shoppinglist")
     Call<Void> updateSLproduct(@Query("products_on_list_id") String products_on_list_id,@Body ProductsOnShopListModel product);
@@ -47,6 +54,8 @@ public interface sbAPI_ViewInventory {
 
     @POST("product")
     Call<com.example.foodvault.ProductModel> insertProduct(@Body com.example.foodvault.ProductModel product);
+    @POST("users_in_group")
+    Call<UsersInGroupModel> addusertogroup(@Body UsersInGroupModel uig);
 
     @GET("rpc/getLastProduct")
     Call<List<ProductModel>> getLastProduct();
