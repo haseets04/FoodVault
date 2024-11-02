@@ -6,49 +6,41 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.NumberPicker;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Set;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class AddProductActivity extends AppCompatActivity {
-
-    //make note of expiry date, count down to notify user
-    //make adding of categories better //allow removal?
-    //add location here?
     Integer userId;
-    private String productName;
-    //Barcode
+    private String productName, selectedCategory, selectedLocation;
     private Date expireDate;
-    private String selectedCategory;
     private boolean isProductExpired;
     private int quantityValue;
     private EditText productNameInput, expirationDateInput;
     private NumberPicker quantityPicker;
-    private Spinner category;
-    private ArrayAdapter<String> categoryAdapter;
-    private List<String> listCategories;
+    private AutoCompleteTextView locationAutoView, categoryAutoView;
+    private final sbAPI_ViewInventory sbAPI = SupabaseClient.getClient().create(sbAPI_ViewInventory.class);
+    private final List<String> locationNames = new ArrayList<>();
+    private final HashMap<String, Integer> locationNameToIdMap = new HashMap<>();
+    private Integer locationID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +50,8 @@ public class AddProductActivity extends AppCompatActivity {
         productNameInput = findViewById(R.id.product_name_input);
         quantityPicker = findViewById(R.id.number_picker_quantity);
         expirationDateInput = findViewById(R.id.expiration_date_input);
-        category = findViewById(R.id.spinner_category);
+        locationAutoView = findViewById(R.id.location_input);
+        categoryAutoView = findViewById(R.id.category_input);
 
         quantityPicker.setMinValue(0);
         quantityPicker.setMaxValue(100);
@@ -78,72 +71,68 @@ public class AddProductActivity extends AppCompatActivity {
 
         });
 
-        loadCategoriesFromPreferences();
+        fetchLocations();
+        fetchProducts(categoryAutoView);
+    }
 
-        //listCategories = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.categories)));
-        categoryAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, listCategories);
-        categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        category.setAdapter(categoryAdapter);
-
-        /*ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.categories, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        category.setAdapter(adapter);*/
-
-        category.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+    private void fetchLocations() {
+        Call<List<LocationModel>> locations = sbAPI.getLocations();
+        locations.enqueue(new Callback<List<LocationModel>>() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                selectedCategory = (String) parent.getItemAtPosition(position);
-                if (selectedCategory.equals("Add New Category")) {
-                    showAddCategoryDialog();
+            public void onResponse(@NonNull Call<List<LocationModel>> call, @NonNull Response<List<LocationModel>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    //listLocations = response.body();
+                    //locationNameToIdMap.clear();
+
+                    for (LocationModel location : response.body()) {
+                        locationNames.add(location.getLocation_name());
+                        locationNameToIdMap.put(location.getLocation_name(), location.getLocation_id());
+                    }
+                    
+                    ArrayAdapter<String> locationAdapter = new ArrayAdapter<>(AddProductActivity.this,
+                            android.R.layout.simple_dropdown_item_1line, locationNames);
+                    locationAutoView.setAdapter(locationAdapter);
+                    locationAutoView.setThreshold(0);
+                } else {
+                    Log.e("Add Product", "Locations response unsuccessful or body is null");
                 }
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                // Handle the case when no item is selected (if necessary)
+            public void onFailure(@NonNull Call<List<LocationModel>> call, @NonNull Throwable t) {
+                Log.e("Add Product", "Failed to fetch locations", t);
             }
         });
     }
 
-    private void showAddCategoryDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Add New Category");
+    private void fetchProducts(AutoCompleteTextView categoryAutoView) {
+        Call<List<ProductModel>> products = sbAPI.getProducts();
+        products.enqueue(new Callback<List<ProductModel>>() {
+            @Override
+            public void onResponse(@NonNull Call<List<ProductModel>> call, @NonNull Response<List<ProductModel>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    //listProducts = response.body();
 
-        final EditText input = new EditText(this);
-        input.setHint("Enter new category");
-        builder.setView(input);
+                    List<String> categories = new ArrayList<>();
+                    for (ProductModel product : response.body()) {
+                        if (product.getProductCategory() != null && !categories.contains(product.getProductCategory())) {
+                            categories.add(product.getProductCategory());
+                        }                    }
+                    
+                    ArrayAdapter<String> categoryAdapter = new ArrayAdapter<>(AddProductActivity.this,
+                            android.R.layout.simple_dropdown_item_1line, categories);
+                    categoryAutoView.setAdapter(categoryAdapter);
+                    categoryAutoView.setThreshold(0);
+                } else {
+                    Log.e("Add Product", "Products response unsuccessful or body is null");
+                }
+            }
 
-        builder.setPositiveButton("Add", (dialog, which) -> {
-            String newCategory = input.getText().toString().trim();
-            if (!newCategory.isEmpty()) {
-                listCategories.add(0, newCategory); //add new category at front of list
-                categoryAdapter.notifyDataSetChanged();
-                category.setSelection(0); //set newly added category as selected
-                //category.setSelection(listCategories.indexOf(newCategory)); // Set the new category as selected
-                saveCategoriesToPreferences();
+            @Override
+            public void onFailure(@NonNull Call<List<ProductModel>> call, @NonNull Throwable t) {
+                Log.e("Add Product", "Failed to fetch products", t);
             }
         });
-
-        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
-
-        builder.show();
-    }
-
-    private void saveCategoriesToPreferences() {
-        SharedPreferences preferences = getSharedPreferences("app_prefs", MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putStringSet("categories", new HashSet<>(listCategories));
-        editor.apply();
-    }
-
-    private void loadCategoriesFromPreferences() {
-        SharedPreferences preferences = getSharedPreferences("app_prefs", MODE_PRIVATE);
-        Set<String> categoriesSet = preferences.getStringSet("categories", null);
-        if (categoriesSet != null) {
-            listCategories = new ArrayList<>(categoriesSet);
-        } else {
-            listCategories = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.categories)));
-        }
     }
 
     public Integer getCurrentUserIDFromSession(){
@@ -154,67 +143,146 @@ public class AddProductActivity extends AppCompatActivity {
         return userId;
     }
 
-    public void onAddProductClicked(View view) {
-        //retrieve values from UI
-        productName = productNameInput.getText().toString();
-        quantityValue = quantityPicker.getValue();
-
-        String dateString = expirationDateInput.getText().toString();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-        try {
-            expireDate = sdf.parse(dateString); //use this to add to DB
-        } catch (ParseException e) {
-            e.printStackTrace();
-            //Toast.makeText(AddProductActivity.this, "Invalid date format", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        //check if product expired
-        Date currentDate = new Date(); //get the current date
-        Log.d("CurrentDate", "Date: " + currentDate);
-
-        //compare the dates
-        if (expireDate != null) {
-            if (expireDate.before(currentDate) || expireDate.equals(currentDate)) {
-                isProductExpired = true; // The chosen date is today or in the past
-            } else {
-                isProductExpired = false; // The chosen date is in the future
-            }
-        } else {
-            // Handle the case where the date couldn't be parsed
-            isProductExpired = true; // Default to expired if date parsing fails
-            Toast.makeText(AddProductActivity.this, "Invalid date format", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        /*Log.d("DateCheck", "isExpired: " + isProductExpired);
-
-        Log.i("Product Info", "Name: " + productName + ", Quantity: " + quantityValue +
-                ", Expiration Date: " + expireDate + ", Category: " + selectedCategory);*/
-
-        //validate inputs
+    private boolean validateInputs() {
         if (productName.isEmpty()) {
             Toast.makeText(this, "Please enter the product name", Toast.LENGTH_SHORT).show();
-            return;
+            return false;
         }
-        else if (quantityValue == 0) {
+        if (quantityValue == 0) {
             Toast.makeText(this, "Please enter a quantity greater than 0", Toast.LENGTH_SHORT).show();
-            return;
+            return false;
         }
-        else if (dateString.isEmpty()) {
+        if (expirationDateInput.getText().toString().isEmpty()) {
             Toast.makeText(this, "Please enter the expiration date", Toast.LENGTH_SHORT).show();
-            return;
+            return false;
         }
-        else if (selectedCategory.isEmpty()) { //check this one
+        if (selectedCategory.isEmpty()) {
             Toast.makeText(this, "Please enter the category", Toast.LENGTH_SHORT).show();
-            return;
+            return false;
         }
+        if (selectedLocation.isEmpty()) {
+            Toast.makeText(this, "Please enter the location", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
+    }
 
+    public void onAddProductClicked(View view) {
+        AlertDialog.Builder builder2 = new AlertDialog.Builder(this);
+        builder2.setTitle("Confirm Save");
+        builder2.setMessage("Are you sure you want to save the entry?");
+        builder2.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                //retrieve values from UI
+                productName = productNameInput.getText().toString();
+                quantityValue = quantityPicker.getValue();
+                selectedCategory = categoryAutoView.getText().toString();
+                selectedLocation = locationAutoView.getText().toString();
+
+                String dateString = expirationDateInput.getText().toString();
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+                try {
+                    expireDate = sdf.parse(dateString); //use this to add to DB
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                    //Toast.makeText(AddProductActivity.this, "Invalid date format", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                //check if product expired
+                Date currentDate = new Date(); //get the current date
+                Log.d("CurrentDate", "Date: " + currentDate);
+
+                //compare the dates
+                if (expireDate != null) {
+                    if (expireDate.before(currentDate) || expireDate.equals(currentDate)) {
+                        isProductExpired = true; // The chosen date is today or in the past
+                    } else {
+                        isProductExpired = false; // The chosen date is in the future
+                    }
+                } else {
+                    // Handle the case where the date couldn't be parsed
+                    isProductExpired = true; // Default to expired if date parsing fails
+                    Toast.makeText(AddProductActivity.this, "Invalid date format", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                /*Log.d("DateCheck", "isExpired: " + isProductExpired);
+
+                Log.i("Product Info", "Name: " + productName + ", Quantity: " + quantityValue +
+                        ", Expiration Date: " + expireDate + ", Category: " + selectedCategory);*/
+
+                //validate inputs
+                if(!validateInputs()){
+                    return;
+                }
+
+                if (!locationNames.contains(selectedLocation)) {
+                    Toast.makeText(AddProductActivity.this, "This is not an existing location. First add the location.", Toast.LENGTH_SHORT).show();
+                    /*addNewLocation(() -> {
+                        locationID = locationNameToIdMap.get(selectedLocation);
+                    });
+                    fetchLocations();
+
+                    if(locationID == null){
+                        Toast.makeText(this, "Location ID null", Toast.LENGTH_SHORT).show();
+                    } else {
+                        insertProduct();
+                    }*/
+                } else {
+                    locationID = locationNameToIdMap.get(selectedLocation);
+                    insertProduct();
+                }
+
+                Toast.makeText(AddProductActivity.this, "Product entry saved", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        });
+
+        builder2.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+
+        AlertDialog dialog2 = builder2.create();
+        dialog2.show();
+
+    }
+
+    /*private void addNewLocation(Runnable onSuccess){
+        Call<LocationModel> insertLocation= sbAPI.insertlocation(new LocationModel(selectedLocation));
+        insertLocation.enqueue(new Callback<LocationModel>() {
+            @Override
+            public void onResponse(Call<LocationModel> call, Response<LocationModel> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    LocationModel addedLocation = response.body();
+                    locationNames.add(addedLocation.getLocation_name());
+                    locationNameToIdMap.put(addedLocation.getLocation_name(), addedLocation.getLocation_id());
+
+                    Toast.makeText(AddProductActivity.this, "Location added successfully", Toast.LENGTH_SHORT).show();
+                    onSuccess.run();
+                } else {
+                    handleApiError(response);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<LocationModel> call, Throwable t) {
+                Log.e("Location Insert Error", t.getMessage());
+                Toast.makeText(AddProductActivity.this, "Error adding location: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+        //Toast.makeText(AddProductActivity.this, "New Location Added: " + selectedLocation, Toast.LENGTH_SHORT).show();
+    }*/
+
+    private void insertProduct(){
         //insert into Product table
         ProductModel newProduct = new ProductModel();
         newProduct.setUserIdForProduct(getCurrentUserIDFromSession());
-        //newProduct.setLocationId(null);
+        newProduct.setLocationId(locationID);
         newProduct.setProductName(productName);
-        //newProduct.setProductBarcode(0);
         newProduct.setProductExpirationDate(expireDate);
         newProduct.setProductCategory(selectedCategory);
         newProduct.setProductExpired(isProductExpired);
@@ -232,7 +300,8 @@ public class AddProductActivity extends AppCompatActivity {
                     productNameInput.setText("");
                     quantityPicker.setValue(0);
                     expirationDateInput.setText("");
-                    selectedCategory = ""; //.isEmpty();
+                    categoryAutoView.setText("");
+                    locationAutoView.setText("");
                 } else {
                     handleApiError(response);
                 }

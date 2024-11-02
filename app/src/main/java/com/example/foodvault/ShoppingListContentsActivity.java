@@ -32,11 +32,11 @@ import retrofit2.Response;
 
 public class ShoppingListContentsActivity extends AppCompatActivity {
     Integer ShopListIDOfBtn;
-    sbAPI_ViewInventory sbAPI=SupabaseClient.getClient().create(sbAPI_ViewInventory.class);
-    List<ProductModel> groupproducts=new ArrayList<>();
-    List<ProductsOnShopListModel>groupslproducts=new ArrayList<>();
-    HashMap<String,Integer> findrows=new HashMap<>();
-    List<Integer> id=new ArrayList<>();
+    sbAPI_ViewInventory sbAPI = SupabaseClient.getClient().create(sbAPI_ViewInventory.class);
+    List<ProductModel> groupproducts = new ArrayList<>();
+    List<ProductsOnShopListModel> groupslproducts = new ArrayList<>();
+    HashMap<String,Integer> findrows = new HashMap<>();
+    List<Integer> id = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,11 +49,14 @@ public class ShoppingListContentsActivity extends AppCompatActivity {
             txtListName.setText(listName); //pass button text
         }
         findViewById(R.id.btndeleterecords).setVisibility(View.GONE);
+
         ShopListIDOfBtn = getIntent().getIntExtra("SHOPPING_LIST_ID", -1);
         if (ShopListIDOfBtn == -1) {
             Toast.makeText(this, "Invalid shopping list ID", Toast.LENGTH_SHORT).show();
             return;
         }
+
+        Toast.makeText(this, "ShopListID: " + ShopListIDOfBtn, Toast.LENGTH_SHORT).show();
         //Log.i("ID", ShopListIDOfBtn.toString());
 
         fetchAndDisplayProductsOnShopListFromDB();
@@ -356,5 +359,9 @@ public class ShoppingListContentsActivity extends AppCompatActivity {
         }
 
         fetchAndDisplayProductsOnShopListFromDB();
+    }
+
+    public void onReturnViewClicked(View view) {
+        finish();
     }
 }

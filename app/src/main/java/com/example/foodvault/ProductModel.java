@@ -6,12 +6,8 @@ import java.util.Objects;
 public class ProductModel {
     private Integer product_id;
     private Integer user_id;
-
-
-
     private Integer location_id; //can be null
     private String product_name;
-    private String product_barcode; //add //can be null //String rather?
     private Date product_expiration_date;
     private String product_category;
     private boolean product_expired;
@@ -50,7 +46,6 @@ public class ProductModel {
                 ", user_id=" + user_id +
                 ", location_id=" + location_id +
                 ", product_name='" + product_name + '\'' +
-                ", product_barcode=" + product_barcode +
                 ", product_expiration_date=" + product_expiration_date +
                 ", product_category='" + product_category + '\'' +
                 ", product_expired=" + product_expired +
@@ -76,14 +71,6 @@ public class ProductModel {
 
     public void setProductName(String product_name) {
         this.product_name = product_name;
-    }
-
-    public String getProductBarcode() {
-        return product_barcode;
-    }
-
-    public void setProductBarcode(String product_barcode) {
-        this.product_barcode = product_barcode;
     }
 
     public Date getProductExpirationDate() {

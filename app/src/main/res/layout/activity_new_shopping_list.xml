@@ -36,7 +36,7 @@
     <LinearLayout
         android:id="@+id/shopping_list_container"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="400dp"
         android:layout_below="@id/title"
         android:layout_marginTop="20dp"
         android:orientation="vertical"
@@ -90,8 +90,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@drawable/inventory_border"
-                android:text="@string/product_name"
+                android:text="@string/product"
                 android:textColor="#050C57"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -112,7 +111,7 @@
 
     </LinearLayout>
 
-    <Spinner
+    <!--<Spinner
         android:id="@+id/spinner_group_products_list"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -126,7 +125,7 @@
         android:textColor="#3949AB"
         android:textColorHint="#3949AB"
         android:backgroundTint="#70B1BA"
-        android:spinnerMode="dropdown" />
+        android:spinnerMode="dropdown" />-->
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fltbtn_add_item"

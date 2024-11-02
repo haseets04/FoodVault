@@ -102,6 +102,8 @@
     <string name="group_by_category">Group by Category</string>
     <string name="group_by_shop">Group by Shop</string>
     <string name="edit">Edit</string>
+    <string name="product">Product</string>
+    <string name="return_to_view_shopping_lists">Return to View Shopping Lists</string>
     <string-array name="spinner_options">
         <item>Item Category</item>
         <item>Grocery Store</item>

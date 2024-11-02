@@ -60,7 +60,6 @@ public class ProductModelDeserializer implements JsonDeserializer<ProductModel> 
         product.setUserIdForProduct(userId);
         product.setLocationId(locationId);
         product.setProductName(productName);
-        product.setProductBarcode(productBarcode);
         product.setProductExpirationDate(productExpirationDate);
         product.setProductCategory(productCategory);
         product.setProductExpired(productExpired);

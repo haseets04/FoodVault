@@ -2,7 +2,15 @@ package com.example.foodvault;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+import androidx.core.content.ContextCompat;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ArrayAdapter;
@@ -13,6 +21,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -25,11 +35,16 @@ public class NotificationsActivity extends AppCompatActivity {
     private final Integer userId = UserSession.getInstance().getUserSessionId();
     private final int expirationPeriod = UserSession.getInstance().getExpiration_period();
     private final SupabaseAPI api = SupabaseClient.getClient().create(SupabaseAPI.class);
+    private NotificationHelper notificationHelper;
+    private static final int PERMISSION_REQUEST_CODE = 123;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notifications);
+
+        notificationHelper = new NotificationHelper(this);
+        checkNotificationPermission();
 
         notificationListView = findViewById(R.id.notificationListView);
 
@@ -44,9 +59,38 @@ public class NotificationsActivity extends AppCompatActivity {
 
     }
 
+    private void checkNotificationPermission() {
+        // Only need to check for notification permission on Android 13 and above
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS)
+                    != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{android.Manifest.permission.POST_NOTIFICATIONS},
+                        PERMISSION_REQUEST_CODE);
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "Notification permission granted", Toast.LENGTH_SHORT).show();
+                // Refresh notifications when permission is granted
+                notificationHelper.checkExpiringProducts();
+            } else {
+                Toast.makeText(this, "Notification permission denied. You won't receive notifications.",
+                        Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
     private void getProductsReachingExpirationFromDB(){
-        String currentDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+        /*String currentDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
         String currentDateMinusExpirationPeriod = new SimpleDateFormat("yyyy-MM-dd").format(new Date(System.currentTimeMillis() - (long) expirationPeriod * 24 * 60 * 60 * 1000));
+        */
+        //maybe also add if item has expired?
 
         Call<List<ProductModel>> productsCall = api.getProducts();
         productsCall.enqueue(new Callback<List<ProductModel>>() {
@@ -54,23 +98,44 @@ public class NotificationsActivity extends AppCompatActivity {
             public void onResponse(@NonNull Call<List<ProductModel>> call, @NonNull Response<List<ProductModel>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     List<ProductModel> listProducts = response.body(); //gets all the products from the database
+                    //notificationsList.clear();
 
+                    Date currentDate = new Date();
                     //only return products for the current user and where the expiration date is between the current date and currentDateMinusEP
 
                     if (!listProducts.isEmpty()) {
                         for (ProductModel product : listProducts) {
                             if(product.getUserIdForProduct() == userId){
-                                String productDetails = "Product: " + product.getProductName() + "\n" +
-                                        "Expiration Date: " + new SimpleDateFormat("yyyy-MM-dd").format(product.getProductExpirationDate()) + "\n" +
-                                        "Quantity: " + product.getProductQuantity();
-                                notificationsList.add(productDetails);
+
+                                Date expirationDate = product.getProductExpirationDate();
+
+                                // Calculate days until expiration
+                                long diffInMillies = expirationDate.getTime() - currentDate.getTime();
+                                long daysUntilExpiration = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
+
+                                // Check if product is within the notification period
+                                if (daysUntilExpiration >= 0 && daysUntilExpiration <= expirationPeriod) {
+                                    String productDetails = "⚠️ EXPIRING SOON ⚠️\n" +
+                                            "Product: " + product.getProductName() + "\n" +
+                                            "Expiration Date: " + new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(expirationDate) + "\n" +
+                                            "Days until expiration: " + daysUntilExpiration + "\n" +
+                                            "Quantity: " + product.getProductQuantity();
+
+                                    notificationsList.add(productDetails);
+
+                                }
+
                             }
-
-
 
                         }
                         // Notify the adapter that the data has changed
                         adapter.notifyDataSetChanged();
+
+                        if (notificationsList.isEmpty()) {
+                            notificationsList.add("No products are nearing expiration.");
+                            adapter.notifyDataSetChanged();
+                        }
+
                     }
 
                 } else {
@@ -85,55 +150,6 @@ public class NotificationsActivity extends AppCompatActivity {
             }
         });
 
-
-
-        /*String currentDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-        String thirtyDaysAgo = new SimpleDateFormat("yyyy-MM-dd").format(new Date(System.currentTimeMillis() - 30L * 24 * 60 * 60 * 1000));
-        //change to using the expiration period
-
-        String expirationDateCondition = "gte." + thirtyDaysAgo + ",lt." + currentDate;
-        //gte (greater than or equal to) and lt (less than) operators to filter products where the expiration date is between 30 days ago and today.
-
-        Call<List<ProductModel>> call = api.getProductsReachingExpiration(expirationDateCondition, "*");
-
-        call.enqueue(new Callback<List<ProductModel>>() {
-            @Override
-            public void onResponse(@NonNull Call<List<ProductModel>> call, @NonNull Response<List<ProductModel>> response) {
-                if (response.isSuccessful()) {
-                    List<ProductModel> expiringProducts = response.body();
-
-                    // Handle the list of products
-                    if (expiringProducts != null && !expiringProducts.isEmpty()) {
-                        for (ProductModel product : expiringProducts) {
-                            String productDetails = "Product: " + product.getProductName() + "\n" +
-                                    "Expiration Date: " + new SimpleDateFormat("yyyy-MM-dd").format(product.getProductExpirationDate()) + "\n" +
-                                    "Quantity: " + product.getProductQuantity();
-                            notificationsList.add(productDetails);
-                        }
-                        // Notify the adapter that the data has changed
-                        adapter.notifyDataSetChanged();
-                    } else {
-                        Toast.makeText(NotificationsActivity.this, "No expiring products found", Toast.LENGTH_SHORT).show();
-                    }
-
-
-                } else {
-                    Log.e("Supabase Error", "Failed to fetch products");
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<List<ProductModel>> call, @NonNull Throwable t) {
-                Log.e("Supabase Error", "Error: " + t.getMessage());
-            }
-        });*/
-
-
-
     }
-
-
-
-
 
 }

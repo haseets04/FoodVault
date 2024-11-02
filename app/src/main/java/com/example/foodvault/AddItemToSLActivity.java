@@ -3,10 +3,12 @@ package com.example.foodvault;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -32,7 +34,6 @@ public class AddItemToSLActivity extends AppCompatActivity {
     private List<ProductModel> listproducts2 = new ArrayList<>();
     private List<String> productnames = new ArrayList<>();
     private Integer addedId = 0;
-
     private Integer userId = UserSession.getInstance().getUserSessionId(); // Get user session ID
 
     // Activity-related data
@@ -42,14 +43,13 @@ public class AddItemToSLActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_add_item_to_slactivity);
 
         userId = UserSession.getInstance().getUserSessionId();
         if (userId == null || userId == 0) {
             userId = getIntent().getIntExtra("USER_ID", 0);
             UserSession.getInstance().setUserSessionId(userId);
         }
-
-        setContentView(R.layout.activity_add_item_to_slactivity);
 
         // Initialize UI components
         NumberPicker quanty = findViewById(R.id.number_picker_quantity);
@@ -61,10 +61,17 @@ public class AddItemToSLActivity extends AppCompatActivity {
         CheckBox cbxbought = findViewById(R.id.cbxbought);
         TextView store = findViewById(R.id.tvgrocerystore);
         Button add = findViewById(R.id.btn_add);
-        if(getIntent().getStringExtra("Activity")!=null)
-         act = getIntent().getStringExtra("Activity");
+
+        act = getIntent().getStringExtra("Activity");
 
         slid = getIntent().getIntExtra("SHOPPING_LIST_ID", 0);
+        if (slid == 0) {
+            Toast.makeText(this, "Invalid shopping list ID", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
+
+        Toast.makeText(this, "ShopListID: " + slid, Toast.LENGTH_SHORT).show();
 
         // Fetch products from the server
         fetchProducts(name);
@@ -74,11 +81,18 @@ public class AddItemToSLActivity extends AppCompatActivity {
 
         // Add item button click listener
         add.setOnClickListener(v -> {
+            String productName = name.getText().toString().trim();
+            if (productName.isEmpty()) {
+                Toast.makeText(this, "Please enter a product name", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             boolean itemExists = false;
 
             // Check if product exists in the list
             for (ProductModel product : listproducts2) {
-                if (name.getText().toString().trim().equalsIgnoreCase(product.getProductName())&&!itemExists) {
+                if (productName.equalsIgnoreCase(product.getProductName()) &&
+                        userId.equals(product.getUserIdForProduct())) { //&& !itemExists) {
                     itemExists = true;
                     addedId = product.getProductId();
 
@@ -88,14 +102,13 @@ public class AddItemToSLActivity extends AppCompatActivity {
                             .setMessage("This item already exists in your inventory. Are you sure you want to add it?")
                             .setPositiveButton("Yes", (dialog, which) -> {
                                 addItemToShoppingList(store, cbxbought, quanty,name);
-                                navigateToNextActivity(cbxbought, quanty, name);
+                                //navigateToNextActivity(cbxbought, quanty, name);
                             })
                             .setNegativeButton("No", (dialog, which) ->
                                     Toast.makeText(AddItemToSLActivity.this, "Product not added to the shopping list.", Toast.LENGTH_SHORT).show())
                             .setCancelable(false)
                             .show();
-
-
+                    break;
                 }
             }
 
@@ -106,10 +119,6 @@ public class AddItemToSLActivity extends AppCompatActivity {
                     insertNewProduct(name, store, cbxbought, quanty);
                 }
             }
-
-
-
-
         });
     }
 
@@ -144,24 +153,34 @@ public class AddItemToSLActivity extends AppCompatActivity {
     }
 
     private void addItemToShoppingList(TextView store, CheckBox cbxbought, NumberPicker quanty, AutoCompleteTextView name) {
-        Call<ProductsOnShopListModel> insertItem = sbAPI.insertShoppingListItem(
-                new ProductsOnShopListModel(store.getText().toString(), cbxbought.isChecked(), slid, addedId, quanty.getValue()));
+        ProductsOnShopListModel newItem = new ProductsOnShopListModel(
+                store.getText().toString(),
+                cbxbought.isChecked(),
+                slid,
+                addedId,
+                quanty.getValue()
+        );
 
+        Call<ProductsOnShopListModel> insertItem = sbAPI.insertShoppingListItem(newItem);
         insertItem.enqueue(new Callback<ProductsOnShopListModel>() {
             @Override
             public void onResponse(Call<ProductsOnShopListModel> call, Response<ProductsOnShopListModel> response) {
                 if (response.isSuccessful()) {
                     // Successfully added to the shopping list
+                    Toast.makeText(AddItemToSLActivity.this,"Item added successfully", Toast.LENGTH_SHORT).show();
+                    navigateToNextActivity();
+
                     Log.d("Add Item", "Item successfully added to the shopping list.");
                     // Ensure to pass 'name' here
                 } else {
+                    Toast.makeText(AddItemToSLActivity.this,"Failed to add item", Toast.LENGTH_SHORT).show();
                     Log.e("Add Item", "Failed to add item to the shopping list: " + response.errorBody());
                 }
-
             }
 
             @Override
             public void onFailure(Call<ProductsOnShopListModel> call, Throwable t) {
+                Toast.makeText(AddItemToSLActivity.this,"Error adding item", Toast.LENGTH_SHORT).show();
                 Log.e("Add Item", "Error adding item to the shopping list.", t);
             }
         });
@@ -261,7 +280,7 @@ public class AddItemToSLActivity extends AppCompatActivity {
                     listproducts2 = response.body();
                     addedId = listproducts2.get(listproducts2.size() - 1).getProductId();
                     addItemToShoppingList(store, cbxbought, quanty,name);
-                    navigateToNextActivity(cbxbought,quanty,name);
+                    navigateToNextActivity();
                 }
             }
 
@@ -272,15 +291,49 @@ public class AddItemToSLActivity extends AppCompatActivity {
         });
     }
 
-    private void navigateToNextActivity(CheckBox cbxbought, NumberPicker quanty, AutoCompleteTextView name) {
+    private void navigateToNextActivity() {
         Intent intent;
-        if (act.equals("ShoppingListContentsActivity")) {
+
+        // Check which activity to navigate to after saving
+        if ("ShoppingListContentsActivity".equals(act)) {
+            // Go back to the shopping list contents screen if that's where we came from
             intent = new Intent(AddItemToSLActivity.this, ShoppingListContentsActivity.class);
         } else {
+            // If navigating from a different path, go back to NewShoppingListActivity
             intent = new Intent(AddItemToSLActivity.this, NewShoppingListActivity.class);
         }
+
+        // Pass user and shopping list details
         intent.putExtra("USER_ID", UserSession.getInstance().getUserSessionId());
         intent.putExtra("SHOPPING_LIST_ID", slid);
+
+        // Clear the activity stack to avoid returning to AddItemToSLActivity on back press
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
+
+        // Finish current activity to prevent it from being in the back stack
+        finish();
     }
+
+    public void onCancelProductClicked(View view) {
+        AlertDialog.Builder builder2 = new AlertDialog.Builder(this);
+        builder2.setTitle("Confirm Cancel");
+        builder2.setMessage("Are you sure you want to cancel the new entry?");
+        builder2.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                navigateToNextActivity();
+            }
+        });
+        builder2.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+
+        AlertDialog dialog2 = builder2.create();
+        dialog2.show();
+    }
+
 }

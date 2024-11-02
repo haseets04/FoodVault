@@ -21,37 +21,6 @@ public class MainActivity extends AppCompatActivity { //Login page
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        //delete later
-        //get first user record
-        /*TextView textView = findViewById(R.id.text_view);
-
-        SupabaseAPI api = SupabaseClient.getClient().create(SupabaseAPI.class);
-        Call<List<UserModel>> call = api.getItems("*"); //second half of your sql statement
-        call.enqueue(new Callback<List<UserModel>>() {
-            @Override
-            public void onResponse(@NonNull Call<List<UserModel>> call, @NonNull Response<List<UserModel>> response) {
-                if (response.isSuccessful()) {
-                    List<UserModel> items = response.body();
-                    Log.d("Supabase Response", response.toString());
-                    if (items != null && !items.isEmpty()) {
-                        //textView.setText("Connected. Items: " + items.get(0).user_id);
-                        textView.setText("Successfully connected to the Supabase API. Items: \n" +
-                                items.get(0).getUserId() + items.get(0).getUserFirstname() + items.get(0).getUserLastname() + items.get(0).getUserEmail() + items.get(0).getUserPassword());
-                    } else {
-                        textView.setText("No items found.");
-                    }
-                } else {
-                    textView.setText("Response unsuccessful: " + response.message());
-                }
-            }
-            @Override
-            public void onFailure(@NonNull Call<List<UserModel>> call, @NonNull Throwable t) {
-                Toast.makeText(MainActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-                textView.setText("Error connecting to the Supabase API: " + t.getMessage());
-            }
-        });*/
-
     }
 
     public void onLoginClicked(View view) {
@@ -92,6 +61,10 @@ public class MainActivity extends AppCompatActivity { //Login page
 
                         Toast.makeText(MainActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
                         startActivity(new Intent(MainActivity.this, DashboardActivity.class)); //DashboardActivity
+
+                        NotificationHelper notificationHelper = new NotificationHelper(MainActivity.this);
+                        notificationHelper.checkExpiringProducts();
+
                     } else{
                         Toast.makeText(MainActivity.this, "Incorrect password", Toast.LENGTH_SHORT).show();
                     }
