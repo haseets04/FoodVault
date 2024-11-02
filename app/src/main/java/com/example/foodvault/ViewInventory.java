@@ -621,5 +621,8 @@ public class ViewInventory extends AppCompatActivity {
         tableLayout.addView(rowView);
     }
 
+    public void onHomeClicked(View view) {
+        startActivity(new Intent(ViewInventory.this, DashboardActivity.class));
+    }
 }
 

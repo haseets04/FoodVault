@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -67,8 +68,11 @@ public class AddProductActivity extends AppCompatActivity {
                         String dateString = year1 + "-" + (month1 + 1) + "-" + dayOfMonth;
                         expirationDateInput.setText(dateString);
                     }, year, month, day);
-            datePickerDialog.show();
 
+            // Set minimum date to current date
+            datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
+
+            datePickerDialog.show();
         });
 
         fetchLocations();
@@ -346,5 +350,9 @@ public class AddProductActivity extends AppCompatActivity {
 
         AlertDialog dialog2 = builder2.create();
         dialog2.show();
+    }
+
+    public void onHomeClicked(View view) {
+        startActivity(new Intent(AddProductActivity.this, DashboardActivity.class));
     }
 }

@@ -11,7 +11,6 @@
     <string name="expiration_date">Expiration Date</string>
     <string name="product_location">Location</string>
     <string name="product_is_expired">Expired</string>
-    <string name="or">OR...</string>
     <string name="scan_product_to_add">Scan Product To Add:</string>
     <string name="camera_icon">Camera icon</string>
     <string name="save_and_add_product_to_inventory">Save and Add Product to Inventory</string>
@@ -55,11 +54,11 @@
     <string name="enter_category">Enter Category</string>
     <string name="cancel_edit">Cancel Edit</string>
     <string name="enter_location">Enter Location</string>
-    <string name="save_and_update_product">Save and update Product</string>
+    <string name="save_and_update_product">Save and Update Product</string>
     <string name="update_item">Update Item</string>
     <string name="quantity_to_buy_0">Quantity To Buy: 0</string>
     <string name="itembought">Is Item Purchased?</string>
-    <string name="grocerystore">GroceryStore</string>
+    <string name="grocerystore">GroceryStore: </string>
     <string name="yes">YES</string>
     <string name="add_item">Add Item</string>
     <string name="shoppingproduct_name">Product Name</string>
@@ -107,6 +106,12 @@
     <string name="group_by_or_sort">Group By or Sort</string>
     <string name="sort_items_ascending">Sort Items Ascending</string>
     <string name="sort_items_descending">Sort Items Descending</string>
+    <string name="home_button">Home Button</string>
+    <string name="blue_puddle">Blue Puddle</string>
+    <string name="lemon">Lemon</string>
+    <string name="peach_puddle">Peach Puddle</string>
+    <string name="cancel_product_edit">Cancel Product Edit</string>
+    <string name="enter_grocery_store">Enter Grocery Store</string>
     <string-array name="spinner_options">
         <item>Item Category</item>
         <item>Grocery Store</item>

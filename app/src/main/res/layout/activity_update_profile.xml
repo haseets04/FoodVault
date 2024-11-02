@@ -6,9 +6,45 @@
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:padding="16dp"
-    android:background="@drawable/screen_background"
     tools:context=".UpdateProfileActivity">
+
+    <ImageView
+        android:id="@+id/img_lemon_puddle2"
+        android:layout_width="107dp"
+        android:layout_height="92dp"
+        android:layout_marginStart="68dp"
+        android:layout_marginBottom="16dp"
+        android:contentDescription="@string/lemon"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/img_blue_puddle3"
+        app:srcCompat="@drawable/lemon"
+        tools:ignore="ImageContrastCheck" />
+
+    <ImageView
+        android:id="@+id/img_blue_puddle3"
+        android:layout_width="262dp"
+        android:layout_height="154dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="200dp"
+        android:contentDescription="@string/blue_puddle"
+        android:scaleType="fitXY"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/save_updates"
+        app:srcCompat="@drawable/blue_puddle"
+        tools:ignore="VisualLintBounds,ImageContrastCheck" />
+
+    <ImageView
+        android:id="@+id/img_peach_puddle3"
+        android:layout_width="257dp"
+        android:layout_height="165dp"
+        android:layout_marginStart="180dp"
+        android:layout_marginBottom="52dp"
+        android:contentDescription="@string/peach_puddle"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toTopOf="@+id/textView10"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/peach_puddle"
+        tools:ignore="VisualLintBounds,ImageContrastCheck" />
 
     <TextView
         android:id="@+id/textView10"
@@ -113,15 +149,14 @@
         android:id="@+id/save_updates"
         android:layout_width="170dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginStart="20dp"
         android:backgroundTint="#70B1BA"
         android:onClick="onSaveUpdatesClicked"
         android:padding="10dp"
         android:text="@string/save_updated_information"
         android:textColor="#311B92"
         android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edit_confirm_password" />
 
@@ -129,17 +164,16 @@
         android:id="@+id/cancel_updates"
         android:layout_width="170dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="80dp"
-        android:layout_marginEnd="10dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="20dp"
         android:backgroundTint="#70B1BA"
         android:onClick="onCancelUpdatesClicked"
         android:padding="10dp"
         android:text="@string/cancel_profile_updates"
         android:textColor="#311B92"
         android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/save_updates"
         app:layout_constraintTop_toBottomOf="@+id/edit_confirm_password" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

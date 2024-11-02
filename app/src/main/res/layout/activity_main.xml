@@ -1,20 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    android:padding="16dp"
-    android:background="@drawable/screen_background"
     tools:context=".MainActivity">
 
+    <ImageView
+        android:id="@+id/img_lemon_puddle2"
+        android:layout_width="107dp"
+        android:layout_height="92dp"
+        android:layout_marginStart="68dp"
+        android:layout_marginBottom="16dp"
+        android:contentDescription="@string/lemon"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/img_blue_puddle3"
+        app:srcCompat="@drawable/lemon" />
+
+    <ImageView
+        android:id="@+id/img_blue_puddle3"
+        android:layout_width="262dp"
+        android:layout_height="154dp"
+        android:layout_marginTop="68dp"
+        android:layout_marginEnd="204dp"
+        android:scaleType="fitXY"
+        android:contentDescription="@string/blue_puddle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
+        app:srcCompat="@drawable/blue_puddle"
+        tools:ignore="VisualLintBounds" />
+
+    <ImageView
+        android:id="@+id/img_peach_puddle3"
+        android:layout_width="257dp"
+        android:layout_height="165dp"
+        android:layout_marginStart="180dp"
+        android:layout_marginBottom="68dp"
+        android:scaleType="fitXY"
+        android:contentDescription="@string/peach_puddle"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/peach_puddle"
+        tools:ignore="VisualLintBounds" />
 
     <LinearLayout
+        android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="16dp">
 
         <ImageView
             android:layout_width="160dp"
@@ -23,34 +61,34 @@
             android:src="@drawable/account_circle_icon" />
 
         <EditText
+            android:id="@+id/email_address_input"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
+            android:autofillHints=""
+            android:background="@drawable/rounded_corner"
             android:gravity="center"
             android:hint="@string/email_address"
+            android:inputType="textEmailAddress"
+            android:padding="18dp"
             android:textColor="#3949AB"
             android:textColorHint="#3949AB"
-            android:textSize="20sp"
-            android:background="@drawable/rounded_corner"
-            android:padding="18dp"
-            android:inputType="textEmailAddress"
-            android:id="@+id/email_address_input"
-            android:autofillHints="" />
+            android:textSize="20sp" />
 
         <EditText
+            android:id="@+id/password_input"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:autofillHints=""
+            android:background="@drawable/rounded_corner"
             android:gravity="center"
             android:hint="@string/password"
+            android:inputType="textPassword"
+            android:padding="18dp"
             android:textColor="#3949AB"
             android:textColorHint="#3949AB"
-            android:textSize="20sp"
-            android:background="@drawable/rounded_corner"
-            android:padding="18dp"
-            android:inputType="textPassword"
-            android:id="@+id/password_input"
-            android:autofillHints="" />
+            android:textSize="20sp" />
 
         <Button
             android:id="@+id/login_btn"
@@ -58,11 +96,11 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
             android:backgroundTint="#70B1BA"
+            android:onClick="onLoginClicked"
             android:padding="18dp"
             android:text="@string/login"
             android:textColor="#311B92"
-            android:textSize="20sp"
-            android:onClick="onLoginClicked" />
+            android:textSize="20sp" />
 
         <Button
             android:id="@+id/sign_up"
@@ -70,11 +108,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
+            android:onClick="onSignUpClicked"
             android:text="@string/don_t_have_an_account"
             android:textAllCaps="false"
             android:textColor="#3949AB"
-            android:textSize="18sp"
-            android:onClick="onSignUpClicked" />
+            android:textSize="18sp" />
 
         <!--<TextView
             android:id="@+id/text_view"
@@ -88,4 +126,6 @@
 
     </LinearLayout>
 
-</RelativeLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

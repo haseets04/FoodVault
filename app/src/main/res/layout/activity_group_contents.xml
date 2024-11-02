@@ -1,47 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
-    android:background="@drawable/screen_background"
     tools:context=".GroupContentsActivity">
 
     <ImageView
-        android:id="@+id/profile_icon"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:contentDescription="@string/profile_icon"
-        android:src="@drawable/account_circle_icon" />
+        android:id="@+id/img_lemon_puddle2"
+        android:layout_width="107dp"
+        android:layout_height="92dp"
+        android:layout_marginStart="68dp"
+        android:layout_marginBottom="16dp"
+        android:contentDescription="@string/lemon"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/img_blue_puddle3"
+        app:srcCompat="@drawable/lemon"
+        tools:ignore="ImageContrastCheck" />
+
+    <ImageView
+        android:id="@+id/img_blue_puddle3"
+        android:layout_width="262dp"
+        android:layout_height="154dp"
+        android:layout_marginTop="44dp"
+        android:layout_marginEnd="200dp"
+        android:contentDescription="@string/blue_puddle"
+        android:scaleType="fitXY"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout11"
+        app:srcCompat="@drawable/blue_puddle"
+        tools:ignore="VisualLintBounds,ImageContrastCheck" />
+
+
+    <ImageView
+        android:id="@+id/img_peach_puddle3"
+        android:layout_width="257dp"
+        android:layout_height="165dp"
+        android:layout_marginStart="196dp"
+        android:layout_marginBottom="20dp"
+        android:contentDescription="@string/peach_puddle"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toTopOf="@+id/txt_group_name"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/peach_puddle"
+        tools:ignore="VisualLintBounds,ImageContrastCheck" />
 
     <TextView
         android:id="@+id/txt_group_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_below="@id/profile_icon"
-        android:layout_marginTop="30dp"
-        android:gravity="center"
-        android:text="@string/group"
+        android:layout_marginTop="110dp"
         android:fontFamily="@font/shrikhand"
+        android:gravity="center"
         android:shadowColor="#214069"
+        android:text="@string/group"
         android:textColor="#050C57"
-        android:textSize="35sp" />
+        android:textSize="35sp"
+        app:layout_constraintBottom_toTopOf="@+id/group_scrollview"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ScrollView
         android:id="@+id/group_scrollview"
         android:layout_width="match_parent"
         android:layout_height="450dp"
-        android:layout_below="@id/txt_group_name"
-        android:layout_marginTop="23dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
         android:background="@drawable/inventory_border"
         android:orientation="vertical"
-        android:padding="16dp" >
+        android:padding="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="0dp">
 
         <HorizontalScrollView
             android:layout_width="match_parent"
@@ -51,8 +83,8 @@
                 android:id="@+id/tblGroupContents"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:stretchColumns="1"
-                android:shrinkColumns="0" >
+                android:shrinkColumns="0"
+                android:stretchColumns="1">
 
                 <TableRow
                     android:id="@+id/row1"
@@ -84,12 +116,16 @@
     </ScrollView>
 
     <LinearLayout
+        android:id="@+id/linearLayout11"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="50dp"
+        android:gravity="center"
         android:orientation="horizontal"
-        android:gravity="center">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/group_scrollview"
+        app:layout_constraintVertical_bias="0.142"
+        tools:layout_editor_absoluteX="12dp">
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fltbtn_add_another_member"
@@ -98,9 +134,9 @@
             android:layout_marginEnd="40dp"
             android:clickable="true"
             android:contentDescription="@string/add_member_to_group"
+            android:focusable="true"
             android:onClick="onAddMemberClicked"
-            android:src="@android:drawable/ic_input_add"
-            android:focusable="true" />
+            android:src="@android:drawable/ic_input_add" />
 
         <!--<com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fltbtn_share_group"
@@ -119,10 +155,10 @@
             android:layout_height="wrap_content"
             android:clickable="true"
             android:contentDescription="@string/remove_member"
+            android:focusable="true"
             android:onClick="onRemoveMemberClicked"
-            android:src="@drawable/baseline_remove_24"
-            android:focusable="true" />
+            android:src="@drawable/baseline_remove_24" />
 
     </LinearLayout>
 
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

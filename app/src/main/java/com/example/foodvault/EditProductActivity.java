@@ -82,6 +82,9 @@ public class EditProductActivity extends AppCompatActivity {
                 tvDate.setText(dateFormat.format(calendar.getTime()));
             }, year, month, day);
 
+            // Set minimum date to current date
+            datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
+
             datePickerDialog.show();
         });
 

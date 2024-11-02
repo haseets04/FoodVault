@@ -22,4 +22,8 @@ public class SettingsActivity extends AppCompatActivity {
         //blank email and password
         startActivity(new Intent(SettingsActivity.this, MainActivity.class));
     }
+
+    public void onHomeClicked(View view) {
+        startActivity(new Intent(SettingsActivity.this, DashboardActivity.class));
+    }
 }

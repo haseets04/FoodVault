@@ -145,4 +145,7 @@ public class ViewGroupsActivity extends AppCompatActivity {
         return userId;
     }
 
+    public void onHomeClicked(View view) {
+        startActivity(new Intent(ViewGroupsActivity.this, DashboardActivity.class));
+    }
 }

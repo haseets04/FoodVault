@@ -120,4 +120,8 @@ public class ViewProfileActivity extends AppCompatActivity {
     public void onNotificationIconClicked(View view) {
         startActivity(new Intent(ViewProfileActivity.this, NotificationsActivity.class));
     }
+
+    public void onHomeClicked(View view) {
+        startActivity(new Intent(ViewProfileActivity.this, DashboardActivity.class));
+    }
 }

@@ -1,22 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/NormalLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
-    android:background="@drawable/screen_background"
     android:gravity="center"
-    android:orientation="vertical"
+    android:orientation="vertical" >
 
-    android:padding="16dp">
+  <ImageView
+      android:id="@+id/img_lemon_puddle2"
+      android:layout_width="107dp"
+      android:layout_height="92dp"
+      android:layout_marginStart="68dp"
+      android:layout_marginBottom="16dp"
+      android:contentDescription="@string/lemon"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintStart_toEndOf="@+id/img_blue_puddle3"
+      app:srcCompat="@drawable/lemon"
+      tools:ignore="ImageContrastCheck" />
+
+
+  <ImageView
+      android:id="@+id/img_blue_puddle3"
+      android:layout_width="262dp"
+      android:layout_height="154dp"
+      android:layout_marginTop="100dp"
+      android:layout_marginEnd="200dp"
+      android:contentDescription="@string/blue_puddle"
+      android:scaleType="fitXY"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/linearLayout12"
+      app:srcCompat="@drawable/blue_puddle"
+      tools:ignore="VisualLintBounds,ImageContrastCheck" />
+
+  <ImageView
+      android:id="@+id/img_peach_puddle3"
+      android:layout_width="257dp"
+      android:layout_height="165dp"
+      android:layout_marginStart="180dp"
+      android:layout_marginBottom="96dp"
+      android:contentDescription="@string/peach_puddle"
+      android:scaleType="fitXY"
+      app:layout_constraintBottom_toTopOf="@+id/linearLayout12"
+      app:layout_constraintStart_toStartOf="parent"
+      app:srcCompat="@drawable/peach_puddle"
+      tools:ignore="VisualLintBounds,ImageContrastCheck" />
 
   <LinearLayout
+      android:id="@+id/linearLayout12"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:gravity="center"
-      android:orientation="vertical">
+      android:orientation="vertical"
+      android:padding="16dp"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      tools:layout_editor_absoluteX="16dp">
 
     <TextView
         android:layout_width="wrap_content"
@@ -26,7 +66,6 @@
         android:textColor="#050C57"
         android:textSize="25sp"
         android:textStyle="bold" />
-
 
     <EditText
         android:id="@+id/product_name_input"
@@ -59,18 +98,15 @@
         android:layout_height="wrap_content"
         android:max="100" />
 
-    <AutoCompleteTextView
+    <TextView
         android:id="@+id/categoryTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:editable="false"
+        android:layout_marginTop="15dp"
         android:gravity="center_horizontal"
-        android:hint="@string/enter_category"
-        android:minHeight="48dp"
         android:text="@string/enter_an_expiration_date"
         android:textColor="#3949AB"
-        android:textColorHint="#A8A8A8"
-        tools:ignore="VisualLintTextFieldSize" />
+        android:textSize="18sp" />
 
     <EditText
         android:id="@+id/expiration_date_input"
@@ -87,28 +123,31 @@
         android:padding="14dp"
         android:textColor="#3949AB"
         android:textColorHint="#A8A8A8"
-        android:textSize="15sp" />
+        android:textSize="15sp"
+        tools:ignore="DuplicateSpeakableTextCheck" />
 
     <AutoCompleteTextView
         android:id="@+id/CategoryTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
         android:hint="@string/enter_category"
         android:minHeight="48dp"
         android:text="@string/empty_string"
         android:textColor="#000000"
-        android:textColorHint="#A8A8A8"
+        android:textColorHint="#546E7A"
         tools:ignore="VisualLintTextFieldSize" />
 
     <AutoCompleteTextView
         android:id="@+id/LocationTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
         android:hint="@string/enter_location"
         android:minHeight="48dp"
         android:text="@string/empty_string"
         android:textColor="#000000"
-        android:textColorHint="#A8A8A8"
+        android:textColorHint="#546E7A"
         tools:ignore="VisualLintTextFieldSize" />
 
     <LinearLayout
@@ -119,26 +158,25 @@
 
       <Button
           android:id="@+id/btn_add"
-          android:layout_width="147dp"
+          android:layout_width="200dp"
           android:layout_height="wrap_content"
-          android:layout_marginTop="10dp"
           android:layout_marginEnd="10dp"
           android:backgroundTint="#70B1BA"
           android:text="@string/save_and_update_product"
-          android:textColor="#311B92" />
+          android:textColor="#311B92"
+          tools:ignore="ButtonStyle,VisualLintBounds" />
 
       <Button
           android:id="@+id/btn_cancel_product"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:layout_marginTop="10dp"
           android:backgroundTint="#70B1BA"
-          android:text="@string/cancel_edit"
-          android:textColor="#311B92" />
+          android:text="@string/cancel_product_edit"
+          android:textColor="#311B92"
+          tools:ignore="ButtonStyle" />
 
     </LinearLayout>
 
-
   </LinearLayout>
 
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

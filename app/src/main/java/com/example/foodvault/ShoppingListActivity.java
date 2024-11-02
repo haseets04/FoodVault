@@ -174,4 +174,8 @@ public class ShoppingListActivity extends AppCompatActivity {
         }
         return userId;
     }
+
+    public void onHomeClicked(View view) {
+        startActivity(new Intent(ShoppingListActivity.this, DashboardActivity.class));
+    }
 }

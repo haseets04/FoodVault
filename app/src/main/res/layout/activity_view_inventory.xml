@@ -4,47 +4,75 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/inventory_border"
     tools:context=".ViewInventory">
+
+    <ImageButton
+        android:id="@+id/home_btn"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="60dp"
+        android:background="?attr/selectableItemBackground"
+        android:contentDescription="@string/home_button"
+        android:elevation="4dp"
+        android:onClick="onHomeClicked"
+        android:padding="10dp"
+        android:src="@drawable/home_icon"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.12"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="RedundantDescriptionCheck" />
+
+    <ImageView
+        android:id="@+id/img_lemon_puddle2"
+        android:layout_width="107dp"
+        android:layout_height="92dp"
+        android:layout_marginStart="68dp"
+        android:layout_marginBottom="16dp"
+        android:contentDescription="@string/lemon"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/img_blue_puddle3"
+        app:srcCompat="@drawable/lemon"
+        tools:ignore="ImageContrastCheck" />
+
+    <ImageView
+        android:id="@+id/img_blue_puddle3"
+        android:layout_width="262dp"
+        android:layout_height="154dp"
+        android:layout_marginTop="68dp"
+        android:layout_marginEnd="200dp"
+        android:contentDescription="@string/blue_puddle"
+        android:scaleType="fitXY"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_newLocation"
+        app:srcCompat="@drawable/blue_puddle"
+        tools:ignore="VisualLintBounds,ImageContrastCheck" />
+
+    <ImageView
+        android:id="@+id/img_peach_puddle3"
+        android:layout_width="257dp"
+        android:layout_height="165dp"
+        android:layout_marginStart="176dp"
+        android:layout_marginBottom="36dp"
+        android:contentDescription="@string/peach_puddle"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toTopOf="@+id/textView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/peach_puddle"
+        tools:ignore="VisualLintBounds,ImageContrastCheck" />
 
     <Button
         android:id="@+id/btn_newLocation"
-        android:layout_width="96dp"
-        android:layout_height="45dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="108dp"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="75dp"
+        android:layout_marginTop="120dp"
         android:backgroundTint="#9AD0D3"
         android:text="@string/add_new_location"
-        android:textSize="10sp"
+        android:textSize="12sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/scrollview"
         tools:ignore="TouchTargetSizeCheck" />
-
-    <ImageButton
-        android:id="@+id/imageButton3"
-        android:layout_width="46dp"
-        android:layout_height="47dp"
-        android:src="@drawable/person_icon"
-        app:layout_constraintBottom_toTopOf="@+id/scrollview"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.128"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.463"
-        tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
-
-    <ImageButton
-        android:id="@+id/imageButton"
-        android:layout_width="46dp"
-        android:layout_height="47dp"
-        android:src="@drawable/house_icon"
-        app:layout_constraintBottom_toTopOf="@+id/scrollview"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.86"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.463"
-        tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
 
     <ScrollView
         android:id="@+id/scrollview"
@@ -146,12 +174,12 @@
         android:shadowColor="#214069"
         android:text="@string/inventory"
         android:textColor="#214069"
-        android:textSize="27sp"
+        android:textSize="30sp"
         app:layout_constraintBottom_toTopOf="@+id/scrollview"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.824" />
+        app:layout_constraintVertical_bias="0.887" />
 
     <Button
         android:id="@+id/btnupdatelocations"
@@ -163,7 +191,7 @@
         android:enabled="false"
         android:text="@string/update_locations"
         android:textColor="#FFFFFF"
-        android:textSize="10sp"
+        android:textSize="12sp"
         android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/scrollview"
@@ -171,52 +199,18 @@
 
     <Button
         android:id="@+id/btn_filteritems"
-        android:layout_width="96dp"
-        android:layout_height="46dp"
-        android:layout_marginStart="268dp"
-        android:layout_marginTop="108dp"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="230dp"
+        android:layout_marginTop="120dp"
         android:backgroundTint="#9ad0d3"
         android:text="@string/filter_items"
-        android:textSize="10sp"
+        android:textSize="12sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/scrollview"
         tools:ignore="TouchTargetSizeCheck" />
 
-    <ImageView
-        android:id="@+id/img_peach_puddle"
-        android:layout_width="210dp"
-        android:layout_height="102dp"
-        android:layout_marginStart="228dp"
-        android:layout_marginBottom="136dp"
-        android:scaleType="fitXY"
-        app:layout_constraintBottom_toTopOf="@+id/scrollview"
-        app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/peach_puddle"
-        tools:ignore="VisualLintBounds" />
-
-    <ImageView
-        android:id="@+id/img_blue_puddle"
-        android:layout_width="210dp"
-        android:layout_height="118dp"
-        android:layout_marginTop="256dp"
-        android:layout_marginEnd="260dp"
-        android:scaleType="fitXY"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/scrollview"
-        app:srcCompat="@drawable/blue_puddle"
-        tools:ignore="VisualLintBounds" />
-
-    <ImageView
-        android:id="@+id/img_lemon_puddle"
-        android:layout_width="99dp"
-        android:layout_height="86dp"
-        android:layout_marginStart="132dp"
-        android:layout_marginBottom="28dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/img_blue_puddle"
-        app:srcCompat="@drawable/lemon" />
-
-    <ImageView
+    <!--<ImageView
         android:id="@+id/img_box_icon"
         android:layout_width="99dp"
         android:layout_height="70dp"
@@ -224,7 +218,7 @@
         android:layout_marginTop="172dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/scrollview"
-        app:srcCompat="@drawable/box_icon" />
+        app:srcCompat="@drawable/box_icon" />-->
 
     <ImageButton
         android:id="@+id/btnaddproduct"
@@ -234,6 +228,7 @@
         android:layout_marginTop="52dp"
         android:background="@drawable/circular_background"
         android:scaleType="centerInside"
+        android:contentDescription="@string/add_product"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/scrollview"
         app:srcCompat="@drawable/plus"
@@ -247,6 +242,7 @@
         android:layout_marginTop="52dp"
         android:background="@drawable/circular_background"
         android:scaleType="centerInside"
+        android:contentDescription="@string/edit_product"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/scrollview"
         app:srcCompat="@drawable/pen"
@@ -256,16 +252,16 @@
         android:id="@+id/btnDelete"
         android:layout_width="55dp"
         android:layout_height="55dp"
-        android:layout_marginTop="8dp"
         android:background="@drawable/circular_background"
         android:onClick="OnClickEvent"
         android:scaleType="centerInside"
+        android:contentDescription="@string/delete_product"
         app:layout_constraintBottom_toTopOf="@+id/btn_filteritems"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.84"
+        app:layout_constraintHorizontal_bias="0.775"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/scrollview"
-        app:layout_constraintVertical_bias="1.0"
+        app:layout_constraintVertical_bias="0.815"
         app:srcCompat="@drawable/minus"
         tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
