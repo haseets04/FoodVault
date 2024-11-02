@@ -145,13 +145,13 @@
         </LinearLayout>
 
         <Button
-            android:id="@+id/btngroup"
+            android:id="@+id/btn_group"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:textColor="#311B92"
             android:backgroundTint="#70B1BA"
-            android:text="@string/group_by" />
+            android:text="@string/group_by_or_sort" />
 
         <Button
             android:id="@+id/btn_return"

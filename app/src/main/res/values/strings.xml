@@ -104,6 +104,9 @@
     <string name="edit">Edit</string>
     <string name="product">Product</string>
     <string name="return_to_view_shopping_lists">Return to View Shopping Lists</string>
+    <string name="group_by_or_sort">Group By or Sort</string>
+    <string name="sort_items_ascending">Sort Items Ascending</string>
+    <string name="sort_items_descending">Sort Items Descending</string>
     <string-array name="spinner_options">
         <item>Item Category</item>
         <item>Grocery Store</item>

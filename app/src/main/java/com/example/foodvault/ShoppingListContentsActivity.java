@@ -60,7 +60,7 @@ public class ShoppingListContentsActivity extends AppCompatActivity {
         //Log.i("ID", ShopListIDOfBtn.toString());
 
         fetchAndDisplayProductsOnShopListFromDB();
-        Button btnGroup = findViewById(R.id.btngroup);
+        Button btnGroup = findViewById(R.id.btn_group);
         btnGroup.setOnClickListener(v -> showGroupMenu(v));
     }
 
@@ -81,10 +81,20 @@ public class ShoppingListContentsActivity extends AppCompatActivity {
             if (id == R.id.group_by_category) {
                 groupItemsByCategory();
                 return true;
-            } else if (id == R.id.group_by_shop) {
+            }
+            else if (id == R.id.group_by_shop) {
                 groupItemsByShop();
                 return true;
-            } else {
+            }
+            else if (id == R.id.sort_ascending) {
+                sortItemsAscending();
+                return true;
+            }
+            else if (id == R.id.sort_descending) {
+                sortItemsDescending();
+                return true;
+            }
+            else {
                 return false;
             }
         });
@@ -93,7 +103,7 @@ public class ShoppingListContentsActivity extends AppCompatActivity {
     private void groupItemsByCategory() {
         // Fetch products and group them by category
         List<ProductModel> products = groupproducts;
-        List<ProductsOnShopListModel> SLproducts =groupslproducts;// Fetch your products
+        List<ProductsOnShopListModel> SLproducts = groupslproducts;// Fetch your products
         String correct="";
         Map<String, List<ProductsOnShopListModel>> groupedProducts = new HashMap<>();
         for (ProductModel product : products) {
@@ -114,7 +124,7 @@ public class ShoppingListContentsActivity extends AppCompatActivity {
 
     private void groupItemsByShop() {
         // Fetch products and group them by shop/store
-        List<ProductsOnShopListModel> productsOnShopList =groupslproducts; // Fetch your products
+        List<ProductsOnShopListModel> productsOnShopList = groupslproducts; // Fetch your products
         List<ProductModel> products = groupproducts;
         Map<String, List<ProductsOnShopListModel>> groupedProducts = new HashMap<>();
         for (ProductsOnShopListModel product : productsOnShopList) {
@@ -125,6 +135,100 @@ public class ShoppingListContentsActivity extends AppCompatActivity {
             }
         }
         displayGroupedProducts(groupedProducts,products);
+    }
+
+    private void sortItemsAscending() {
+        List<ProductModel> products = groupproducts;
+        List<ProductsOnShopListModel> slProducts = new ArrayList<>(groupslproducts);
+
+        // Sort slProducts based on corresponding product names
+        slProducts.sort((sl1, sl2) -> {
+            String name1 = "";
+            String name2 = "";
+
+            // Find corresponding product names
+            for (ProductModel product : products) {
+                if (product.getProductId().equals(sl1.getProduct_id())) {
+                    name1 = product.getProductName();
+                }
+                if (product.getProductId().equals(sl2.getProduct_id())) {
+                    name2 = product.getProductName();
+                }
+            }
+
+            return name1.compareToIgnoreCase(name2);
+        });
+
+        // Display the sorted products
+        TableLayout tableLayout = findViewById(R.id.tblShopListContents);
+        tableLayout.removeAllViews();
+
+        LayoutInflater inflater = LayoutInflater.from(this);
+        TableRow headerRow = (TableRow) inflater.inflate(R.layout.header_row, tableLayout, false);
+        TextView headerQty = headerRow.findViewById(R.id.txt_quantity);
+        TextView headerProductName = headerRow.findViewById(R.id.txt_product_name);
+        headerQty.setText("Qty");
+        headerProductName.setText("Product");
+        tableLayout.addView(headerRow);
+
+        // Add sorted product rows
+        for (ProductsOnShopListModel slProduct : slProducts) {
+            if (slProduct.getShoplist_id().equals(ShopListIDOfBtn)) {
+                for (ProductModel product : products) {
+                    if (product.getProductId().equals(slProduct.getProduct_id())) {
+                        addProductRow(tableLayout, slProduct, product);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    private void sortItemsDescending() {
+        List<ProductModel> products = groupproducts;
+        List<ProductsOnShopListModel> slProducts = new ArrayList<>(groupslproducts);
+
+        // Sort slProducts based on corresponding product names
+        slProducts.sort((sl1, sl2) -> {
+            String name1 = "";
+            String name2 = "";
+
+            // Find corresponding product names
+            for (ProductModel product : products) {
+                if (product.getProductId().equals(sl1.getProduct_id())) {
+                    name1 = product.getProductName();
+                }
+                if (product.getProductId().equals(sl2.getProduct_id())) {
+                    name2 = product.getProductName();
+                }
+            }
+
+            return name2.compareToIgnoreCase(name1);  // Reversed comparison for descending order
+        });
+
+        // Display the sorted products
+        TableLayout tableLayout = findViewById(R.id.tblShopListContents);
+        tableLayout.removeAllViews();
+
+        LayoutInflater inflater = LayoutInflater.from(this);
+        TableRow headerRow = (TableRow) inflater.inflate(R.layout.header_row, tableLayout, false);
+        TextView headerQty = headerRow.findViewById(R.id.txt_quantity);
+        TextView headerProductName = headerRow.findViewById(R.id.txt_product_name);
+        headerQty.setText("Qty");
+        headerProductName.setText("Product");
+        tableLayout.addView(headerRow);
+
+        // Add sorted product rows
+        for (ProductsOnShopListModel slProduct : slProducts) {
+            if (slProduct.getShoplist_id().equals(ShopListIDOfBtn)) {
+                for (ProductModel product : products) {
+                    if (product.getProductId().equals(slProduct.getProduct_id())) {
+                        addProductRow(tableLayout, slProduct, product);
+                        break;
+                    }
+                }
+            }
+        }
     }
 
     private void displayGroupedProducts(Map<String, List<ProductsOnShopListModel>> groupedProducts,List<ProductModel> groupprods) {

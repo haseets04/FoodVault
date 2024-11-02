@@ -5,4 +5,10 @@
     <item
         android:id="@+id/group_by_shop"
         android:title="@string/group_by_shop" />
+    <item
+        android:id="@+id/sort_ascending"
+        android:title="@string/sort_items_ascending" />
+    <item
+        android:id="@+id/sort_descending"
+        android:title="@string/sort_items_descending" />
 </menu>
