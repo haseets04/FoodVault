@@ -29,6 +29,7 @@ import androidx.core.content.ContextCompat;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -304,35 +305,66 @@ public class ViewInventory extends AppCompatActivity {
         }
         return userId;
     }
-    public void setupmenu(Button btnfilter)
-    {
+    public void setupmenu(Button btnfilter) {
         btnfilter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 PopupMenu popupMenu = new PopupMenu(ViewInventory.this, btnfilter);
-                // Inflate the popup menu using the XML file
-                Menu menu= popupMenu.getMenu();
-                menu.add(0,1,Menu.NONE,"Categorize Inventory by location");
-                menu.add(0,2,Menu.NONE,"Filter by Category");
+
+                // Start sorting in a background thread
+                new Thread(() -> {
+                    listproducts.sort(Comparator.comparing(ProductModel::getProductExpirationDate));
+                }).start();
+
+                // Inflate and set up menu items
+                Menu menu = popupMenu.getMenu();
+                menu.add(0, 1, Menu.NONE, "Categorize Inventory by location");
+                menu.add(0, 2, Menu.NONE, "Filter by Category");
+                menu.add(0, 3, Menu.NONE, "Sort by Expiration Date");
+
                 popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
                         switch(item.getItemId()) {
                             case 1:
                                 showLocations();
-
                                 return true;
                             case 2:
                                 showCategory();
                                 return true;
+                            case 3:
+                                // Now, simply load the sorted list instantly
+                                sortByExpirationDate();
+                                return true;
                         }
-                       return true;
+                        return true;
                     }
                 });
                 popupMenu.show();
             }
         });
     }
+
+    private void sortByExpirationDate() {
+        // Clear table and display already sorted products
+        TableLayout tableLayout = findViewById(R.id.tblInventory);
+        for (int i = tableLayout.getChildCount() - 1; i > 0; i--) {
+            tableLayout.removeViewAt(i);
+        }
+
+        // Display sorted listproducts
+        for (ProductModel product : listproducts) {
+            for (LocationModel location : listlocations) {
+                if (product.getUserIdForProduct().equals(getCurrentUserIDFromSession()) &&
+                        product.getLocationId() != null &&
+                        product.getLocationId().equals(location.getLocation_id())) {
+                    addProductRecord(tableLayout, product, location);
+                }
+            }
+        }
+    }
+
+
     private void showCategory() {
         // Inflate the custom layout for the dialog
         LayoutInflater inflater = getLayoutInflater();

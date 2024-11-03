@@ -409,8 +409,28 @@
                     String id="eq."+productOnShopList.getProducts_on_list_id();
                     ProductsOnShopListModel product=new ProductsOnShopListModel(productOnShopList.getGrocery_store(),checkBox.isChecked(),productOnShopList.getShoplist_id(), productOnShopList.getProduct_id(),  0);
                     product.setProducts_on_list_id(productOnShopList.getProducts_on_list_id());
-                    Call<Void> insertproduct=sbAPI.updateSLproduct(id,product);
+                    Call<Void> insertslproduct=sbAPI.updateSLproduct(id,product);
+                    ProductModel temp=new ProductModel();
+                    for (ProductModel prod:
+                         groupproducts) {
+                        if(productOnShopList.getProduct_id().equals(prod.getProductId()))
+                            temp=prod;
+                    }
+                    if(product.isTicked_or_not())
+                    temp.setProductQuantity(temp.getProductQuantity()+productOnShopList.getShoplistproducts_quantity());
+                    Call<Void> insertproduct=sbAPI.updateProduct("eq."+productOnShopList.getProduct_id(),temp);
                     insertproduct.enqueue(new Callback<Void>() {
+                        @Override
+                        public void onResponse(Call<Void> call, Response<Void> response) {
+
+                        }
+
+                        @Override
+                        public void onFailure(Call<Void> call, Throwable t) {
+
+                        }
+                    });
+                    insertslproduct.enqueue(new Callback<Void>() {
                         @Override
                         public void onResponse(Call<Void> call, Response<Void> response) {
                             if(!response.isSuccessful()) {

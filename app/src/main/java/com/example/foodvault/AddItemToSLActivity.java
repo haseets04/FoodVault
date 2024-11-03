@@ -145,7 +145,7 @@ public class AddItemToSLActivity extends AppCompatActivity {
 
     private void addItemToShoppingList(TextView store, CheckBox cbxbought, NumberPicker quanty, AutoCompleteTextView name) {
         Call<ProductsOnShopListModel> insertItem = sbAPI.insertShoppingListItem(
-                new ProductsOnShopListModel(store.getText().toString(), cbxbought.isChecked(), slid, addedId, quanty.getValue()));
+                new ProductsOnShopListModel(store.getText().toString(), false, slid, addedId, quanty.getValue()));
 
         insertItem.enqueue(new Callback<ProductsOnShopListModel>() {
             @Override

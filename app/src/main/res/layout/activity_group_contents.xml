@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -36,8 +35,9 @@
     <ScrollView
         android:id="@+id/group_scrollview"
         android:layout_width="match_parent"
-        android:layout_height="450dp"
+        android:layout_height="0dp"
         android:layout_below="@id/txt_group_name"
+        android:layout_above="@id/button_layout"
         android:layout_marginTop="23dp"
         android:background="@drawable/inventory_border"
         android:orientation="vertical"
@@ -84,12 +84,13 @@
     </ScrollView>
 
     <LinearLayout
+        android:id="@+id/button_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="50dp"
         android:orientation="horizontal"
-        android:gravity="center">
+        android:gravity="center"
+        android:layout_marginBottom="50dp">
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fltbtn_add_another_member"
