@@ -1,47 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
-    android:background="@drawable/screen_background"
     tools:context=".ShoppingListContentsActivity">
 
     <ImageView
-        android:id="@+id/profile_icon"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="3dp"
-        android:contentDescription="@string/profile_icon"
-        android:src="@drawable/account_circle_icon" />
+        android:id="@+id/img_lemon_puddle2"
+        android:layout_width="107dp"
+        android:layout_height="92dp"
+        android:layout_marginStart="68dp"
+        android:layout_marginBottom="16dp"
+        android:contentDescription="@string/lemon"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/img_blue_puddle3"
+        app:srcCompat="@drawable/lemon"
+        tools:ignore="ImageContrastCheck" />
+
+    <ImageView
+        android:id="@+id/img_blue_puddle3"
+        android:layout_width="262dp"
+        android:layout_height="154dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="200dp"
+        android:contentDescription="@string/blue_puddle"
+        android:scaleType="fitXY"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout10"
+        app:srcCompat="@drawable/blue_puddle"
+        tools:ignore="VisualLintBounds,ImageContrastCheck" />
+
+    <ImageView
+        android:id="@+id/img_peach_puddle3"
+        android:layout_width="257dp"
+        android:layout_height="165dp"
+        android:layout_marginStart="180dp"
+        android:layout_marginBottom="16dp"
+        android:contentDescription="@string/peach_puddle"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toTopOf="@+id/txt_list_name"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/peach_puddle"
+        tools:ignore="VisualLintBounds,ImageContrastCheck" />
 
     <TextView
         android:id="@+id/txt_list_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/profile_icon"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="2dp"
         android:fontFamily="@font/shrikhand"
         android:gravity="center"
         android:shadowColor="#214069"
         android:text="@string/shopping_list"
         android:textColor="#050C57"
-        android:textSize="20sp" />
+        android:textSize="35sp"
+        app:layout_constraintBottom_toTopOf="@+id/shopping_list_scrollview"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.817" />
 
     <ScrollView
         android:id="@+id/shopping_list_scrollview"
         android:layout_width="393dp"
-        android:layout_height="466dp"
-        android:layout_below="@id/txt_list_name"
-        android:layout_marginTop="3dp"
+        android:layout_height="400dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        android:padding="16dp"
         android:background="@drawable/inventory_border"
         android:orientation="vertical"
-        android:padding="16dp">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.431">
 
         <HorizontalScrollView
             android:layout_width="match_parent"
@@ -88,15 +121,19 @@
     </ScrollView>
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="143dp"
-        android:layout_below="@+id/shopping_list_scrollview"
-        android:layout_marginTop="10dp"
-        android:orientation="vertical">
+        android:id="@+id/linearLayout10"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/shopping_list_scrollview"
+        app:layout_constraintVertical_bias="0.046">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="72dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp"
             android:layout_marginBottom="10dp"
             android:gravity="center"
             android:orientation="horizontal">
@@ -145,13 +182,24 @@
         </LinearLayout>
 
         <Button
-            android:id="@+id/btngroup"
-            android:layout_width="match_parent"
+            android:id="@+id/btn_group"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:minHeight="48dp"
-            android:text="@string/group_by"
-            tools:ignore="TouchTargetSizeCheck" />
+            android:layout_gravity="center_horizontal"
+            android:backgroundTint="#70B1BA"
+            android:text="@string/group_by_or_sort"
+            android:textColor="#311B92" />
+
+        <!--<Button
+            android:id="@+id/btn_return"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:backgroundTint="#70B1BA"
+            android:onClick="onReturnViewClicked"
+            android:text="@string/return_to_view_shopping_lists"
+            android:textColor="#311B92" />-->
 
     </LinearLayout>
 
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

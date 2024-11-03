@@ -166,10 +166,27 @@ public class NewGroupActivity extends AppCompatActivity {
 
 
     public void onSaveNewGroupClicked(View view) {
-        updateInsertedGroupRecord();
-        insertNewUsersInGroupInDB();
-        finish();
-        //confirm saving of changes
+        AlertDialog.Builder builder2 = new AlertDialog.Builder(this);
+        builder2.setTitle("Confirm Save");
+        builder2.setMessage("Are you sure you want to save the entry?");
+        builder2.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                updateInsertedGroupRecord();
+                insertNewUsersInGroupInDB();
+                finish();
+            }
+        });
+
+        builder2.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+
+        AlertDialog dialog2 = builder2.create();
+        dialog2.show();
     }
 
     public void onCancelNewGroupClicked(View view) {

@@ -6,18 +6,19 @@ import java.util.Objects;
 public class ProductModel {
     private Integer product_id;
     private Integer user_id;
+    private Integer location_id; //can be null
+    private String product_name;
+    private Date product_expiration_date;
+    private String product_category;
+    private boolean product_expired;
+    private int quantity;
 
     public Integer getLocation_id() {
         return location_id;
     }
 
-    private Integer location_id; //can be null
-    private String product_name;
-    private String product_barcode; //add //can be null //String rather?
-    private Date product_expiration_date;
-    private String product_category;
-    private boolean product_expired;
-    private int quantity;
+    public ProductModel() {
+    }
 
     public Integer getProductId() {
         return product_id;
@@ -38,6 +39,19 @@ public class ProductModel {
         return Objects.equals(product_category, that.product_category);
     }
 
+    @Override
+    public String toString() {
+        return "ProductModel{" +
+                "product_id=" + product_id +
+                ", user_id=" + user_id +
+                ", location_id=" + location_id +
+                ", product_name='" + product_name + '\'' +
+                ", product_expiration_date=" + product_expiration_date +
+                ", product_category='" + product_category + '\'' +
+                ", product_expired=" + product_expired +
+                ", quantity=" + quantity +
+                '}';
+    }
 
     public void setUserIdForProduct(Integer user_id) {
         this.user_id = user_id;
@@ -57,14 +71,6 @@ public class ProductModel {
 
     public void setProductName(String product_name) {
         this.product_name = product_name;
-    }
-
-    public String getProductBarcode() {
-        return product_barcode;
-    }
-
-    public void setProductBarcode(String product_barcode) {
-        this.product_barcode = product_barcode;
     }
 
     public Date getProductExpirationDate() {
@@ -97,20 +103,5 @@ public class ProductModel {
 
     public void setProductQuantity(int quantity) {
         this.quantity = quantity;
-    }
-
-    @Override
-    public String toString() {
-        return "ProductModel{" +
-                "product_id=" + product_id +
-                ", user_id=" + user_id +
-                ", location_id=" + location_id +
-                ", product_name='" + product_name + '\'' +
-                ", product_barcode=" + product_barcode +
-                ", product_expiration_date=" + product_expiration_date +
-                ", product_category='" + product_category + '\'' +
-                ", product_expired=" + product_expired +
-                ", quantity=" + quantity +
-                '}';
     }
 }

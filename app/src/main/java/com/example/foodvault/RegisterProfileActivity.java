@@ -10,6 +10,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -20,8 +22,13 @@ public class RegisterProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_profile);
+    }
 
-        //do show/hide for passwords
+    private boolean isValidEmail(String email) {
+        String emailPattern = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.(com|co\\.za)$";
+        Pattern pattern = Pattern.compile(emailPattern);
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
     }
 
     public void onRegisterClicked(View view) {
@@ -48,6 +55,10 @@ public class RegisterProfileActivity extends AppCompatActivity {
         }
         else if (emailAddress.isEmpty()) {
             Toast.makeText(this, "Please enter your email address", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        else if (!isValidEmail(emailAddress)) {
+            Toast.makeText(this, "Please enter a valid email address", Toast.LENGTH_SHORT).show();
             return;
         }
         else if (password.isEmpty()) {

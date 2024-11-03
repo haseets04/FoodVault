@@ -4,37 +4,92 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/screen_background"
     android:gravity="center"
-    android:padding="16dp"
     tools:context=".ShoppingListActivity">
+
+    <ImageButton
+        android:id="@+id/home_btn"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="70dp"
+        android:background="?attr/selectableItemBackground"
+        android:contentDescription="@string/home_button"
+        android:elevation="4dp"
+        android:onClick="onHomeClicked"
+        android:padding="10dp"
+        android:src="@drawable/home_icon"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.158"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="RedundantDescriptionCheck" />
+
+    <ImageView
+        android:id="@+id/img_lemon_puddle2"
+        android:layout_width="107dp"
+        android:layout_height="92dp"
+        android:layout_marginStart="68dp"
+        android:layout_marginBottom="16dp"
+        android:contentDescription="@string/lemon"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/img_blue_puddle3"
+        app:srcCompat="@drawable/lemon"
+        tools:ignore="ImageContrastCheck" />
+
+    <ImageView
+        android:id="@+id/img_blue_puddle3"
+        android:layout_width="262dp"
+        android:layout_height="154dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="200dp"
+        android:contentDescription="@string/blue_puddle"
+        android:scaleType="fitXY"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        app:srcCompat="@drawable/blue_puddle"
+        tools:ignore="VisualLintBounds,ImageContrastCheck" />
+
+    <ImageView
+        android:id="@+id/img_peach_puddle3"
+        android:layout_width="257dp"
+        android:layout_height="165dp"
+        android:layout_marginStart="180dp"
+        android:layout_marginBottom="52dp"
+        android:contentDescription="@string/peach_puddle"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toTopOf="@+id/txt_shopping_lists"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/peach_puddle"
+        tools:ignore="VisualLintBounds,ImageContrastCheck" />
 
     <TextView
         android:id="@+id/txt_shopping_lists"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="110dp"
+        android:layout_marginTop="164dp"
         android:ellipsize="end"
-        android:gravity="center"
-        android:text="@string/shopping_lists"
         android:fontFamily="@font/shrikhand"
+        android:gravity="center"
         android:shadowColor="#214069"
+        android:text="@string/shopping_lists"
         android:textColor="#050C57"
         android:textSize="35sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ScrollView
         android:id="@+id/scrollview_shoplist"
         android:layout_width="377dp"
-        android:layout_height="450dp"
+        android:layout_height="400dp"
         android:layout_marginTop="50dp"
+        android:contentDescription="@string/scrollview_for_shopping_lists"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.47"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:contentDescription="@string/scrollview_for_shopping_lists" >
+        app:layout_constraintVertical_bias="0.446">
 
         <LinearLayout
             android:id="@+id/linear_layout_shop_list"
@@ -42,7 +97,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="vertical"
-            app:layout_constraintTop_toBottomOf="@+id/txt_shopping_lists" >
+            app:layout_constraintTop_toBottomOf="@+id/txt_shopping_lists">
 
         </LinearLayout>
 
@@ -52,11 +107,11 @@
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
         android:gravity="center_horizontal"
         android:orientation="horizontal"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="20dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/scrollview_shoplist">
 
@@ -67,9 +122,9 @@
             android:layout_marginEnd="40dp"
             android:clickable="true"
             android:contentDescription="@string/add_new_shopping_list"
+            android:focusable="true"
             android:onClick="onAddListClicked"
-            android:src="@android:drawable/ic_input_add"
-            android:focusable="true" />
+            android:src="@android:drawable/ic_input_add" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fltbtn_edit_list"
@@ -78,9 +133,9 @@
             android:layout_marginEnd="40dp"
             android:clickable="true"
             android:contentDescription="@string/edit_shopping_list"
+            android:focusable="true"
             android:onClick="onEditListClicked"
-            android:src="@drawable/baseline_edit_24"
-            android:focusable="true" />
+            android:src="@drawable/baseline_edit_24" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fltbtn_delete_list"
@@ -88,9 +143,9 @@
             android:layout_height="wrap_content"
             android:clickable="true"
             android:contentDescription="@string/remove_shopping_list"
+            android:focusable="true"
             android:onClick="onRemoveListClicked"
-            android:src="@drawable/baseline_remove_24"
-            android:focusable="true" />
+            android:src="@drawable/baseline_remove_24" />
     </LinearLayout>
 
 

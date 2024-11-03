@@ -1,53 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
-    android:background="@drawable/screen_background"
     tools:context=".NewGroupActivity">
 
     <ImageView
-        android:id="@+id/profile_icon"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="16dp"
+        android:id="@+id/img_lemon_puddle2"
+        android:layout_width="107dp"
+        android:layout_height="92dp"
+        android:layout_marginStart="68dp"
+        android:layout_marginBottom="16dp"
+        android:contentDescription="@string/lemon"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/img_blue_puddle3"
+        app:srcCompat="@drawable/lemon"
+        tools:ignore="ImageContrastCheck" />
+
+    <ImageView
+        android:id="@+id/img_blue_puddle3"
+        android:layout_width="262dp"
+        android:layout_height="154dp"
         android:layout_marginTop="16dp"
-        android:contentDescription="@string/profile_icon"
-        android:src="@drawable/account_circle_icon" />
+        android:layout_marginEnd="200dp"
+        android:contentDescription="@string/blue_puddle"
+        android:scaleType="fitXY"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout9"
+        app:srcCompat="@drawable/blue_puddle"
+        tools:ignore="VisualLintBounds,ImageContrastCheck" />
+
+    <ImageView
+        android:id="@+id/img_peach_puddle3"
+        android:layout_width="257dp"
+        android:layout_height="165dp"
+        android:layout_marginStart="180dp"
+        android:layout_marginBottom="36dp"
+        android:contentDescription="@string/peach_puddle"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toTopOf="@+id/title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/peach_puddle"
+        tools:ignore="VisualLintBounds,ImageContrastCheck" />
 
     <TextView
         android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_below="@id/profile_icon"
-        android:layout_marginTop="30dp"
-        android:gravity="center"
-        android:text="@string/create_group"
         android:fontFamily="@font/shrikhand"
+        android:gravity="center"
         android:shadowColor="#214069"
+        android:text="@string/create_group"
         android:textColor="#050C57"
-        android:textSize="35sp" />
+        android:textSize="35sp"
+        app:layout_constraintBottom_toTopOf="@+id/group_container"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.848" />
 
     <LinearLayout
         android:id="@+id/group_container"
         android:layout_width="match_parent"
         android:layout_height="400dp"
-        android:layout_below="@id/title"
-        android:layout_marginTop="20dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        android:background="@drawable/inventory_border"
         android:orientation="vertical"
         android:padding="16dp"
-        android:background="@drawable/inventory_border">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.463"
+        tools:layout_editor_absoluteX="16dp">
         <!-- This container will hold dynamically added items -->
-
-        <!--<ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:contentDescription="ScrollView" />-->
 
         <EditText
             android:id="@+id/groupName"
@@ -66,31 +94,38 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/group_container"
-        android:layout_marginStart="200dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="20dp"
+        android:backgroundTint="#70B1BA"
+        android:onClick="onAddMembersToGroupClicked"
         android:text="@string/add_members_to_group"
         android:textColor="#311B92"
-        android:backgroundTint="#70B1BA"
-        android:onClick="onAddMembersToGroupClicked" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/group_container" />
 
     <LinearLayout
+        android:id="@+id/linearLayout9"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="50dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        android:gravity="center"
         android:orientation="horizontal"
-        android:gravity="center">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_add_members_to_group"
+        app:layout_constraintVertical_bias="0.167"
+        tools:layout_editor_absoluteX="16dp">
 
         <Button
             android:id="@+id/btn_save_new_group"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_marginEnd="8dp"
-            android:text="@string/save_new_group"
-            android:textColor="#311B92"
+            android:layout_weight="1"
             android:backgroundTint="#70B1BA"
-            android:onClick="onSaveNewGroupClicked" />
+            android:onClick="onSaveNewGroupClicked"
+            android:text="@string/save_new_group"
+            android:textColor="#311B92" />
 
         <Button
             android:id="@+id/btn_cancel_group_entry"
@@ -98,10 +133,10 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:backgroundTint="#70B1BA"
+            android:onClick="onCancelNewGroupClicked"
             android:text="@string/cancel_entry"
-            android:textColor="#311B92"
-            android:onClick="onCancelNewGroupClicked" />
+            android:textColor="#311B92" />
 
     </LinearLayout>
 
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

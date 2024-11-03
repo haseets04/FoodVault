@@ -26,10 +26,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class EditProductActivity extends AppCompatActivity {
-
     private sbAPI_ViewInventory sbAPI;
     private List<ProductModel> listproducts = new ArrayList<>();
-
     private List<LocationModel> listlocations = new ArrayList<>();
     Intent intent;
     SeekBar seekBar;
@@ -43,13 +41,14 @@ public class EditProductActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_product);
+
         intent= getIntent();
         seekBar = findViewById(R.id.sk_quantity);
         seekBarValueTextView = findViewById(R.id.tvquantity);
         locationAutoView = findViewById(R.id.LocationTextView);
         categoryAutoView = findViewById(R.id.CategoryTextView);
 
-       Product=findViewById(R.id.product_name_input);
+        Product=findViewById(R.id.product_name_input);
 
         seekBar.setProgress(intent.getIntExtra("quantity",0));
         locationAutoView.setText(intent.getStringExtra("location"));
@@ -82,6 +81,9 @@ public class EditProductActivity extends AppCompatActivity {
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
                 tvDate.setText(dateFormat.format(calendar.getTime()));
             }, year, month, day);
+
+            // Set minimum date to current date
+            datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
 
             datePickerDialog.show();
         });

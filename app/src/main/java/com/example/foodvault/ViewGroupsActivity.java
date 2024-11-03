@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -60,8 +61,11 @@ public class ViewGroupsActivity extends AppCompatActivity {
             for(UsersInGroupModel userInGroup : userInGroupList){
                 if(userInGroup.getUser_id().equals(getCurrentUserIDFromSession()) && (userInGroup.getGroup_id().equals(group.getGroupId()))){
                     Button button = new Button(this);
+                    int width = (int) TypedValue.applyDimension(
+                            TypedValue.COMPLEX_UNIT_DIP, 300, getResources().getDisplayMetrics());
+
                     LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                            LinearLayout.LayoutParams.WRAP_CONTENT,
+                            width, // Set fixed width in pixels
                             LinearLayout.LayoutParams.WRAP_CONTENT
                     );
                     params.setMargins(0, 16, 0, 16); // Set margins (left, top, right, bottom)
@@ -141,4 +145,7 @@ public class ViewGroupsActivity extends AppCompatActivity {
         return userId;
     }
 
+    public void onHomeClicked(View view) {
+        startActivity(new Intent(ViewGroupsActivity.this, DashboardActivity.class));
+    }
 }
