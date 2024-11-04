@@ -6,6 +6,9 @@ public class UsersInGroupModel {
     private Integer user_id;
     private boolean is_admin;
 
+
+
+    // Getters and setters
     public Integer getUsers_group_id() {
         return users_group_id;
     }
@@ -37,4 +40,6 @@ public class UsersInGroupModel {
     public void setIs_admin(boolean is_admin) {
         this.is_admin = is_admin;
     }
+
+    // Override equals to compare based on users_group_id
 }

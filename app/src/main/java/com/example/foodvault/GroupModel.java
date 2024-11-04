@@ -1,5 +1,7 @@
 package com.example.foodvault;
 
+import java.util.Objects;
+
 public class GroupModel {
     private Integer group_id;
     //private Integer user_id;
@@ -29,6 +31,19 @@ public class GroupModel {
     public void setShoplistIdForGroup(Integer shoplist_id) {
         this.shoplist_id = shoplist_id;
     }*/
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true; // Check for reference equality
+        if (obj == null || getClass() != obj.getClass()) return false; // Type check
+        GroupModel that = (GroupModel) obj;
+        return Objects.equals(group_id, that.group_id); // Compare group_id
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(group_id); // Include group_id in hash code
+    }
+
 
     public String getGroupName() {
         return group_name;

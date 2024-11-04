@@ -102,7 +102,7 @@ public class ExpirationPeriodActivity extends AppCompatActivity {
                 updatedUser.setExpirationPeriod(currentExpirationPeriod);
                 UserSession.getInstance().setExpiration_period(currentExpirationPeriod); //to use in NotificationActivity
 
-                Call<Void> updateCall = api.updateUserDetails("eq." + userId, updatedUser);
+                Call<Void> updateCall = api.updateUserExpirationPeriod("eq." + userId, updatedUser);
                 updateCall.enqueue(new Callback<Void>() {
                     @Override
                     public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {

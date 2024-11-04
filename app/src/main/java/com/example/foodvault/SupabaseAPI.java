@@ -9,6 +9,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Query;
 import retrofit2.http.HTTP;
 
@@ -48,6 +49,9 @@ public interface SupabaseAPI {
 
     @DELETE("/rest/v1/shoppinglist")
     Call<Void> deleteShoppingList(@Query("shoplist_id") String shoppingList);
+
+    @PUT("user")
+    Call<Void> updateUserExpirationPeriod(@Query("user_id") String user_id,@Body UserModel user);
 
     @GET("/rest/v1/shoppinglist")
     Call<List<ShopListModel>> getShoppingLists(@Query("select") String select);
