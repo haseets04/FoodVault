@@ -3,10 +3,12 @@ package com.example.foodvault;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -17,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -217,6 +220,7 @@ public class AddItemToSLActivity extends AppCompatActivity {
                 Log.e("Insert Product", "Error inserting product", t);
             }
         });
+
     }
 
     private void insertNewProductWithQuantity(AutoCompleteTextView name, TextView store, CheckBox cbxbought, NumberPicker quanty, int quantity) {
@@ -246,22 +250,28 @@ public class AddItemToSLActivity extends AppCompatActivity {
         });
     }
 
-    private void fetchLastProduct(TextView store, CheckBox cbxbought, NumberPicker quanty,AutoCompleteTextView name) {
-        try {
-            Thread.sleep(500); // Wait to ensure the product is inserted
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+    private void fetchLastProduct(TextView store, CheckBox cbxbought, NumberPicker quanty, AutoCompleteTextView name) {
 
         Call<List<ProductModel>> products = sbAPI.getProducts();
         products.enqueue(new Callback<List<ProductModel>>() {
             @Override
             public void onResponse(Call<List<ProductModel>> call, Response<List<ProductModel>> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    listproducts2 = response.body();
-                    addedId = listproducts2.get(listproducts2.size() - 1).getProductId();
-                    addItemToShoppingList(store, cbxbought, quanty,name);
-                    navigateToNextActivity(cbxbought,quanty,name);
+                    List<ProductModel> temp = new ArrayList<>(response.body());
+
+                    // Find the last added product using a comparator
+                    temp.sort(new Comparator<ProductModel>() {
+                        @Override
+                        public int compare(ProductModel p1, ProductModel p2) {
+                            // Assuming ProductModel has a method getAddedDate() returning a Date object
+                            return p2.getProductId().compareTo(p1.getProductId());
+                        }
+                    });
+
+                    ProductModel lastAddedProduct = temp.get(0);
+                    addedId = lastAddedProduct.getProductId();
+                    addItemToShoppingList(store, cbxbought, quanty, name);
+                    navigateToNextActivity(cbxbought, quanty, name);
                 }
             }
 
@@ -271,6 +281,8 @@ public class AddItemToSLActivity extends AppCompatActivity {
             }
         });
     }
+
+
 
     private void navigateToNextActivity(CheckBox cbxbought, NumberPicker quanty, AutoCompleteTextView name) {
         Intent intent;
@@ -283,4 +295,32 @@ public class AddItemToSLActivity extends AppCompatActivity {
         intent.putExtra("SHOPPING_LIST_ID", slid);
         startActivity(intent);
     }
+
+    public void onCancel(View view) {
+        new AlertDialog.Builder(this)
+                .setTitle("Confirm Cancel")
+                .setMessage("Are you sure you want to cancel adding this item?")
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent;
+                        if (act.equals("ShoppingListContentsActivity")) {
+                            intent = new Intent(AddItemToSLActivity.this, ShoppingListContentsActivity.class);
+                        } else {
+                            intent = new Intent(AddItemToSLActivity.this, NewShoppingListActivity.class);
+                        }
+                        intent.putExtra("USER_ID", UserSession.getInstance().getUserSessionId());
+                        intent.putExtra("SHOPPING_LIST_ID", slid);
+                        startActivity(intent);
+                        finish();
+                    }
+                })
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Do nothing
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+    }
+
 }

@@ -62,6 +62,9 @@ public class GroupContentsActivity extends AppCompatActivity {
         FloatingActionButton addmember=findViewById(R.id.fltbtn_add_another_member);
         addmember.setOnClickListener(v->adduser());
     }
+
+
+
     private void adduser() {
         // Create an EditText for user code input
         final EditText userCodeInput = new EditText(this);
@@ -78,12 +81,14 @@ public class GroupContentsActivity extends AppCompatActivity {
                         int userCode = Integer.parseInt(userCodeString);
                         // Call your method to add the user here
                         addusertodatabase(new Integer(userCode));
+                        fetchAndDisplayGroupMembersFromDB();
                     } else {
                         Toast.makeText(this, "Please enter a valid usercode.", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
                 .show();
+
     }
     private void addusertodatabase(Integer userid)
     {
@@ -105,7 +110,7 @@ public class GroupContentsActivity extends AppCompatActivity {
 
            }
        });
-        fetchAndDisplayGroupMembersFromDB();
+
     }
 
     // Helper method to check if the input is a natural number

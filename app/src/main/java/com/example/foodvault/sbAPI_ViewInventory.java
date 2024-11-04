@@ -46,8 +46,8 @@ public interface sbAPI_ViewInventory {
 
     @PUT("location")
     Call<Void> updateLocation(@Query("location_id") String location_id, @Body LocationModel location);
-    @DELETE("user")
-    Call<Void> deleteshoppinglistrecord(@Query("user_id") String product_id);
+    @DELETE("shoppinglist")
+    Call<Void> deleteshoppinglistrecord(@Query("shoplist_id") String shoplist_id);
     @POST("products_on_shoppinglist")
     Call<com.example.foodvault.ProductsOnShopListModel> insertShoppingListItem(@Body com.example.foodvault.ProductsOnShopListModel inventory);
     @POST("location")

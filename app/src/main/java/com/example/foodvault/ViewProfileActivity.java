@@ -33,6 +33,8 @@ public class ViewProfileActivity extends AppCompatActivity {
         fetchAndDisplayUserNameSurname();
         fetchAndDisplayUserNumShopLists();
         fetchAndDisplayUserNumGroups();
+        TextView usercode=findViewById(R.id.user_code);
+        usercode.setText(""+userId.intValue());
     }
 
     public void fetchAndDisplayUserNumGroups(){ //just gets groups created, not if its linked with a shoplist

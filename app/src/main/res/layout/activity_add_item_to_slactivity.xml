@@ -142,7 +142,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:backgroundTint="#70B1BA"
-                android:onClick="onCancelProductClicked"
+                android:onClick="onCancel"
                 android:text="@string/cancel_edit"
                 android:textColor="#311B92" />
 
