@@ -39,6 +39,7 @@ public class NewShoppingListActivity extends AppCompatActivity {
     private LinearLayout shoppingListContainer;
     private AppState appState;
     private int currentShopListNameID; // for cancel functionality
+    private ShopListModel newShoppingList;
     private String shopListName;
     private EditText shopListNameInput;
     private List<ProductsOnShopListModel> shoppingListProductsModels;
@@ -78,7 +79,9 @@ public class NewShoppingListActivity extends AppCompatActivity {
         if (shoppingListContainer == null) {
             Toast.makeText(this, "Failed to initialize shopping list container", Toast.LENGTH_LONG).show();
         }
-
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.spinner_options, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         FloatingActionButton add = findViewById(R.id.fltbtn_add_item);
         add.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -177,7 +180,7 @@ public class NewShoppingListActivity extends AppCompatActivity {
                 products = response.body();
                 for (ProductModel product : products) {
                     for (ProductsOnShopListModel slProduct : shoppingListProductsModels) {
-                        if (slProduct.getShoplist_id() == currentShopListID && slProduct.getProduct_id() == product.getProductId()) {
+                        if (slProduct.getShoplist_id().equals(currentShopListID) && slProduct.getProduct_id().equals(product.getProductId())) {
                             LinearLayout linearLayout = inflateLinearLayout(NewShoppingListActivity.this);
                             CheckBox checkBox = linearLayout.findViewById(R.id.cbxTicked);
                             TextView textView1 = linearLayout.findViewById(R.id.tvQuantity);
@@ -238,6 +241,7 @@ public class NewShoppingListActivity extends AppCompatActivity {
                             Toast.makeText(NewShoppingListActivity.this, "Shopping List saved", Toast.LENGTH_SHORT).show();
                             setResult(RESULT_OK);
                             finish();
+                            startActivity(new Intent(NewShoppingListActivity.this,ShoppingListActivity.class));
                         } else {
                             try {
                                 String errorBody = response.errorBody() != null ? response.errorBody().string() : "No error body";

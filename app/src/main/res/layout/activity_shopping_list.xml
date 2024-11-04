@@ -119,25 +119,13 @@
             android:id="@+id/fltbtn_add_list"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="40dp"
             android:clickable="true"
             android:contentDescription="@string/add_new_shopping_list"
             android:focusable="true"
             android:onClick="onAddListClicked"
             android:src="@android:drawable/ic_input_add" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fltbtn_edit_list"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="40dp"
-            android:clickable="true"
-            android:contentDescription="@string/edit_shopping_list"
-            android:focusable="true"
-            android:onClick="onEditListClicked"
-            android:src="@drawable/baseline_edit_24" />
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
+        <!--<com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fltbtn_delete_list"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -145,7 +133,7 @@
             android:contentDescription="@string/remove_shopping_list"
             android:focusable="true"
             android:onClick="onRemoveListClicked"
-            android:src="@drawable/baseline_remove_24" />
+            android:src="@drawable/baseline_remove_24" />-->
     </LinearLayout>
 
 

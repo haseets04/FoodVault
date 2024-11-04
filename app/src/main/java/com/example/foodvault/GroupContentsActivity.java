@@ -2,19 +2,25 @@ package com.example.foodvault;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,13 +30,14 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class GroupContentsActivity extends AppCompatActivity {
-    private SupabaseAPI api = SupabaseClient.getClient().create(SupabaseAPI.class);
+    private final SupabaseAPI api = SupabaseClient.getClient().create(SupabaseAPI.class);
     private Integer groupIDOfBtn;
     private String shopListName;
     private List<Integer> selectedUserIds;
+    private List<ShopListModel> shoplists = new ArrayList<>();
 
     // Declare a map to hold the member IDs and their corresponding TableRows
-    private SparseArray<TableRow> memberRowsMap = new SparseArray<>();
+    private final SparseArray<TableRow> memberRowsMap = new SparseArray<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +57,60 @@ public class GroupContentsActivity extends AppCompatActivity {
         }
 
         fetchAndDisplayGroupMembersFromDB();
+        FloatingActionButton addmember = findViewById(R.id.fltbtn_add_another_member);
+        addmember.setOnClickListener(v-> adduser());
+    }
+
+    private void adduser() {
+        // Create an EditText for user code input
+        final EditText userCodeInput = new EditText(this);
+        userCodeInput.setInputType(InputType.TYPE_CLASS_NUMBER); // Restrict input to numbers only
+
+        // Create an AlertDialog
+        new AlertDialog.Builder(this)
+                .setTitle("Enter User Code")
+                .setMessage("Please enter the user code (Positive Whole Number only):")
+                .setView(userCodeInput) // Set the EditText as the dialog view
+                .setPositiveButton("OK", (dialog, which) -> {
+                    String userCodeString = userCodeInput.getText().toString().trim();
+                    if (isNaturalNumber(userCodeString)) {
+                        int userCode = Integer.parseInt(userCodeString);
+                        // Call your method to add the user here
+                        addusertodatabase(Integer.valueOf(userCode));
+                        fetchAndDisplayGroupMembersFromDB();
+                    } else {
+                        Toast.makeText(this, "Please enter a valid usercode.", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
+                .show();
+    }
+
+    private void addusertodatabase(Integer userid)
+    {
+        sbAPI_ViewInventory api = SupabaseClient.getClient().create(sbAPI_ViewInventory.class);
+        UsersInGroupModel uig=new UsersInGroupModel();
+        uig.setGroup_id(groupIDOfBtn);
+        uig.setIs_admin(false);
+        uig.setUser_id(userid);
+        Call<UsersInGroupModel> addCall= api.addusertogroup(uig);
+        addCall.enqueue(new Callback<UsersInGroupModel>() {
+            @Override
+            public void onResponse(@NonNull Call<UsersInGroupModel> call, @NonNull Response<UsersInGroupModel> response) {
+
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<UsersInGroupModel> call, @NonNull Throwable t) {
+
+            }
+        });
+    }
+
+    // Helper method to check if the input is a natural number
+    private boolean isNaturalNumber(String str) {
+        // Check if the string is empty or does not match the regex for natural numbers
+        return !str.isEmpty() && str.matches("\\d+");
     }
 
     private void fetchAndDisplayGroupMembersFromDB() {
@@ -92,14 +153,17 @@ public class GroupContentsActivity extends AppCompatActivity {
             @Override
             public void onResponse(@NonNull Call<List<ShopListModel>> call, @NonNull Response<List<ShopListModel>> response) {
                 if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
-                    ShopListModel shopList = response.body().get(0);
-                    shopListName = shopList != null ? shopList.getShoplistName() : "None";
+                    shoplists = response.body();
+                    // Display the header row with the fetched shop list name
+                    addHeaderRow(tableLayout, shoplists);
+
+                    /*ShopListModel shopList = response.body().get(0);
+                    shopListName = shopList != null ? shopList.getShoplistName() : "None";*/
                 } else {
                     shopListName = "None"; // Set a default value if no matching list is found
+                    addHeaderRow(tableLayout, shoplists);
                     Toast.makeText(GroupContentsActivity.this, "Failed to load shop list with groupID", Toast.LENGTH_SHORT).show();
                 }
-                // Display the header row with the fetched shop list name
-                addHeaderRow(tableLayout);
                 // Continue to display group members now that header is set
                 displayGroupMemberRows(groupMembers, tableLayout);
             }
@@ -110,15 +174,14 @@ public class GroupContentsActivity extends AppCompatActivity {
                 Toast.makeText(GroupContentsActivity.this, "Error loading shop list with groupID", Toast.LENGTH_SHORT).show();
                 Log.e("Supabase Error", "Failed to fetch shop list with groupID", t);
                 // Display the header row and continue to display group members even if the fetch failed
-                addHeaderRow(tableLayout);
+                addHeaderRow(tableLayout, shoplists);
                 displayGroupMemberRows(groupMembers, tableLayout);
             }
         });
     }
 
-    private void addHeaderRow(TableLayout tableLayout) {
+    private void addHeaderRow(TableLayout tableLayout, List<ShopListModel> ShopLists) {
         TableRow headerRow = new TableRow(this);
-        TableRow row = new TableRow(this);
         TableRow headerRow2 = new TableRow(GroupContentsActivity.this);
 
         TextView headerTextView = new TextView(this);
@@ -127,12 +190,53 @@ public class GroupContentsActivity extends AppCompatActivity {
         headerTextView.setTextSize(20);
         headerTextView.setTypeface(null, Typeface.BOLD);
         headerTextView.setPadding(8, 8, 8, 8);
+        headerRow.addView(headerTextView);
+        tableLayout.addView(headerRow);
 
-        TextView rowTextView = new TextView(this);
-        rowTextView.setText(shopListName + "\n");
-        rowTextView.setTextColor(getResources().getColor(R.color.black));
-        rowTextView.setTextSize(18);
-        rowTextView.setPadding(8, 8, 8, 8);
+        boolean condition = (shopListName == null && !(ShopLists.size() > 0));
+        if (condition) {
+            Button shopListButton = new Button(this);
+            shopListButton.setClickable(false);
+            shopListButton.setText("None\n");
+            shopListButton.setTextColor(getResources().getColor(R.color.white));
+            shopListButton.setTextSize(18);
+            shopListButton.setPadding(4, 4, 4, 4);
+            shopListButton.setBackgroundColor(getResources().getColor(R.color.rowdelete));
+
+            TableRow listRow = new TableRow(this);
+            listRow.addView(shopListButton);
+            tableLayout.addView(listRow);  // Add this row to the table layout
+        } else {
+            for (ShopListModel list : ShopLists) {
+                Button shopListButton = new Button(this);
+                shopListButton.setText(list.getShoplistName() + "\n");
+                shopListButton.setTextColor(getResources().getColor(R.color.white));
+                shopListButton.setTextSize(18);
+                shopListButton.setPadding(8, 8, 8, 8);
+                // shopListButton.setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.rowdelete));
+                shopListButton.setBackground(ContextCompat.getDrawable(this, R.drawable.rounded_button));
+
+                TableRow.LayoutParams params = new TableRow.LayoutParams(
+                        TableRow.LayoutParams.WRAP_CONTENT, // Width
+                        TableRow.LayoutParams.WRAP_CONTENT); // Height
+                params.setMargins(0, 5, 0, 5); // Optional: add margins between buttons
+                shopListButton.setLayoutParams(params);
+                // Set OnClickListener to handle the button click event
+                shopListButton.setOnClickListener(v -> {
+                    Toast.makeText(this, "Clicked on " + list.getShoplistName(), Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(GroupContentsActivity.this, ShoppingListContentsActivity.class);
+                    intent.putExtra("SHOPPING_LIST_ID", list.getShoplistId());
+                    intent.putExtra("SHOPPING_LIST_NAME", list.getShoplistName());
+                    intent.putExtra("Activity", "GroupContents");
+                    startActivity(intent);
+                });
+
+                TableRow listRow = new TableRow(this); // Create a new row for each button
+                listRow.setPadding(0, 10, 0, 10);
+                listRow.addView(shopListButton);       // Add the button to the new row
+                tableLayout.addView(listRow);           // Add each new row to the table layout
+            }
+        }
 
         TextView header2TextView = new TextView(GroupContentsActivity.this);
         header2TextView.setText("Group members: ");
@@ -141,12 +245,7 @@ public class GroupContentsActivity extends AppCompatActivity {
         header2TextView.setTypeface(null, Typeface.BOLD);
         header2TextView.setPadding(8, 8, 8, 8);
 
-        headerRow.addView(headerTextView);
-        row.addView(rowTextView);
         headerRow2.addView(header2TextView);
-
-        tableLayout.addView(headerRow);
-        tableLayout.addView(row);
         tableLayout.addView(headerRow2);
     }
 
@@ -225,9 +324,8 @@ public class GroupContentsActivity extends AppCompatActivity {
         }
     }
 
-
-    public void onAddMemberClicked(View view) {
-    }
+    /*public void onAddMemberClicked(View view) {
+    }*/
 
     public void onRemoveMemberClicked(View view) {
         if (selectedUserIds.isEmpty()) {

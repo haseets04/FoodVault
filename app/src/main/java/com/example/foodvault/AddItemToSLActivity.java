@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -26,7 +27,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class AddItemToSLActivity extends AppCompatActivity {
+public class AddItemToSLActivity extends AppCompatActivity { //:)
     // Retrofit API client instance
     sbAPI_ViewInventory sbAPI = SupabaseClient.getClient().create(sbAPI_ViewInventory.class);
 
@@ -92,7 +93,7 @@ public class AddItemToSLActivity extends AppCompatActivity {
             // Check if product exists in the list
             for (ProductModel product : listproducts2) {
                 if (productName.equalsIgnoreCase(product.getProductName()) &&
-                        userId.equals(product.getUserIdForProduct())) { //&& !itemExists) {
+                        userId.equals(product.getUserIdForProduct()) && !itemExists) {
                     itemExists = true;
                     addedId = product.getProductId();
 
@@ -101,8 +102,8 @@ public class AddItemToSLActivity extends AppCompatActivity {
                             .setTitle("Existing Item")
                             .setMessage("This item already exists in your inventory. Are you sure you want to add it?")
                             .setPositiveButton("Yes", (dialog, which) -> {
-                                addItemToShoppingList(store, cbxbought, quanty,name);
-                                //navigateToNextActivity(cbxbought, quanty, name);
+                                addItemToShoppingList(store, cbxbought,quanty,name);
+                                navigateToNextActivity();
                             })
                             .setNegativeButton("No", (dialog, which) ->
                                     Toast.makeText(AddItemToSLActivity.this, "Product not added to the shopping list.", Toast.LENGTH_SHORT).show())
@@ -153,34 +154,24 @@ public class AddItemToSLActivity extends AppCompatActivity {
     }
 
     private void addItemToShoppingList(TextView store, CheckBox cbxbought, NumberPicker quanty, AutoCompleteTextView name) {
-        ProductsOnShopListModel newItem = new ProductsOnShopListModel(
-                store.getText().toString(),
-                cbxbought.isChecked(),
-                slid,
-                addedId,
-                quanty.getValue()
-        );
+        Call<ProductsOnShopListModel> insertItem = sbAPI.insertShoppingListItem(
+                new ProductsOnShopListModel(store.getText().toString(), false, slid, addedId, quanty.getValue()));
 
-        Call<ProductsOnShopListModel> insertItem = sbAPI.insertShoppingListItem(newItem);
         insertItem.enqueue(new Callback<ProductsOnShopListModel>() {
             @Override
             public void onResponse(Call<ProductsOnShopListModel> call, Response<ProductsOnShopListModel> response) {
                 if (response.isSuccessful()) {
                     // Successfully added to the shopping list
-                    Toast.makeText(AddItemToSLActivity.this,"Item added successfully", Toast.LENGTH_SHORT).show();
-                    navigateToNextActivity();
-
                     Log.d("Add Item", "Item successfully added to the shopping list.");
                     // Ensure to pass 'name' here
                 } else {
-                    Toast.makeText(AddItemToSLActivity.this,"Failed to add item", Toast.LENGTH_SHORT).show();
                     Log.e("Add Item", "Failed to add item to the shopping list: " + response.errorBody());
                 }
+
             }
 
             @Override
             public void onFailure(Call<ProductsOnShopListModel> call, Throwable t) {
-                Toast.makeText(AddItemToSLActivity.this,"Error adding item", Toast.LENGTH_SHORT).show();
                 Log.e("Add Item", "Error adding item to the shopping list.", t);
             }
         });
@@ -225,7 +216,7 @@ public class AddItemToSLActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<ProductModel> call, Response<ProductModel> response) {
                 if (response.isSuccessful()) {
-                    fetchLastProduct(store, cbxbought, quanty,name);
+                    fetchLastProduct(store, cbxbought,quanty,name);
                 } else {
                     Log.e("Insert Product", "Failed to insert product");
                 }
@@ -265,21 +256,27 @@ public class AddItemToSLActivity extends AppCompatActivity {
         });
     }
 
-    private void fetchLastProduct(TextView store, CheckBox cbxbought, NumberPicker quanty,AutoCompleteTextView name) {
-        try {
-            Thread.sleep(500); // Wait to ensure the product is inserted
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+    private void fetchLastProduct(TextView store, CheckBox cbxbought, NumberPicker quanty, AutoCompleteTextView name) {
 
         Call<List<ProductModel>> products = sbAPI.getProducts();
         products.enqueue(new Callback<List<ProductModel>>() {
             @Override
             public void onResponse(Call<List<ProductModel>> call, Response<List<ProductModel>> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    listproducts2 = response.body();
-                    addedId = listproducts2.get(listproducts2.size() - 1).getProductId();
-                    addItemToShoppingList(store, cbxbought, quanty,name);
+                    List<ProductModel> temp = new ArrayList<>(response.body());
+
+                    // Find the last added product using a comparator
+                    temp.sort(new Comparator<ProductModel>() {
+                        @Override
+                        public int compare(ProductModel p1, ProductModel p2) {
+                            // Assuming ProductModel has a method getAddedDate() returning a Date object
+                            return p2.getProductId().compareTo(p1.getProductId());
+                        }
+                    });
+
+                    ProductModel lastAddedProduct = temp.get(0);
+                    addedId = lastAddedProduct.getProductId();
+                    addItemToShoppingList(store, cbxbought, quanty, name);
                     navigateToNextActivity();
                 }
             }
@@ -322,7 +319,17 @@ public class AddItemToSLActivity extends AppCompatActivity {
         builder2.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                navigateToNextActivity();
+                //navigateToNextActivity();
+                Intent intent;
+                if (act.equals("ShoppingListContentsActivity")) {
+                    intent = new Intent(AddItemToSLActivity.this, ShoppingListContentsActivity.class);
+                } else {
+                    intent = new Intent(AddItemToSLActivity.this, NewShoppingListActivity.class);
+                }
+                intent.putExtra("USER_ID", UserSession.getInstance().getUserSessionId());
+                intent.putExtra("SHOPPING_LIST_ID", slid);
+                startActivity(intent);
+                finish();
             }
         });
         builder2.setNegativeButton("No", new DialogInterface.OnClickListener() {

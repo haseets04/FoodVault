@@ -134,16 +134,16 @@
             android:textSize="20sp"
             android:textStyle="bold" />
 
-        <!--<TextView
-            android:id="@+id/num_members_connected"
+        <TextView
+            android:id="@+id/user_code"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="0"
+            android:text="@string/_0"
             android:textColor="#050C57"
             android:textSize="20sp"
-            android:textStyle="bold" />-->
+            android:textStyle="bold" />
 
     </LinearLayout>
 
@@ -177,15 +177,15 @@
             android:textColor="#050C57"
             android:textSize="20sp" />
 
-        <!--<TextView
+        <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:gravity="center"
             android:maxLines="2"
-            android:text="Members connected"
+            android:gravity="center"
+            android:text="@string/user_code"
             android:textColor="#050C57"
-            android:textSize="20sp" />-->
+            android:textSize="20sp" />
 
     </LinearLayout>
 

@@ -17,7 +17,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ViewProfileActivity extends AppCompatActivity {
-    private TextView nameSurname, numShoppingLists, numGroups;
+    private TextView nameSurname, numShoppingLists, numGroups, userCode;
     private Integer userId;
     private final SupabaseAPI api = SupabaseClient.getClient().create(SupabaseAPI.class);
 
@@ -29,10 +29,13 @@ public class ViewProfileActivity extends AppCompatActivity {
         nameSurname = findViewById(R.id.profile_name_surname);
         numShoppingLists = findViewById(R.id.num_shopping_lists);
         numGroups = findViewById(R.id.num_groups);
+        userCode = findViewById(R.id.user_code);
 
         fetchAndDisplayUserNameSurname();
         fetchAndDisplayUserNumShopLists();
         fetchAndDisplayUserNumGroups();
+
+        userCode.setText("" + userId.intValue());
     }
 
     public void fetchAndDisplayUserNumGroups(){ //just gets groups created, not if its linked with a shoplist

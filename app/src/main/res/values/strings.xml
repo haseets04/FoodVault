@@ -112,6 +112,7 @@
     <string name="peach_puddle">Peach Puddle</string>
     <string name="cancel_product_edit">Cancel Product Edit</string>
     <string name="enter_grocery_store">Enter Grocery Store</string>
+    <string name="user_code">User Code</string>
     <string-array name="spinner_options">
         <item>Item Category</item>
         <item>Grocery Store</item>

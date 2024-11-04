@@ -14,6 +14,15 @@ public interface sbAPI_ViewInventory {
     @GET("location")
     Call<List<LocationModel>> getLocations();
 
+    @GET("shoppinglist")
+    Call<List<ShopListModel>> getShoppingLists();
+
+    @GET("group")
+    Call<List<GroupModel>> getGroups();
+
+    @GET("users_in_group")
+    Call<List<UsersInGroupModel>> getusersingroups();
+
     @PUT("products_on_shoppinglist")
     Call<Void> updateSLproduct(@Query("products_on_list_id") String products_on_list_id,@Body ProductsOnShopListModel product);
 
@@ -30,7 +39,6 @@ public interface sbAPI_ViewInventory {
     Call<Void> deleteSLproduct(@Query("products_on_list_id") String products_on_list_id);
 
 
-
     @PUT("product")
     Call<Void> updateProduct(@Query("product_id") String product_id, @Body ProductModel product);
 
@@ -39,15 +47,21 @@ public interface sbAPI_ViewInventory {
 
     @PUT("location")
     Call<Void> updateLocation(@Query("location_id") String location_id, @Body LocationModel location);
-    @DELETE("user")
-    Call<Void> deleteshoppinglistrecord(@Query("user_id") String product_id);
+
+    @DELETE("shoppinglist")
+    Call<Void> deleteshoppinglistrecord(@Query("shoplist_id") String shoplist_id);
+
     @POST("products_on_shoppinglist")
     Call<com.example.foodvault.ProductsOnShopListModel> insertShoppingListItem(@Body com.example.foodvault.ProductsOnShopListModel inventory);
+
     @POST("location")
     Call<com.example.foodvault.LocationModel> insertlocation(@Body com.example.foodvault.LocationModel location);
 
     @POST("product")
     Call<com.example.foodvault.ProductModel> insertProduct(@Body com.example.foodvault.ProductModel product);
+
+    @POST("users_in_group")
+    Call<UsersInGroupModel> addusertogroup(@Body UsersInGroupModel uig);
 
     @GET("rpc/getLastProduct")
     Call<List<ProductModel>> getLastProduct();

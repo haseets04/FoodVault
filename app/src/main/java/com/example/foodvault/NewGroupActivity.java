@@ -59,6 +59,7 @@ public class NewGroupActivity extends AppCompatActivity {
     }
 
     public void onAddMembersToGroupClicked(View view) {
+
     }
 
     public void createNewGroupRecord(){
