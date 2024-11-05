@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
@@ -12,6 +13,8 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import retrofit2.Call;
@@ -31,9 +34,66 @@ public class ViewGroupsActivity extends AppCompatActivity {
     }
 
     public void onAddGroupClicked(View view) {
-        Intent intent = new Intent(ViewGroupsActivity.this, NewGroupActivity.class);
-        startActivityForResult(intent, REQUEST_CODE_ADD_LIST);
+        GroupModel newgroup=new GroupModel();
+        sbAPI_ViewInventory api = SupabaseClient.getClient().create(sbAPI_ViewInventory.class);
+        Call<GroupModel> insertgroup=api.insertgroup(newgroup);
+
+        insertgroup.enqueue(new Callback<GroupModel>() {
+            @Override
+            public void onResponse(Call<GroupModel> call, Response<GroupModel> response) {
+
+
+            }
+
+            @Override
+            public void onFailure(Call<GroupModel> call, Throwable t) {
+                Call<List<GroupModel>> getgroups = api.getgroups();
+                getgroups.enqueue(new Callback<List<GroupModel>>() {
+                    @Override
+                    public void onResponse(Call<List<GroupModel>> call, Response<List<GroupModel>> response) {
+                        if (!response.isSuccessful())
+                            return;
+                        List<GroupModel> oldgroups = response.body();
+                        oldgroups.sort(new Comparator<GroupModel>() {
+                            @Override
+                            public int compare(GroupModel o1, GroupModel o2) {
+                                return o2.getGroupId().compareTo(o1.getGroupId());
+                            }
+                        });
+
+                        GroupModel groupinserted = oldgroups.get(0);
+                        Intent intent = new Intent(ViewGroupsActivity.this, NewGroupActivity.class);
+                        intent.putExtra("GROUP_ID", groupinserted.getGroupId());
+                        Toast.makeText(ViewGroupsActivity.this,""+groupinserted.getGroupId(),Toast.LENGTH_SHORT).show();
+                        startActivityForResult(intent, REQUEST_CODE_ADD_LIST);
+                        // finish();
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<GroupModel>> call, Throwable t) {
+
+                    }
+                });
+            }
+        });
+
+
     }
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // Delay fetching groups for 2 seconds (2000 milliseconds)
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // Fetch and refresh the groups
+                fetchGroupsFromDatabase();
+            }
+        }, 500); // Delay time in milliseconds
+    }
+
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

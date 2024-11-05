@@ -88,14 +88,16 @@ public class ViewInventory extends AppCompatActivity {
                 builder.setView(input);
 
                 // Set up the buttons
-                builder.setPositiveButton("Add Location", (dialog, which) -> {
+                builder.setPositiveButton("Cancel", (dialog, which) -> dialog.cancel());
+
+                builder.setNegativeButton("Add Location", (dialog, which) -> {
                     String newLocationName = input.getText().toString().trim();
 
                     if (!newLocationName.isEmpty()) {
                         // Add the new location to the list
                         LocationModel newLocation = new LocationModel(newLocationName);
 
-                      listlocations.add(newLocation);
+                        listlocations.add(newLocation);
 
 
                         Call<LocationModel> insertLocation= api.insertlocation(new LocationModel(newLocationName));
@@ -121,9 +123,7 @@ public class ViewInventory extends AppCompatActivity {
                     } else {
                         Toast.makeText(ViewInventory.this, "Location name cannot be empty", Toast.LENGTH_SHORT).show();
                     }
-                });
-
-                builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+                });;
 
                 // Show the dialog
                 builder.show();
@@ -148,7 +148,7 @@ public class ViewInventory extends AppCompatActivity {
                                 new AlertDialog.Builder(v.getContext())
                                         .setTitle("Delete Record")
                                         .setMessage("Are you sure you want to delete the " + ((TextView) tableRow.getChildAt(0)).getText().toString() + " record?")
-                                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                        .setNegativeButton("Yes", new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
                                                 // Handle the record deletion here
@@ -156,7 +156,7 @@ public class ViewInventory extends AppCompatActivity {
 
                                             }
                                         })
-                                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                        .setPositiveButton("No", new DialogInterface.OnClickListener() {
 
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
@@ -203,7 +203,7 @@ public class ViewInventory extends AppCompatActivity {
                                new AlertDialog.Builder(v.getContext())
                                        .setTitle("Edit Record")
                                        .setMessage("Are you sure you want to edit the " + ((TextView) tableRow.getChildAt(0)).getText().toString() + " record?")
-                                       .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                       .setNegativeButton("Yes", new DialogInterface.OnClickListener() {
                                            @Override
                                            public void onClick(DialogInterface dialog, int which) {
                                                TextView tvquantity= (TextView) tableRow.getChildAt(1);
@@ -235,7 +235,7 @@ public class ViewInventory extends AppCompatActivity {
 
                                            }
                                        })
-                                       .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                       .setPositiveButton("No", new DialogInterface.OnClickListener() {
 
                                            @Override
                                            public void onClick(DialogInterface dialog, int which) {

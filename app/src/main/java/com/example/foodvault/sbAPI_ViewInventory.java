@@ -16,18 +16,25 @@ public interface sbAPI_ViewInventory {
 
     @GET("shoppinglist")
     Call<List<ShopListModel>> getShoppingLists();
+    @GET("/rest/v1/user")
+    Call<List<UserModel>> getUserDetails(@Query("user_id") String userId);
 
     @GET("group")
-    Call<List<GroupModel>> getGroups();
+    Call<List<GroupModel>> getlastgroup(@Query("group_id") String group_id);
 
     @GET("users_in_group")
     Call<List<UsersInGroupModel>> getusersingroups();
+
+    @GET("users_in_group")
+    Call<List<UsersInGroupModel>> getusers(@Query("group_id") String group_id);
 
     @PUT("products_on_shoppinglist")
     Call<Void> updateSLproduct(@Query("products_on_list_id") String products_on_list_id,@Body ProductsOnShopListModel product);
 
     @GET("product")
     Call<List<ProductModel>> getProducts();
+    @GET("group")
+    Call<List<GroupModel>> getgroups();
 
     @GET("products_on_shoppinglist")
     Call<List<ProductsOnShopListModel>> getshoppinglistproducts();
@@ -45,6 +52,9 @@ public interface sbAPI_ViewInventory {
     @PUT("shoppinglist")
     Call<Void> updateShoplist(@Query("shoplist_id") String shoplist_id, @Body ShopListModel product);
 
+    @PUT("group")
+    Call<Void> updateGroup(@Query("group_id")String group_id,@Body GroupModel group);
+
     @PUT("location")
     Call<Void> updateLocation(@Query("location_id") String location_id, @Body LocationModel location);
 
@@ -53,6 +63,9 @@ public interface sbAPI_ViewInventory {
 
     @POST("products_on_shoppinglist")
     Call<com.example.foodvault.ProductsOnShopListModel> insertShoppingListItem(@Body com.example.foodvault.ProductsOnShopListModel inventory);
+
+    @POST("group")
+    Call<GroupModel> insertgroup(@Body GroupModel group);
 
     @POST("location")
     Call<com.example.foodvault.LocationModel> insertlocation(@Body com.example.foodvault.LocationModel location);

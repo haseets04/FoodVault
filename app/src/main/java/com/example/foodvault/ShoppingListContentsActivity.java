@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -343,7 +344,7 @@ public class ShoppingListContentsActivity extends AppCompatActivity {
     }
 
     private void ShareList(sbAPI_ViewInventory sbAPI) {
-        Call<List<GroupModel>> groups = sbAPI.getGroups();
+        Call<List<GroupModel>> groups = sbAPI.getgroups();
 
         groups.enqueue(new Callback<List<GroupModel>>() {
             @Override
@@ -618,9 +619,30 @@ public class ShoppingListContentsActivity extends AppCompatActivity {
         deleterecords.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                deleterecords(id);
-                deleterecords.setEnabled(false);
-                deleterecords.setVisibility(View.GONE);
+                // Show confirmation dialog
+                new AlertDialog.Builder(ShoppingListContentsActivity.this)
+                        .setTitle("Confirm Deletion")
+                        .setMessage("Are you sure you want to delete the selected items?")
+                        .setPositiveButton("No", new DialogInterface.OnClickListener() {
+
+                            public void onClick(DialogInterface dialog, int which) {
+                                fetchAndDisplayProductsOnShopListFromDB();
+                                deleterecords.setEnabled(false);
+                                deleterecords.setVisibility(View.GONE);
+                                dialog.dismiss(); // Close the dialog
+                            }
+                        })
+                        .setNegativeButton("Yes", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                deleterecords(id); // Proceed with deletion
+                                deleterecords.setEnabled(false);
+                                deleterecords.setVisibility(View.GONE);
+                                fabdelete.setEnabled(true);
+                                fabdelete.setVisibility(View.VISIBLE);
+                            }
+                        })
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
             }
         });
 

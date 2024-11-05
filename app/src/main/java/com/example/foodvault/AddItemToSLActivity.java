@@ -101,11 +101,11 @@ public class AddItemToSLActivity extends AppCompatActivity { //:)
                     new AlertDialog.Builder(v.getContext())
                             .setTitle("Existing Item")
                             .setMessage("This item already exists in your inventory. Are you sure you want to add it?")
-                            .setPositiveButton("Yes", (dialog, which) -> {
+                            .setNegativeButton("Yes", (dialog, which) -> {
                                 addItemToShoppingList(store, cbxbought,quanty,name);
                                 navigateToNextActivity();
                             })
-                            .setNegativeButton("No", (dialog, which) ->
+                            .setPositiveButton("No", (dialog, which) ->
                                     Toast.makeText(AddItemToSLActivity.this, "Product not added to the shopping list.", Toast.LENGTH_SHORT).show())
                             .setCancelable(false)
                             .show();
@@ -316,7 +316,7 @@ public class AddItemToSLActivity extends AppCompatActivity { //:)
         AlertDialog.Builder builder2 = new AlertDialog.Builder(this);
         builder2.setTitle("Confirm Cancel");
         builder2.setMessage("Are you sure you want to cancel the new entry?");
-        builder2.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+        builder2.setNegativeButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 //navigateToNextActivity();
@@ -332,7 +332,7 @@ public class AddItemToSLActivity extends AppCompatActivity { //:)
                 finish();
             }
         });
-        builder2.setNegativeButton("No", new DialogInterface.OnClickListener() {
+        builder2.setPositiveButton("No", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 dialogInterface.dismiss();
